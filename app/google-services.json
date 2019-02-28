@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "497623901285",
+    "firebase_url": "https://sputnikmusic-e2a90.firebaseio.com",
+    "project_id": "sputnikmusic-e2a90",
+    "storage_bucket": "sputnikmusic-e2a90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497623901285:android:9dc08a1bbf36754a",
+        "android_client_info": {
+          "package_name": "com.dima.emmegi95.jaycaves.sm2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497623901285-00mi8vq2e8424ejcfbom5eem5lumu5tp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPewxT0u9c-juI_GtdKD7mJut1uAQH-40"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497623901285:android:6058c3c536eba057",
+        "android_client_info": {
+          "package_name": "polimi.grottipietro_gullomarco.sputnikmusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497623901285-eiig9bskhmnsnvikp5gqk6afquq6ha0c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "polimi.grottipietro_gullomarco.sputnikmusic",
+            "certificate_hash": "b56262d7eb0db31fd2b4a9b1fdc74cd345c0a09c"
+          }
+        },
+        {
+          "client_id": "497623901285-00mi8vq2e8424ejcfbom5eem5lumu5tp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPewxT0u9c-juI_GtdKD7mJut1uAQH-40"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497623901285-00mi8vq2e8424ejcfbom5eem5lumu5tp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
