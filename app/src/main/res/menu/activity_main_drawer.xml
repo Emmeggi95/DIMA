@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/group_account">
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_baseline_account_circle_24px"
+            android:title="@string/title_account" />
+    </group>
+    <group
+        android:id="@+id/group_fragments"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_home_24px"
+            android:title="@string/title_home" />
+        <item
+            android:id="@+id/nav_charts"
+            android:icon="@drawable/ic_baseline_star_rate_18px"
+            android:title="@string/title_charts" />
+        <item
+            android:id="@+id/nav_forum"
+            android:icon="@drawable/ic_baseline_forum_24px"
+            android:title="@string/title_forum" />
+    </group>
+    <group android:id="@+id/group_settings">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_baseline_settings_20px"
+            android:title="@string/title_settings" />
+    </group>
+
+</menu>
