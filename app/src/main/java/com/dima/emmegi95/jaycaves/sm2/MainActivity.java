@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -118,10 +120,25 @@ public class MainActivity extends AppCompatActivity
         chartsFragment = new ChartsFragment();
         forumFragment = new ForumFragment();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.home_fragment, homeFragment).commit();
+        setFragment(homeFragment);//init
         setTitle(R.string.app_name);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        authentication.removeAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //authentication.addAuthStateListener(authStateListener);
+    }
+
+    /**
+     * Firebase methods
+     */
 
     private void onSignOutCleanUp() {
         username = ANONYMOUS;
@@ -140,6 +157,9 @@ public class MainActivity extends AppCompatActivity
         //signin procedure, database attach
     }
 
+    /**
+     * Navigation Drawer methods
+     */
 
     @Override
     public void onBackPressed() {
@@ -150,6 +170,50 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_account) {
+            Intent goToAccount = new Intent(this, AccountActivity.class);
+            startActivity(goToAccount);
+        } else if (id == R.id.nav_home) {
+            setFragment(homeFragment);
+            setTitle(R.string.app_name);
+        } else if (id == R.id.nav_charts) {
+            setFragment(chartsFragment);
+            setTitle(R.string.title_charts);
+        } else if (id == R.id.nav_forum) {
+            setFragment(forumFragment);
+            setTitle(R.string.title_forum);
+        } else if (id == R.id.nav_settings) {
+            Intent goToSettings = new Intent(this, SettingsActivity.class);
+            startActivity(goToSettings);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void setFragment(Fragment fragment){
+        if(fragment!=null){
+            FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_main,fragment);
+            ft.commit();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+    /**
+     * App Bar methods
+     * @param menu
+     * @return
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,55 +239,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_account) {
-            Intent goToAccount = new Intent(this, AccountActivity.class);
-            startActivity(goToAccount);
-        } else if (id == R.id.nav_home) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if (chartsFragment.isVisible())
-                fragmentManager.beginTransaction().remove(chartsFragment).commit();
-            if (forumFragment.isVisible())
-                fragmentManager.beginTransaction().remove(forumFragment).commit();
-            if (!homeFragment.isVisible()) {
-                fragmentManager.beginTransaction().add(R.id.home_fragment, homeFragment).commit();
-                setTitle(R.string.app_name);
-            }
-        } else if (id == R.id.nav_charts) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if (homeFragment.isVisible())
-                fragmentManager.beginTransaction().remove(homeFragment).commit();
-            if (forumFragment.isVisible())
-                fragmentManager.beginTransaction().remove(forumFragment).commit();
-            if (!chartsFragment.isVisible()) {
-                fragmentManager.beginTransaction().add(R.id.charts_fragment, chartsFragment).commit();
-                setTitle(R.string.title_charts);
-            }
-        } else if (id == R.id.nav_forum) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if (chartsFragment.isVisible())
-                fragmentManager.beginTransaction().remove(chartsFragment).commit();
-            if (homeFragment.isVisible())
-                fragmentManager.beginTransaction().remove(homeFragment).commit();
-            if (!forumFragment.isVisible()) {
-                fragmentManager.beginTransaction().add(R.id.forum_fragment, forumFragment).commit();
-                setTitle(R.string.title_forum);
-            }
-        } else if (id == R.id.nav_settings) {
-            Intent goToSettings = new Intent(this, SettingsActivity.class);
-            startActivity(goToSettings);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -241,16 +256,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        authentication.removeAuthStateListener(authStateListener);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //authentication.addAuthStateListener(authStateListener);
-    }
 
 }
