@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:theme="@style/AppTheme">
 
     <FrameLayout
         android:id="@+id/content_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorBackground">
 
     </FrameLayout>
 </RelativeLayout>

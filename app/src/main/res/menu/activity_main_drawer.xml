@@ -6,7 +6,7 @@
     <group android:id="@+id/group_account">
         <item
             android:id="@+id/nav_account"
-            android:icon="@drawable/ic_baseline_account_circle_24px"
+            android:icon="@drawable/ic_account_box_black_24dp"
             android:title="@string/title_account" />
     </group>
     <group
@@ -18,8 +18,16 @@
             android:title="@string/title_home" />
         <item
             android:id="@+id/nav_charts"
-            android:icon="@drawable/ic_baseline_star_rate_18px"
+            android:icon="@drawable/ic_outline_bar_chart_24px"
             android:title="@string/title_charts" />
+        <item
+            android:id="@+id/nav_fresh"
+            android:icon="@drawable/ic_new_releases_black_24dp"
+            android:title="@string/title_fresh" />
+        <item
+            android:id="@+id/nav_playlists"
+            android:icon="@drawable/ic_playlist_play_black_24dp"
+            android:title="@string/title_playlists" />
         <item
             android:id="@+id/nav_forum"
             android:icon="@drawable/ic_baseline_forum_24px"

@@ -9,6 +9,10 @@ public class HomeAlbum {
     private double score;
     private int coverSrc;
 
+    public HomeAlbum(String title) {
+        this.title = title;
+    }
+
     public HomeAlbum(String title, String author, String genre, double score, int coverSrc) {
         this.title = title;
         this.author = author;

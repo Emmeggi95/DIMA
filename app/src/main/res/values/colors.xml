@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#424242</color>
-    <color name="colorPrimaryDark">#1b1b1b</color>
-    <color name="colorPrimaryLight">#6d6d6d</color>
-    <color name="colorSecondary">#b71c1c</color>
-    <color name="colorSecondaryDark">#7f0000</color>
-    <color name="colorSecondaryLight">#f05545</color>
-    <color name="colorTextOnPrimary">#ffffff</color>
-    <color name="colorTextOnSecondary">#ffffff</color>
-    <color name="colorIconAppBar">#ffffff</color>
-    <color name="colorAccent">#F05545</color>
+    <!--Primary and secondary colors-->
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorPrimaryLight">#ffffff</color>
+    <color name="colorSecondary">#691b99</color>
+    <color name="colorSecondaryDark">#37006a</color>
+    <color name="colorSecondaryLight">#9b4dcb</color>
+    <color name="colorAccent">@color/colorSecondary</color>
 
-    <color name="viewBg">#f1f5f8</color>
+    <!--Background colors-->
+    <color name="colorLightBackground">#ffffff</color>
+    <color name="colorDarkBackground">#212121</color>
+
+    <!--Text colors-->
+    <color name="colorTextOnPrimary">#000000</color>
+    <color name="colorTextOnSecondary">#ffffff</color>
+    <color name="colorTextOnAccent">@color/colorTextOnSecondary</color>
+    <color name="colorTextOnLightBackgroud">#000000</color>
+    <color name="colorTextOnDarkBackground">#ffffff</color>
+    <color name="colorDarkText">#000000</color>
+    <color name="colorLightText">#ffffff</color>
+    <color name="colorGrayText">#616161</color>
+    <color name="colorAppBarText">#000000</color>
+
+    <!--UI elements color-->
+    <!--Card colors-->
     <color name="album_title">#4c4c4c</color>
-    <color name="card_default_color">#e0e0e0</color>
-    <color name="card_text_color">#ffffff</color>
+    <color name="card_default_color">#ffffff</color>
+    <color name="card_text_color">#000000</color>
+    <color name="star_color">#f57f17</color>
 </resources>
