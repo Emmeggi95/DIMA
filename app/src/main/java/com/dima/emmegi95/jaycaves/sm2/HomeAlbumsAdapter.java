@@ -3,41 +3,39 @@ package com.dima.emmegi95.jaycaves.sm2;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
-
-public class HomeAlbumsAdapter extends RecyclerView.Adapter<HomeAlbumsAdapter.MyViewHolder> {
+public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<HomeAlbum> albumList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
+
+    public HomeAlbumsAdapter(Context mContext, List<HomeAlbum> albumList) {
+        this.mContext = mContext;
+        this.albumList = albumList;
+    }
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView title, author, genre, rating;
         public ImageView cover;
         public List<ImageView> stars;
         public CardView card;
 
-        public MyViewHolder(View view) {
+        public ItemViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.text_album_title);
             author = (TextView) view.findViewById(R.id.text_author);
@@ -53,49 +51,80 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<HomeAlbumsAdapter.My
             card = (CardView) view.findViewById(R.id.card);
         }
     }
-
-
-    public HomeAlbumsAdapter(Context mContext, List<HomeAlbum> albumList) {
-        this.mContext = mContext;
-        this.albumList = albumList;
+    
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public TextView text;
+        
+        public HeaderViewHolder(View view) {
+            super(view);
+            text = (TextView) view.findViewById(R.id.home_header_text);
+        }
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.home_album_card, parent, false);
-
-        return new MyViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER){
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.header_home, parent, false);
+            return new HeaderViewHolder(itemView);
+        } else if (viewType == TYPE_ITEM){
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.home_album_card, parent, false);
+            return new ItemViewHolder(itemView);
+        }
+        throw new RuntimeException("No match for " + viewType + ".");
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         HomeAlbum album = albumList.get(position);
-        holder.title.setText(album.getTitle());
-        holder.author.setText(album.getAuthor());
-        holder.genre.setText(album.getGenre());
-        holder.rating.setText(String.format("%.2f", album.getScore()));
-        holder.cover.setImageResource(album.getCover());
+        if(holder instanceof HeaderViewHolder){
+            ((HeaderViewHolder) holder).text.setText(album.getTitle());
+        }else if(holder instanceof ItemViewHolder){
+            ((ItemViewHolder) holder).title.setText(album.getTitle());
+            ((ItemViewHolder) holder).author.setText(album.getAuthor());
+            ((ItemViewHolder) holder).genre.setText(album.getGenre());
+            ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
+            ((ItemViewHolder) holder).cover.setImageResource(album.getCover());
 
-        //Set rating stars
-        int integerScore = (int) album.getScore();
-        int i;
-        for(i=0; i<integerScore; i++){
-            holder.stars.get(i).setImageResource(R.drawable.ic_star_24dp);
-        }
-        float decimalPart = (float) album.getScore() - integerScore;
-        if(decimalPart >= 0.5){
-            holder.stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+            //Set rating stars
+            int integerScore = (int) album.getScore();
+            int i;
+            for(i=0; i<integerScore; i++){
+                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+            }
+            float decimalPart = (float) album.getScore() - integerScore;
+            if(decimalPart >= 0.5){
+                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+            }
+
+            /*/Set card background color based on the album cover
+
+            Bitmap coverBitmap = BitmapFactory.decodeResource(mContext.getResources(), album.getCover());
+            Palette p = Palette.from(coverBitmap).generate();
+            if(p.getMutedSwatch()!=null)
+            ((ItemViewHolder) holder).title.setTextColor(p.getMutedSwatch().getRgb());*/
         }
 
-        //Set card background color based on the album cover
-        Bitmap coverBitmap = BitmapFactory.decodeResource(mContext.getResources(), album.getCover());
-        Palette p = Palette.from(coverBitmap).generate();
-        holder.card.setCardBackgroundColor(p.getMutedSwatch().getRgb());
+    }
+
+    private HomeAlbum getItem(int position) {
+        return albumList.get(position);
     }
 
     @Override
     public int getItemCount() {
         return albumList.size();
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isPositionHeader(position))
+            return TYPE_HEADER;
+        return TYPE_ITEM;
+    }
+    private boolean isPositionHeader(int position) {
+        return position == 0;
+    }
+
 }

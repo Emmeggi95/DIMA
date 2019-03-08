@@ -1,6 +1,8 @@
 package com.dima.emmegi95.jaycaves.sm2;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,8 +20,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,8 +51,11 @@ public class MainActivity extends AppCompatActivity
     private String username;
     private String email;
 
+    //Drawer
+    private int clickedNavItem = 0;
 
     // Fragments
+    LoadingFragment loadingFragment;
     HomeFragment homeFragment;
     ChartsFragment chartsFragment;
     ForumFragment forumFragment;
@@ -111,11 +118,56 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+                                           @Override
+                                           public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                                           }
+
+                                           @Override
+                                           public void onDrawerOpened(View drawerView) {
+
+                                           }
+
+                                           @Override
+                                           public void onDrawerClosed(View drawerView) {
+                                               /**
+                                                * Change fragment for all items excluding nav_five
+                                                * as it opens up an Activity
+                                                */
+                                               switch (clickedNavItem) {
+                                                   case R.id.nav_account:
+                                                       goToActivity(AccountActivity.class);
+                                                       break;
+                                                   case R.id.nav_home:
+                                                       setFragment(homeFragment);
+                                                       break;
+                                                   case R.id.nav_charts:
+                                                       setFragment(chartsFragment);
+                                                       break;
+                                                   case R.id.nav_forum:
+                                                       setFragment(forumFragment);
+                                                       break;
+                                                   case R.id.nav_settings:
+                                                       goToActivity(SettingsActivity.class);
+                                                       break;
+
+                                               }
+                                           }
+
+                                     @Override
+                                     public void onDrawerStateChanged(int i) {
+
+                                     }
+
+                                 });
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
         // Fragments init
+        loadingFragment = new LoadingFragment();
         homeFragment = new HomeFragment();
         chartsFragment = new ChartsFragment();
         forumFragment = new ForumFragment();
@@ -177,21 +229,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_account) {
-            Intent goToAccount = new Intent(this, AccountActivity.class);
-            startActivity(goToAccount);
-        } else if (id == R.id.nav_home) {
-            setFragment(homeFragment);
-            setTitle(R.string.app_name);
-        } else if (id == R.id.nav_charts) {
-            setFragment(chartsFragment);
-            setTitle(R.string.title_charts);
-        } else if (id == R.id.nav_forum) {
-            setFragment(forumFragment);
-            setTitle(R.string.title_forum);
-        } else if (id == R.id.nav_settings) {
-            Intent goToSettings = new Intent(this, SettingsActivity.class);
-            startActivity(goToSettings);
+        clickedNavItem = id;
+
+        if (id == R.id.nav_home || id == R.id.nav_charts || id == R.id.nav_forum) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_main, loadingFragment);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -199,14 +242,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void goToActivity(Class activity){
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
+    }
+
     public void setFragment(Fragment fragment){
         if(fragment!=null){
-            FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_main,fragment);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            ft.replace(R.id.content_main, fragment);
             ft.commit();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
     }
 
     /**
@@ -254,8 +301,6 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
-
-
 
 
 }
