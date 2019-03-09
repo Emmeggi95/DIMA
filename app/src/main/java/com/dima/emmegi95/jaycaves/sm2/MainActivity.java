@@ -30,8 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 
@@ -43,11 +41,9 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase database;
     private DatabaseReference rtb;
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
     public static final String ANONYMOUS = "anonymous";
-    public static final int RC_SIGN_IN = 123;
-    public static final int RC_PHOTO_PICKER =  2;
+    public static final int SIGN_IN = 123;
+    public static final int PHOTO_PICKER =  2;
     private String username;
     private String email;
 
@@ -66,10 +62,8 @@ public class MainActivity extends AppCompatActivity
 
         authentication = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        storage= FirebaseStorage.getInstance();
+        rtb= database.getReference("admins");
 
-        rtb= database.getReference().child("admins");
-        storageReference= storage.getReference();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -92,7 +86,7 @@ public class MainActivity extends AppCompatActivity
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
                                             new AuthUI.IdpConfig.EmailBuilder().build()))
                                     .build(),
-                            RC_SIGN_IN);
+                            SIGN_IN);
                 }
             }
         };
@@ -107,8 +101,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                 */
+                Intent intent = new Intent(view.getContext(),CreateNewAlbumActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -289,15 +286,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
                 finish();
-            } else if (requestCode == RC_PHOTO_PICKER && requestCode == RESULT_OK ){
-                
             }
+
 
         }
     }
