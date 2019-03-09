@@ -1,5 +1,9 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class HomeAlbum {
     private String title;
     private String author;
@@ -66,4 +70,5 @@ public class HomeAlbum {
     public void setCover(int cover) {
         this.coverSrc = cover;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -73,7 +74,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         HomeAlbum album = albumList.get(position);
         if(holder instanceof HeaderViewHolder){
             ((HeaderViewHolder) holder).text.setText(album.getTitle());
@@ -101,6 +102,14 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Palette p = Palette.from(coverBitmap).generate();
             if(p.getMutedSwatch()!=null)
             ((ItemViewHolder) holder).title.setTextColor(p.getMutedSwatch().getRgb());*/
+
+            ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
+                @Override
+                public void onClick(View v){
+                    Intent intent = new Intent(mContext, AlbumActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
     }

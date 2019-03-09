@@ -1,4 +1,4 @@
-package com.dima.emmegi95.jaycaves.sm2;
+package com.dima.emmeggi95.jaycaves.me;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

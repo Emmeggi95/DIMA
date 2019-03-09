@@ -1,10 +1,16 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.FontRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,15 +21,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
@@ -34,14 +48,21 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase database;
     private DatabaseReference rtb;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
     public static final String ANONYMOUS = "anonymous";
     public static final int SIGN_IN = 123;
-    public static final int PHOTO_PICKER =  2;
+    public static final int PHOTO_PICKER = 2;
     private String username;
     private String email;
 
     //Drawer
     private int clickedNavItem = 0;
+    private boolean selectionChanged = false;
+
+    //Custom fonts
+    private Typeface floydFont;
+    private Typeface nasaFont;
 
     // Fragments
     LoadingFragment loadingFragment;
@@ -55,8 +76,10 @@ public class MainActivity extends AppCompatActivity
 
         authentication = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        rtb= database.getReference("admins");
+        storage = FirebaseStorage.getInstance();
 
+        rtb = database.getReference().child("admins");
+        storageReference = storage.getReference();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -86,6 +109,16 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        // Fragments init
+        loadingFragment = new LoadingFragment();
+        homeFragment = new HomeFragment();
+        chartsFragment = new ChartsFragment();
+        forumFragment = new ForumFragment();
+
+        // Initialize custom fonts
+        floydFont = Typeface.createFromAsset(getAssets(), "fonts/floyd.TTF");
+        nasaFont = Typeface.createFromAsset(getAssets(), "fonts/nasalization-rg.ttf");
+
         // Set App Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -94,14 +127,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                 */
-                Intent intent = new Intent(view.getContext(),CreateNewAlbumActivity.class);
+                Intent intent = new Intent(view.getContext(), CreateNewAlbumActivity.class);
                 startActivity(intent);
             }
         });
 
+        // Set Navigation Drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -109,61 +140,57 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-                                           @Override
-                                           public void onDrawerSlide(View drawerView, float slideOffset) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
 
-                                           }
+            }
 
-                                           @Override
-                                           public void onDrawerOpened(View drawerView) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
 
-                                           }
+            }
 
-                                           @Override
-                                           public void onDrawerClosed(View drawerView) {
-                                               /**
-                                                * Change fragment for all items excluding nav_five
-                                                * as it opens up an Activity
-                                                */
-                                               switch (clickedNavItem) {
-                                                   case R.id.nav_account:
-                                                       goToActivity(AccountActivity.class);
-                                                       break;
-                                                   case R.id.nav_home:
-                                                       setFragment(homeFragment);
-                                                       break;
-                                                   case R.id.nav_charts:
-                                                       setFragment(chartsFragment);
-                                                       break;
-                                                   case R.id.nav_forum:
-                                                       setFragment(forumFragment);
-                                                       break;
-                                                   case R.id.nav_settings:
-                                                       goToActivity(SettingsActivity.class);
-                                                       break;
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                /**
+                 * Change fragments when the Drawer is closed to avoid lag
+                 */
+                if (selectionChanged) {
+                    selectionChanged = false;
+                    switch (clickedNavItem) {
+                        case R.id.nav_account:
+                            goToActivity(AccountActivity.class);
+                            break;
+                        case R.id.nav_home:
+                            setFragment(homeFragment);
+                            break;
+                        case R.id.nav_charts:
+                            setFragment(chartsFragment);
+                            break;
+                        case R.id.nav_forum:
+                            setFragment(forumFragment);
+                            break;
+                        case R.id.nav_settings:
+                            goToActivity(SettingsActivity.class);
+                            break;
+                    }
+                }
+            }
 
-                                               }
-                                           }
+            @Override
+            public void onDrawerStateChanged(int i) {
 
-                                     @Override
-                                     public void onDrawerStateChanged(int i) {
+            }
 
-                                     }
+        });
 
-                                 });
-
+        // Set Navigation Drawer listener and select Home as starting fragment
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
-
-        // Fragments init
-        loadingFragment = new LoadingFragment();
-        homeFragment = new HomeFragment();
-        chartsFragment = new ChartsFragment();
-        forumFragment = new ForumFragment();
-
+        clickedNavItem = R.id.nav_home;
         setFragment(homeFragment);//init
-        setTitle(R.string.app_name);
+        setToolbarTitle(R.string.app_name, 2);
     }
 
     @Override
@@ -219,26 +246,41 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        clickedNavItem = id;
+        if (clickedNavItem != id) {
+            clickedNavItem = id;
+            selectionChanged = true;
 
-        if (id == R.id.nav_home || id == R.id.nav_charts || id == R.id.nav_forum) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_main, loadingFragment);
-            ft.commit();
+            // Set a blank fragment before loading the actual fragment to avoid lags
+            if (id == R.id.nav_home || id == R.id.nav_charts || id == R.id.nav_forum) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.content_main, loadingFragment);
+                ft.commit();
+            }
+            if (id == R.id.nav_home) {
+                setLoadingFragment();
+                setToolbarTitle(R.string.app_name, 2);
+            } else if (id == R.id.nav_charts) {
+                setLoadingFragment();
+                setToolbarTitle(R.string.title_charts, 0);
+            } else if (id == R.id.nav_forum) {
+                setLoadingFragment();
+                setToolbarTitle(R.string.title_forum, 0);
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
-    public void goToActivity(Class activity){
+    public void goToActivity(Class activity) {
         Intent intent = new Intent(this, activity);
         startActivity(intent);
     }
 
-    public void setFragment(Fragment fragment){
-        if(fragment!=null){
+    public void setFragment(Fragment fragment) {
+        if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
             ft.replace(R.id.content_main, fragment);
@@ -246,8 +288,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void setLoadingFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, loadingFragment);
+        ft.commit();
+    }
+
     /**
      * App Bar methods
+     *
      * @param menu
      * @return
      */
@@ -285,9 +334,35 @@ public class MainActivity extends AppCompatActivity
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
                 finish();
+            } else if (requestCode == PHOTO_PICKER && requestCode == RESULT_OK) {
+
             }
 
+        }
+    }
 
+    /**
+     * Set the toolbar title
+     *
+     * @param title: the id of the string you want to put in the title
+     * @param font:  these are the available fonts ->
+     *               0. Roboto
+     *               1. Floyd
+     *               2. Nasa
+     */
+    private void setToolbarTitle(int title, int font) {
+        TextView titleTextView = (TextView) findViewById(R.id.toolbar_title);
+        titleTextView.setText(getResources().getString(title));
+        switch (font) {
+            case 2:
+                titleTextView.setTypeface(nasaFont);
+                break;
+            case 1:
+                titleTextView.setTypeface(floydFont);
+                break;
+            case 0:
+            default:
+                titleTextView.setTypeface(null);
         }
     }
 
