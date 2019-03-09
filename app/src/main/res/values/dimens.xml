@@ -7,6 +7,12 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <!--App Bar-->
+    <dimen name="app_bar_text_size">20sp</dimen>
+
+    <!--Home Page-->
+    <dimen name="header_text_size">24sp</dimen>
+
     <!--Album Card-->
     <dimen name="card_margin">8dp</dimen>
     <dimen name="card_radius">8dp</dimen>
@@ -19,4 +25,6 @@
     <dimen name="ic_album_overflow_height">30dp</dimen>
     <dimen name="ic_album_overflow_margin_top">10dp</dimen>
     <dimen name="star_dimension">20dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

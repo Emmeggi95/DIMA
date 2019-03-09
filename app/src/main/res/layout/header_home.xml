@@ -15,6 +15,6 @@
         android:fontFamily="sans-serif-condensed"
         android:text="@string/home_header_title"
         android:textColor="?attr/colorTextOnBackground"
-        android:textSize="28sp"
+        android:textSize="@dimen/header_text_size"
         android:textStyle="bold" />
 </LinearLayout>

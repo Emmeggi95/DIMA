@@ -6,7 +6,7 @@
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="colorSecondary">#691b99</color>
     <color name="colorSecondaryDark">#37006a</color>
-    <color name="colorSecondaryLight">#9b4dcb</color>
+    <color name="colorSecondaryLight">#9B4DCB</color>
     <color name="colorAccent">@color/colorSecondary</color>
 
     <!--Background colors-->
