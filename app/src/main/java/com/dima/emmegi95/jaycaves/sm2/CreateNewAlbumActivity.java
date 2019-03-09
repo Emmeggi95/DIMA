@@ -3,8 +3,10 @@ package com.dima.emmegi95.jaycaves.sm2;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -213,29 +215,29 @@ public class CreateNewAlbumActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     }});
             } else{
-                Toast.makeText(this, "Error: the Artist does not exists in our database! Go create him!", Toast.LENGTH_SHORT).show();
+                Snackbar.make(this.getCurrentFocus(),R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "Error: the Album already exists in our database!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.album_existing_error, Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void missingElementMessage(){
 
         if (!isNotEmpty(newAlbumNameInput)){
-            Toast.makeText(this, "Please insert a valid Album Name!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.album_name_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumReleaseDateInput)){
-            Toast.makeText(this, "Please insert a valid Release Date!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.album_date_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumArtistInput)){
-            Toast.makeText(this, "Please insert a valid Artist Name!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.album_artist_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumGenreInput1)){
-            Toast.makeText(this, "Please insert at least one Genre!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.album_genre_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!newAlbumPicture.isActivated())
-            Toast.makeText(this, "Please upload a picture!", Toast.LENGTH_SHORT).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.album_picture_error, Snackbar.LENGTH_LONG).show();
     }
 
 
