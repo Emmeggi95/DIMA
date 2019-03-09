@@ -2,78 +2,112 @@ package com.dima.emmegi95.jaycaves.sm2;
 
 public class Album {
 
-    private long id;
+
     private String title;
-    private String year;
-    private String month;
+    private String date;
+    private double score;
     private String artist;
-    private String genre;
+    private String genre1;
+    private String genre2;
+    private String genre3;
     private String cover;
 
 
-    public Album(long id, String title, String year, String month, String artist, String genre, String cover) {
-        this.id = id;
+    public Album(){
+
+    }
+
+    public Album(String title, String date, double score, String artist, String genre1, String genre2, String genre3, String cover) {
         this.title = title;
-        this.year = year;
-        this.month = month;
+        this.date = date;
+        this.score = score;
         this.artist = artist;
-        this.genre = genre;
+        this.genre1 = genre1;
+        this.genre2 = genre2;
+        this.genre3 = genre3;
         this.cover = cover;
     }
 
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
+    public Album(String title, String date, double score, String artist, String genre1, String cover) {
+        this.title = title;
+        this.date = date;
+        this.score = score;
+        this.artist = artist;
+        this.genre1 = genre1;
         this.cover = cover;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public Album(String title, String date, double score, String artist, String genre1, String genre2, String cover) {
+        this.title = title;
+        this.date = date;
+        this.score = score;
+        this.artist = artist;
+        this.genre1 = genre1;
+        this.genre2 = genre2;
+        this.cover = cover;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getDate() {
+        return date;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public double getScore() {
+        return score;
     }
 
     public String getArtist() {
         return artist;
     }
 
+    public String getGenre1() {
+        return genre1;
+    }
+
+    public String getGenre2() {
+        return genre2;
+    }
+
+    public String getGenre3() {
+        return genre3;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public void setGenre1(String genre1) {
+        this.genre1 = genre1;
+    }
+
+    public void setGenre2(String genre2) {
+        this.genre2 = genre2;
+    }
+
+    public void setGenre3(String genre3) {
+        this.genre3 = genre3;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 }
