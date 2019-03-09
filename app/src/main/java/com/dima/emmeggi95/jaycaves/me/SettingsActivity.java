@@ -1,4 +1,4 @@
-package com.dima.emmegi95.jaycaves.sm2;
+package com.dima.emmeggi95.jaycaves.me;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -18,7 +18,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.WindowManager;
 
 import java.util.List;
 

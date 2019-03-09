@@ -1,4 +1,4 @@
-package com.dima.emmegi95.jaycaves.sm2;
+package com.dima.emmeggi95.jaycaves.me;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

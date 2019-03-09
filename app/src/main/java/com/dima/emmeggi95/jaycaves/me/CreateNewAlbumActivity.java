@@ -1,4 +1,4 @@
-package com.dima.emmegi95.jaycaves.sm2;
+package com.dima.emmeggi95.jaycaves.me;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -6,13 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +27,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.dima.emmegi95.jaycaves.sm2.MainActivity.PHOTO_PICKER;
+import static com.dima.emmeggi95.jaycaves.me.MainActivity.PHOTO_PICKER;
 
 /**
  * This activity is where the user can insert into the catalogue new albums

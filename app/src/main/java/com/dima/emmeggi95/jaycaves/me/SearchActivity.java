@@ -1,10 +1,7 @@
-package com.dima.emmegi95.jaycaves.sm2;
+package com.dima.emmeggi95.jaycaves.me;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.view.Window;
 
 public class SearchActivity extends AppCompatActivity {
 

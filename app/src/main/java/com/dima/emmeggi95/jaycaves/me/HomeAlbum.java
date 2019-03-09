@@ -1,6 +1,4 @@
-package com.dima.emmegi95.jaycaves.sm2;
-
-import android.net.Uri;
+package com.dima.emmeggi95.jaycaves.me;
 
 public class HomeAlbum {
     private String title;
