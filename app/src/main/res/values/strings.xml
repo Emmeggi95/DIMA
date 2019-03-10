@@ -206,4 +206,10 @@
     <string name="album_noartist_error">Error: there is no such artist in our database</string>
     <string name="album_existing_error">Error: album already exists in our database!</string>
 
+
+    <!-- Tab Names -->
+    <string name="album">Album</string>
+    <string name="artist">Artist</string>
+    <string name="add_content_title">Register new content here!</string>
+
 </resources>
