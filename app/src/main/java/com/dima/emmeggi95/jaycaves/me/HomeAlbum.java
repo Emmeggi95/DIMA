@@ -4,7 +4,9 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class HomeAlbum {
+import java.io.Serializable;
+
+public class HomeAlbum implements Serializable {
     private String title;
     private String author;
     private String genre;

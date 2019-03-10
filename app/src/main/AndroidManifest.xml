@@ -40,8 +40,6 @@
             android:label="@string/action_search"
             android:parentActivityName="com.dima.emmeggi95.jaycaves.me.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -107,6 +107,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View v){
                     Intent intent = new Intent(mContext, AlbumActivity.class);
+                    intent.putExtra("album", albumList.get(position));
                     mContext.startActivity(intent);
                 }
             });
