@@ -76,7 +76,7 @@ public class CreateNewAlbumActivity extends AppCompatActivity {
 
 
         // Button for image selection
-        ImageButton button = findViewById(R.id.photoPickerButton);
+        ImageButton button = findViewById(R.id.photoPickerButton2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

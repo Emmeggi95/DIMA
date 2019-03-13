@@ -11,45 +11,45 @@
 
 
         <ImageButton
-            android:id="@+id/photoPickerButton"
+            android:id="@+id/photoPickerButton2"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="4dp"
             android:layout_marginTop="10dp"
             android:background="@android:drawable/ic_menu_gallery"
-            app:layout_constraintStart_toEndOf="@+id/newAlbumUplaodMessage"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput3" />
+            app:layout_constraintStart_toEndOf="@+id/newArtistUplaodMessage"
+            app:layout_constraintTop_toBottomOf="@+id/newArtistGenreInput3" />
 
         <ImageView
-            android:id="@+id/newAlbumPicture"
+            android:id="@+id/newArtistPicture"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="64dp"
             android:layout_marginTop="16dp"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumUplaodMessage"
+            app:layout_constraintTop_toBottomOf="@+id/newArtistUplaodMessage"
             tools:srcCompat="@tools:sample/avatars" />
 
 
         <EditText
-            android:id="@+id/newAlbumReleaseDateInput"
+            android:id="@+id/newArtistReleaseDateInput"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="64dp"
             android:ems="10"
-            android:hint="ReleaseDate"
+            android:hint="Date of foundation"
             android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.307"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumNameInput" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistNameInput" />
 
         <EditText
-            android:id="@+id/newAlbumNameInput"
+            android:id="@+id/newArtistNameInput"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/newAlbumGenreInput1"
+            android:id="@+id/newArtistGenreInput1"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -75,10 +75,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistStory" />
 
         <EditText
-            android:id="@+id/newAlbumGenreInput2"
+            android:id="@+id/newArtistGenreInput2"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -90,10 +90,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput1" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistGenreInput1" />
 
         <EditText
-            android:id="@+id/newAlbumGenreInput3"
+            android:id="@+id/newArtistGenreInput3"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -105,20 +105,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.306"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput2" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistGenreInput2" />
 
         <TextView
-            android:id="@+id/newAlbumUplaodMessage"
+            android:id="@+id/newArtistUplaodMessage"
             android:layout_width="162dp"
             android:layout_height="38dp"
             android:layout_marginStart="64dp"
             android:layout_marginTop="10dp"
             android:text="To upload the cover, tap the icon on the right!"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput3" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistGenreInput3" />
 
         <Button
-            android:id="@+id/createNewAlbumButton"
+            android:id="@+id/createNewArtistButton"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -129,22 +129,22 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumUplaodMessage" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistUplaodMessage" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/newArtistStory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="64dp"
             android:ems="10"
-            android:hint="Story"
+            android:hint="Story (200 words)"
             android:inputType="textMultiLine"
             android:maxLength="200"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumReleaseDateInput" />
+            app:layout_constraintTop_toBottomOf="@+id/newArtistReleaseDateInput" />
 
 
     </android.support.constraint.ConstraintLayout>

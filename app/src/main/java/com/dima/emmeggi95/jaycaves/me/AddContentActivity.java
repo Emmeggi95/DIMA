@@ -21,6 +21,7 @@ public class AddContentActivity extends AppCompatActivity {
         viewPager= findViewById(R.id.pager);
         adapter= new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 
