@@ -1,7 +1,8 @@
-package com.dima.emmeggi95.jaycaves.me;
+package com.dima.emmeggi95.jaycaves.me.entities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,23 +11,36 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
+import com.dima.emmeggi95.jaycaves.me.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * This class is used to inflate the content in the RecyclerView in the Home Page.
+ */
 public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private Context context;
     private List<HomeAlbum> albumList;
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
+    /**
+     * @param mContext
+     * @param albumList
+     */
     public HomeAlbumsAdapter(Context mContext, List<HomeAlbum> albumList) {
-        this.mContext = mContext;
+        this.context = mContext;
+        albumList.add(0, new HomeAlbum(context.getResources().getString(R.string.home_header_title)));
         this.albumList = albumList;
     }
 
+    /**
+     * Holder to manage a single item in the RecyclerView
+     */
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView title, author, genre, rating;
         public ImageView cover;
@@ -49,7 +63,10 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             card = (CardView) view.findViewById(R.id.card);
         }
     }
-    
+
+    /**
+     * Holder to manage the header of the RecyclerView
+     */
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         public TextView text;
         
@@ -59,8 +76,15 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    /**
+     * Choose the layout to inflate based on the viewType (item or header)
+     * @param parent
+     * @param viewType
+     * @return
+     */
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER){
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.header_home, parent, false);
@@ -73,6 +97,11 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         throw new RuntimeException("No match for " + viewType + ".");
     }
 
+    /**
+     * Set the parameters of each item from the corresponding Album in albumList
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         HomeAlbum album = albumList.get(position);
@@ -96,19 +125,13 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
             }
 
-            /*/Set card background color based on the album cover
-
-            Bitmap coverBitmap = BitmapFactory.decodeResource(mContext.getResources(), album.getCover());
-            Palette p = Palette.from(coverBitmap).generate();
-            if(p.getMutedSwatch()!=null)
-            ((ItemViewHolder) holder).title.setTextColor(p.getMutedSwatch().getRgb());*/
-
+            //Set listener to open AlbumActivity
             ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    Intent intent = new Intent(mContext, AlbumActivity.class);
+                    Intent intent = new Intent(context, AlbumActivity.class);
                     intent.putExtra("album", albumList.get(position));
-                    mContext.startActivity(intent);
+                    context.startActivity(intent);
                 }
             });
         }
@@ -124,6 +147,11 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return albumList.size();
     }
 
+    /**
+     * This method is used "behind the scenes" in the onCreateViewHolder to set the header in first position and the items in all the following positions in the RecyclerView
+     * @param position
+     * @return
+     */
     @Override
     public int getItemViewType(int position) {
         if (isPositionHeader(position))

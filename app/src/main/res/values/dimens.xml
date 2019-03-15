@@ -27,4 +27,12 @@
     <dimen name="star_dimension">20dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!--Album Page-->
+    <dimen name="layout_margin">16dp</dimen>
+    <dimen name="artist_font_size">24sp</dimen>
+    <dimen name="review_title_font_size">20sp</dimen>
+    <dimen name="review_author_font_size">18sp</dimen>
+    <dimen name="review_text_font_size">16sp</dimen>
+    <dimen name="like_button_width">50dp</dimen>
 </resources>

@@ -1,17 +1,18 @@
-package com.dima.emmeggi95.jaycaves.me;
-
-import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.dima.emmeggi95.jaycaves.me.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeAlbum implements Serializable {
     private String title;
     private String author;
     private String genre;
+    private String year;
     private double score;
     private int coverSrc;
+
+    private List<Review> reviews = new ArrayList<Review>();
 
     public HomeAlbum(String title) {
         this.title = title;
@@ -30,7 +31,25 @@ public class HomeAlbum implements Serializable {
         this.author = author;
         this.genre = genre;
         this.score = score;
+    }
 
+    public HomeAlbum(String title, String author, String genre, String year, double score, int coverSrc) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.year = year;
+        this.score = score;
+        this.coverSrc = coverSrc;
+    }
+
+    public HomeAlbum(String title, String author, String genre, String year, double score, int coverSrc, List<Review> reviews) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.year = year;
+        this.score = score;
+        this.coverSrc = coverSrc;
+        this.reviews = reviews;
     }
 
     public String getTitle() {
@@ -43,6 +62,10 @@ public class HomeAlbum implements Serializable {
 
     public String getGenre() {
         return genre;
+    }
+
+    public String getYear() {
+        return year;
     }
 
     public double getScore() {
@@ -65,6 +88,10 @@ public class HomeAlbum implements Serializable {
         this.genre = genre;
     }
 
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public void setScore(double score) {
         this.score = score;
     }
@@ -73,4 +100,11 @@ public class HomeAlbum implements Serializable {
         this.coverSrc = cover;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }

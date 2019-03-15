@@ -46,11 +46,13 @@ dependencies {
     // implementation 'com.facebook.android:facebook-login:4.x'
 
     implementation 'com.android.support:cardview-v7:28.0.0'//To implement a single album card
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-//To display multiple cards in a single view
+    implementation 'com.android.support:recyclerview-v7:28.0.0'//To display multiple cards in a single view
 
-    implementation 'com.android.support:palette-v7:28.0.0-alpha1'
-//Palette class, useful to find dominant colors in bitmaps
+    implementation 'com.android.support:palette-v7:28.0.0-alpha1'//Palette class, useful to find dominant colors in bitmaps
+
+    //To manage data through ViewModels and LiveData
+    implementation "android.arch.lifecycle:extensions:1.0.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

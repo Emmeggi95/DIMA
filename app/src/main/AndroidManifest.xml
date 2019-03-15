@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ReviewsActivity"
+            android:parentActivityName=".AlbumActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".AddContentActivity"
             android:parentActivityName= ".MainActivity" />
         <activity
@@ -18,7 +22,8 @@
             android:name=".AlbumActivity"
             android:label="@string/title_activity_album"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatus" />
+            android:theme="@style/AppTheme.NoActionBar.TranslucentStatus"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
