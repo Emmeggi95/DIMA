@@ -24,6 +24,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private List<HomeAlbum> albumList;
+    private static HomeAlbum header;
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -34,7 +35,12 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public HomeAlbumsAdapter(Context mContext, List<HomeAlbum> albumList) {
         this.context = mContext;
-        albumList.add(0, new HomeAlbum(context.getResources().getString(R.string.home_header_title)));
+        if(header==null){
+            header = new HomeAlbum(context.getResources().getString(R.string.home_header_title));
+        }
+        if(albumList.get(0)!=header){
+            albumList.add(0, header);
+        }
         this.albumList = albumList;
     }
 
