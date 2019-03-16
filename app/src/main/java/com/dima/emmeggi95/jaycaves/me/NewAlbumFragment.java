@@ -8,21 +8,29 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -41,6 +49,10 @@ public class NewAlbumFragment extends Fragment {
     private Uri selectedImageUri;
     private FirebaseDatabase database;
     private DatabaseReference dbReference;
+    private ArrayList<String> genreList;
+    private ArrayList<String> tempArtist;
+    private boolean checkedArtist;
+    private ValueEventListener listener;
 
     // Layout elements
     private ImageView newAlbumPicture;
@@ -69,7 +81,6 @@ public class NewAlbumFragment extends Fragment {
         database= FirebaseDatabase.getInstance();
         dbReference= database.getReference("albums");
 
-
         // Activity View Setup
         newAlbumNameInput = view.findViewById(R.id.newAlbumNameInput);
         newAlbumReleaseDateInput = view.findViewById(R.id.newAlbumReleaseDateInput);
@@ -80,7 +91,70 @@ public class NewAlbumFragment extends Fragment {
         newAlbumPicture = view.findViewById(R.id.newAlbumPicture);
         newAlbumPicture.setActivated(false);
 
+        // Fetch all genres for autocompletion
+     /*   genreList= new ArrayList<>();
+        database.getReference("genres").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                if (genreList.isEmpty()) {
+                    for (DataSnapshot d : data)
+                        genreList.add(d.getValue(Genre.class).getName());
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_dropdown_item_1line, (String[]) genreList.toArray());
+                    // newAlbumGenreInput1.setAdapter(adapter); same for genre2 and genre3
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Snackbar.make(getActivity().getCurrentFocus(), R.string.album_internal_error, Snackbar.LENGTH_LONG).show();
+            }
+        });
+        */
 
+
+        // Text Listener for Artist input check
+        tempArtist= new ArrayList<>();
+        checkedArtist=false;
+        newAlbumArtistInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                // Parse user input text
+                String tempArtistName = s.toString();
+                String parsedArtistName = "";
+                if (s.toString().length()>0)
+                    parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+                database.getReference("artists").orderByKey().equalTo(parsedArtistName)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                tempArtist.clear(); // flush previous temporary values
+                                Iterable<DataSnapshot> data= dataSnapshot.getChildren();
+                                for (DataSnapshot d: data) {
+                                    tempArtist.add(d.getValue(Artist.class).getName());
+
+                                }
+                                checkedArtist=true;
+                                System.out.println(tempArtist.toString());
+
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Snackbar.make(getActivity().getCurrentFocus(),"CABBAGE", Snackbar.LENGTH_LONG).show();
+                            }
+                        });
+
+            }
+
+        });
 
 
         // Button for image selection
@@ -103,34 +177,18 @@ public class NewAlbumFragment extends Fragment {
             public void onClick(View view) {
 
                 if (inputCheckOk()) {
-
-                        newAlbumUpload();
-
-                } else
+                    newAlbumUpload();
+                }
+                else
                     missingElementMessage();
             }
         });
+
 
         return view;
     }
 
 
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    /**
-     * Checks if one text field in the form contains user input
-     * @param etText
-     * @return true if there is some content
-     */
-    private boolean isNotEmpty(EditText etText) {
-        return etText.getText().toString().trim().length()> 0;
-    }
 
 
     /**
@@ -162,20 +220,37 @@ public class NewAlbumFragment extends Fragment {
     private boolean inputCheckOk() {
 
         return (isNotEmpty(newAlbumNameInput) && isNotEmpty(newAlbumReleaseDateInput) && isNotEmpty(newAlbumArtistInput)
-                && isNotEmpty(newAlbumGenreInput1) && newAlbumPicture.isActivated());
+                && isNotEmpty(newAlbumGenreInput1) && newAlbumPicture.isActivated() && checkedArtist && !tempArtist.isEmpty());
     }
+
+    /**
+     * Checks if one text field in the form contains user input
+     * @param etText
+     * @return true if there is some content
+     */
+    private boolean isNotEmpty(EditText etText) {
+        return etText.getText().toString().trim().length()> 0;
+    }
+
 
     /**
      * Procedure to store the new album in the real-time database and to upload the album cover in the storage
      */
     private void newAlbumUpload() {
 
-        // Temp variables to parse user inputs and store query results
+        // Temp variables to parse user inputs
         String tempAlbumName = newAlbumNameInput.getText().toString();
-        String parsedAlbumName = tempAlbumName.substring(0, 1).toUpperCase() + tempAlbumName.substring(1);
+        final String parsedAlbumName = tempAlbumName.substring(0, 1).toUpperCase() + tempAlbumName.substring(1);
         String tempArtistName = newAlbumArtistInput.getText().toString();
         String parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+        String tempGenre1= newAlbumGenreInput1.getText().toString();
+        String parsedGenre1= tempGenre1.substring(0,1).toUpperCase()+ tempGenre1.substring(1);
+        String tempGenre2= newAlbumGenreInput1.getText().toString();
+        String parsedGenre2= tempGenre2.substring(0,1).toUpperCase()+ tempGenre2.substring(1);
+        String tempGenre3= newAlbumGenreInput1.getText().toString();
+        String parsedGenre3= tempGenre3.substring(0,1).toUpperCase()+ tempGenre3.substring(1);
         final String parsedCoverName= selectedImageUri.getLastPathSegment()+randomIdGenerator();
+
 
 
 
@@ -184,16 +259,14 @@ public class NewAlbumFragment extends Fragment {
         if (isNotEmpty(newAlbumGenreInput2))
             if(isNotEmpty(newAlbumGenreInput3))
                 album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
-                        0.0, parsedArtistName, newAlbumGenreInput1.getText().toString(),
-                        newAlbumGenreInput2.getText().toString(), newAlbumGenreInput3.getText().toString(), parsedCoverName);
+                        0.0, parsedArtistName, parsedGenre1, parsedGenre2, parsedGenre3, parsedCoverName);
             else
                 album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
-                        0.0, parsedArtistName, newAlbumGenreInput1.getText().toString(),
-                        newAlbumGenreInput2.getText().toString(), parsedCoverName);
+                        0.0, parsedArtistName, parsedGenre1, parsedGenre2, parsedCoverName);
 
         else
             album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
-                    0.0, parsedArtistName, newAlbumGenreInput1.getText().toString(), parsedCoverName);
+                    0.0, parsedArtistName, parsedGenre1, parsedCoverName);
 
 
 
@@ -215,8 +288,8 @@ public class NewAlbumFragment extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Snackbar.make(getActivity().getCurrentFocus(),R.string.album_cover_error,Snackbar.LENGTH_LONG).show();
-                                //dbReference.child(newAlbumNameInput.getText().toString()).removeValue();
-                                // HANDLE
+                                dbReference.child(parsedAlbumName).removeValue();
+
                     }
                 });
             }
@@ -251,8 +324,14 @@ public class NewAlbumFragment extends Fragment {
         else if (!isNotEmpty(newAlbumGenreInput1)){
             Snackbar.make(getActivity().getCurrentFocus(),R.string.album_genre_error, Snackbar.LENGTH_LONG).show();
         }
-        else if (!newAlbumPicture.isActivated())
+        else if (!newAlbumPicture.isActivated()){
             Snackbar.make(getActivity().getCurrentFocus(),R.string.album_picture_error, Snackbar.LENGTH_LONG).show();
+        }
+        else if (!checkedArtist){
+            Snackbar.make(getActivity().getCurrentFocus(), "DING", Snackbar.LENGTH_LONG).show();
+        }
+        else if (tempArtist.isEmpty())
+            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
     }
 
 
@@ -312,3 +391,4 @@ else
 
 
 }
+

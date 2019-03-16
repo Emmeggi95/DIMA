@@ -142,7 +142,7 @@
     <string name="album_genre_error">Please insert at least a valid genre!</string>
     <string name="album_picture_error">Please upload a picture!</string>
     <string name="album_noartist_error">Error: there is no such artist in our database</string>
-    <string name="album_existing_error">Oops something went wrong! Please check if artist is registered and album is not already present in our catalogue!  </string>
+    <string name="album_existing_error">Oops something went wrong! Album already exists </string>
     <string name="album_network_error">Network connection error: operation failed!</string>
     <string name="album_unknown_error">Unknown error: try again!</string>
     <string name="album_cover_error">Failed to uplaod the cover! Try again</string>
@@ -152,16 +152,19 @@
     <string name="artist_genre_error">Please insert at least a valid genre!</string>
     <string name="artist_picture_error">Please upload a picture!</string>
     <string name="artist_existing_error">Error: artist already exists in our database!</string>
+    <string name="artist_cover_error">Failed to upload artist cover! Try again</string>
+    <string name="artist_unknown_error">Some enexpected error occurred! Try again!</string>
+    <string name="album_internal_error">Internal Error: check your internet connection!</string>
 
+    <!-- Other Messages -->
+    <string name="album_success">Album successfully created!</string>
+    <string name="artist_success">Artist registered successfully</string>
 
     <!-- Tab Names -->
     <string name="album">Album</string>
     <string name="artist">Artist</string>
     <string name="add_content_title">Register new content here!</string>
-    <string name="album_success">Album successfully created!</string>
-    <string name="artist_success">Artist registered successfully</string>
-    <string name="artist_cover_error">Failed to upload artist cover! Try again</string>
-    <string name="artist_unknown_error">Some enexpected error occurred! Try again!</string>
+
 
 
 </resources>
