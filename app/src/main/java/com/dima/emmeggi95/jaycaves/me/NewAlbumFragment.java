@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -14,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,7 +24,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,16 +51,15 @@ public class NewAlbumFragment extends Fragment {
     private ArrayList<String> genreList;
     private ArrayList<String> tempArtist;
     private boolean checkedArtist;
-    private ValueEventListener listener;
 
     // Layout elements
     private ImageView newAlbumPicture;
     private EditText newAlbumNameInput;
     private EditText newAlbumReleaseDateInput;
     private EditText newAlbumArtistInput;
-    private EditText newAlbumGenreInput1;
-    private EditText newAlbumGenreInput2;
-    private EditText newAlbumGenreInput3;
+    private AutoCompleteTextView newAlbumGenreInput1;
+    private AutoCompleteTextView newAlbumGenreInput2;
+    private AutoCompleteTextView newAlbumGenreInput3;
 
     public NewAlbumFragment() {
         // Required empty public constructor
@@ -92,25 +90,25 @@ public class NewAlbumFragment extends Fragment {
         newAlbumPicture.setActivated(false);
 
         // Fetch all genres for autocompletion
-     /*   genreList= new ArrayList<>();
-        database.getReference("genres").addListenerForSingleValueEvent(new ValueEventListener() {
+        genreList= new ArrayList<>();
+        database.getReference("genres").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                if (genreList.isEmpty()) {
                     for (DataSnapshot d : data)
-                        genreList.add(d.getValue(Genre.class).getName());
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                            android.R.layout.simple_dropdown_item_1line, (String[]) genreList.toArray());
-                    // newAlbumGenreInput1.setAdapter(adapter); same for genre2 and genre3
-                }
+                        genreList.add(d.getKey());
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                            android.R.layout.simple_dropdown_item_1line, genreList);
+                    newAlbumGenreInput1.setAdapter(adapter);
+                    newAlbumGenreInput2.setAdapter(adapter);
+                    newAlbumGenreInput3.setAdapter(adapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Snackbar.make(getActivity().getCurrentFocus(), R.string.album_internal_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getActivity().getCurrentFocus(), R.string.internal_error, Snackbar.LENGTH_LONG).show();
             }
         });
-        */
+
 
 
         // Text Listener for Artist input check
@@ -131,6 +129,8 @@ public class NewAlbumFragment extends Fragment {
                 String parsedArtistName = "";
                 if (s.toString().length()>0)
                     parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+
+                // Check existence of typed artist in real time db
                 database.getReference("artists").orderByKey().equalTo(parsedArtistName)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -143,12 +143,11 @@ public class NewAlbumFragment extends Fragment {
 
                                 }
                                 checkedArtist=true;
-                                System.out.println(tempArtist.toString());
 
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Snackbar.make(getActivity().getCurrentFocus(),"CABBAGE", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(getActivity().getCurrentFocus(),R.string.album_unknown_error, Snackbar.LENGTH_LONG).show();
                             }
                         });
 
@@ -220,7 +219,9 @@ public class NewAlbumFragment extends Fragment {
     private boolean inputCheckOk() {
 
         return (isNotEmpty(newAlbumNameInput) && isNotEmpty(newAlbumReleaseDateInput) && isNotEmpty(newAlbumArtistInput)
-                && isNotEmpty(newAlbumGenreInput1) && newAlbumPicture.isActivated() && checkedArtist && !tempArtist.isEmpty());
+                && isNotEmpty(newAlbumGenreInput1) && newAlbumPicture.isActivated() && checkedArtist && !tempArtist.isEmpty()
+                && isGenreValid(newAlbumGenreInput1) && (!isNotEmpty(newAlbumGenreInput2) || isGenreValid(newAlbumGenreInput2))
+                && ((!isNotEmpty(newAlbumGenreInput3) || isGenreValid(newAlbumGenreInput3))));
     }
 
     /**
@@ -230,6 +231,16 @@ public class NewAlbumFragment extends Fragment {
      */
     private boolean isNotEmpty(EditText etText) {
         return etText.getText().toString().trim().length()> 0;
+    }
+
+    private boolean isGenreValid(AutoCompleteTextView textView){
+        boolean found= false;
+        for (String el: genreList){
+            if (el.toLowerCase().equals(textView.getText().toString().toLowerCase()))
+                found=true;
+        }
+
+        return found;
     }
 
 
@@ -250,8 +261,6 @@ public class NewAlbumFragment extends Fragment {
         String tempGenre3= newAlbumGenreInput1.getText().toString();
         String parsedGenre3= tempGenre3.substring(0,1).toUpperCase()+ tempGenre3.substring(1);
         final String parsedCoverName= selectedImageUri.getLastPathSegment()+randomIdGenerator();
-
-
 
 
         // Create object Album according to the number of genres specified
@@ -310,6 +319,9 @@ public class NewAlbumFragment extends Fragment {
 
     }
 
+    /**
+     *
+     */
     private void missingElementMessage(){
 
         if (!isNotEmpty(newAlbumNameInput)){
@@ -322,16 +334,26 @@ public class NewAlbumFragment extends Fragment {
             Snackbar.make(getActivity().getCurrentFocus(),R.string.album_artist_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumGenreInput1)){
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_genre_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(getActivity().getCurrentFocus(),R.string.genre_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!newAlbumPicture.isActivated()){
             Snackbar.make(getActivity().getCurrentFocus(),R.string.album_picture_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!checkedArtist){
-            Snackbar.make(getActivity().getCurrentFocus(), "DING", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(getActivity().getCurrentFocus(), R.string.album_unknown_error, Snackbar.LENGTH_LONG).show();
         }
-        else if (tempArtist.isEmpty())
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
+        else if (tempArtist.isEmpty()) {
+            Snackbar.make(getActivity().getCurrentFocus(), R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
+        }
+        else if(!isGenreValid(newAlbumGenreInput1)) {
+            Snackbar.make(getActivity().getCurrentFocus(), R.string.genre1_error, Snackbar.LENGTH_LONG).show();
+        }
+        else if(!isGenreValid(newAlbumGenreInput2)) {
+            Snackbar.make(getActivity().getCurrentFocus(), R.string.genre2_error, Snackbar.LENGTH_LONG).show();
+        }
+        else if(!isGenreValid(newAlbumGenreInput3)) {
+            Snackbar.make(getActivity().getCurrentFocus(), R.string.genre3_error, Snackbar.LENGTH_LONG).show();
+        }
     }
 
 
@@ -352,42 +374,6 @@ public class NewAlbumFragment extends Fragment {
             buf[idx] = symbols[new SecureRandom().nextInt(symbols.length)];
         return new String(buf);
     }
-
-/*
-
-if (existsArtist(newAlbumArtistInput.getText().toString()))
-else
-                        Snackbar.make(getActivity().getCurrentFocus(),R.string.album_noartist_error,Snackbar.LENGTH_LONG).show();
-
-  private boolean existsArtist(String artist) {
-
-        tempArtist.setName("default");
-        Query result = database.getReference("artists").orderByKey().equalTo(artist).limitToFirst(1);
-
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> list = dataSnapshot.getChildren();
-
-                for (DataSnapshot el: list) {
-                    Artist fetched = el.getValue(Artist.class);
-                    tempArtist.setName(fetched.getName());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Snackbar.make(getActivity().getCurrentFocus(), "ERROR: could not check Artist validity", Snackbar.LENGTH_LONG).show();
-            }
-        };
-        result.addValueEventListener(listener);
-        System.out.println(tempArtist);
-        return (tempArtist.getName().equals(artist));
-
-    }
-
- */
 
 
 }

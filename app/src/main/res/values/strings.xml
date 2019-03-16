@@ -139,7 +139,7 @@
     <string name="album_name_error">Please insert a valid Album Name!</string>
     <string name="album_date_error">Please insert a valid date!</string>
     <string name="album_artist_error">Please insert a valid artist!</string>
-    <string name="album_genre_error">Please insert at least a valid genre!</string>
+    <string name="genre_error">Please insert at least a valid genre!</string>
     <string name="album_picture_error">Please upload a picture!</string>
     <string name="album_noartist_error">Error: there is no such artist in our database</string>
     <string name="album_existing_error">Oops something went wrong! Album already exists </string>
@@ -154,7 +154,10 @@
     <string name="artist_existing_error">Error: artist already exists in our database!</string>
     <string name="artist_cover_error">Failed to upload artist cover! Try again</string>
     <string name="artist_unknown_error">Some enexpected error occurred! Try again!</string>
-    <string name="album_internal_error">Internal Error: check your internet connection!</string>
+    <string name="internal_error">Internal Error: check your internet connection!</string>
+    <string name="genre1_error">Please insert a valid genre 1</string>
+    <string name="genre2_error">Please insert a valid genre 2</string>
+    <string name="genre3_error">Please insert a valid genre 3</string>
 
     <!-- Other Messages -->
     <string name="album_success">Album successfully created!</string>

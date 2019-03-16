@@ -78,12 +78,8 @@
             android:hint="Artist"
             android:inputType="text" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/newAlbumGenreInput1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumArtistInput"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -91,14 +87,14 @@
             android:layout_marginEnd="64dp"
             android:ems="10"
             android:hint="Genre1"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/newAlbumGenreInput2"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput1"
+            app:layout_constraintTop_toBottomOf="@+id/newAlbumArtistInput" />
+
+        <AutoCompleteTextView
+            android:id="@+id/newAlbumGenreInput2"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -106,14 +102,14 @@
             android:layout_marginEnd="64dp"
             android:ems="10"
             android:hint="Genre2 (Optional)"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/newAlbumGenreInput3"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.306"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput2"
+            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput1" />
+
+        <AutoCompleteTextView
+            android:id="@+id/newAlbumGenreInput3"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
@@ -121,7 +117,11 @@
             android:layout_marginEnd="64dp"
             android:ems="10"
             android:hint="Genre3 (Optional)"
-            android:inputType="text" />
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.306"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput2" />
 
         <TextView
             android:id="@+id/newAlbumUplaodMessage"
