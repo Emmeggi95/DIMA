@@ -57,4 +57,8 @@ public class AddContentActivity extends AppCompatActivity {
 
 
     }
+
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
 }

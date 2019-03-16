@@ -155,7 +155,6 @@ public class NewAlbumFragment extends Fragment {
 
         });
 
-
         // Button for image selection
         ImageButton button = view.findViewById(R.id.photoPickerButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -344,6 +343,7 @@ public class NewAlbumFragment extends Fragment {
         }
         else if (tempArtist.isEmpty()) {
             Snackbar.make(getActivity().getCurrentFocus(), R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
+            //((AddContentActivity) getActivity()).getViewPager().setCurrentItem(1);
         }
         else if(!isGenreValid(newAlbumGenreInput1)) {
             Snackbar.make(getActivity().getCurrentFocus(), R.string.genre1_error, Snackbar.LENGTH_LONG).show();

@@ -1,14 +1,13 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.dima.emmeggi95.jaycaves.me.NewArtistFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="match_parent">
 
         <ImageButton
             android:id="@+id/photoPickerButton2"
@@ -27,7 +26,9 @@
             android:layout_height="100dp"
             android:layout_marginStart="64dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newArtistUplaodMessage"
             tools:srcCompat="@tools:sample/avatars" />
@@ -109,11 +110,11 @@
 
         <TextView
             android:id="@+id/newArtistUplaodMessage"
-            android:layout_width="162dp"
-            android:layout_height="38dp"
+            android:layout_width="179dp"
+            android:layout_height="37dp"
             android:layout_marginStart="64dp"
             android:layout_marginTop="10dp"
-            android:text="To upload the cover, tap the icon on the right!"
+            android:text="To upload the cover, tap the icon on the right! (6MB max)"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newArtistGenreInput3" />
 
@@ -149,4 +150,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
