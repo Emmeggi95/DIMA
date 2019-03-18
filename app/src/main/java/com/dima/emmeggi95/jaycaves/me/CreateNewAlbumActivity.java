@@ -232,7 +232,7 @@ public class CreateNewAlbumActivity extends AppCompatActivity {
             Snackbar.make(this.getCurrentFocus(),R.string.album_artist_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumGenreInput1)){
-            Snackbar.make(this.getCurrentFocus(),R.string.album_genre_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(this.getCurrentFocus(),R.string.genre_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!newAlbumPicture.isActivated())
             Snackbar.make(this.getCurrentFocus(),R.string.album_picture_error, Snackbar.LENGTH_LONG).show();
