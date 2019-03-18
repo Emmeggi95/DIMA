@@ -3,19 +3,46 @@ package com.dima.emmeggi95.jaycaves.me.view_models;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
-import com.dima.emmeggi95.jaycaves.me.R;
-import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbum;
-import com.dima.emmeggi95.jaycaves.me.entities.Review;
+import com.dima.emmeggi95.jaycaves.me.Album;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeAlbumsViewModel extends ViewModel {
 
-    private MutableLiveData<List<HomeAlbum>> homeAlbums = new MutableLiveData<>();
+    private MutableLiveData<List<Album>> albums = new MutableLiveData<>();
+    private List<Album> albumList = new ArrayList<>();
+
+    private FirebaseDatabase database;
 
     public HomeAlbumsViewModel(){
+
+        database = FirebaseDatabase.getInstance();
+        database.getReference("albums").orderByKey().limitToFirst(10).addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for(DataSnapshot d : data){
+                    albumList.add(d.getValue(Album.class));
+                }
+                albums.postValue(albumList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        /*
         // Qui dovrebbe prendere i dati dal databse, in questo caso vengono generati nel codice.
         List<HomeAlbum> albumList = new ArrayList<HomeAlbum>();
         Review animalsReview = new Review("Emmeggi95", "A masterpiece from the 70s.", "Animals is one of my favourite albums by Pink Floyd. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum varius metus, at condimentum nisi consectetur at. Aliquam eu venenatis dolor. Nulla pharetra ligula elit, ut fringilla tortor tincidunt sed. Sed venenatis risus ac tellus sollicitudin fermentum. Nullam bibendum, odio id fringilla mollis, magna tortor venenatis mauris, at laoreet felis tortor eget mauris. Sed egestas turpis eu lectus faucibus mollis. Curabitur eget tincidunt ipsum. Fusce ac imperdiet eros, sagittis semper lacus. Maecenas luctus, massa a scelerisque molestie, tellus odio consequat nisl, in suscipit metus urna ultricies ligula. Fusce lobortis luctus neque, ac commodo ligula. Mauris eu ex mollis, auctor tellus vitae, vulputate nisl. Sed consectetur urna ut velit semper auctor. Vivamus rutrum mi in erat pulvinar, sed bibendum leo egestas.",
@@ -30,9 +57,10 @@ public class HomeAlbumsViewModel extends ViewModel {
         albumList.add(new HomeAlbum("London Calling", "The Clash", "Punk Rock", 3.36, R.drawable.the_clash_london_calling));
         albumList.add(new HomeAlbum("The Doors", "The Doors", "Psychedelic Rock", 4.02, R.drawable.the_doors_the_doors));
         homeAlbums.postValue(albumList);
+        */
     }
 
-    public LiveData<List<HomeAlbum>> getData(){
-        return homeAlbums;
+    public LiveData<List<Album>> getData(){
+        return albums;
     }
 }

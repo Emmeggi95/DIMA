@@ -1,6 +1,12 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-public class Album {
+import com.dima.emmeggi95.jaycaves.me.entities.Review;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Album implements Serializable {
 
 
     private String title;
@@ -11,6 +17,8 @@ public class Album {
     private String genre2;
     private String genre3;
     private String cover;
+
+    private List<Review> reviews = new ArrayList<>();
 
 
     public Album(){
@@ -45,6 +53,10 @@ public class Album {
         this.genre1 = genre1;
         this.genre2 = genre2;
         this.cover = cover;
+    }
+
+    public Album(String title){
+        this.title = title;
     }
 
     public String getTitle() {
@@ -109,5 +121,13 @@ public class Album {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

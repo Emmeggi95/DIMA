@@ -12,12 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbum;
 import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbumsAdapter;
-import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.dima.emmeggi95.jaycaves.me.view_models.HomeAlbumsViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -47,9 +44,9 @@ public class HomeFragment extends Fragment {
         viewModel = ViewModelProviders.of(getActivity()).get(HomeAlbumsViewModel.class);
 
 
-        final Observer<List<HomeAlbum>> observer = new Observer<List<HomeAlbum>>() {
+        final Observer<List<Album>> observer = new Observer<List<Album>>() {
             @Override
-            public void onChanged(@Nullable List<HomeAlbum> homeAlbums) {
+            public void onChanged(@Nullable List<Album> homeAlbums) {
                 adapter = new HomeAlbumsAdapter(getActivity(), homeAlbums);
                 recyclerView.setAdapter(adapter);
             }

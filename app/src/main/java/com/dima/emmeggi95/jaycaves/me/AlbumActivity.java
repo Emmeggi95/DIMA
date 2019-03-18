@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbum;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import static android.view.View.GONE;
 
 public class AlbumActivity extends AppCompatActivity {
 
-    HomeAlbum album;
+    Album album;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +35,15 @@ public class AlbumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album);
 
         // Get album from intent extra
-        album = (HomeAlbum) getIntent().getSerializableExtra("album");
-        Bitmap coverBitmap = BitmapFactory.decodeResource(getResources(), album.getCover());
+        album = (Album) getIntent().getSerializableExtra("album");
+        Bitmap coverBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_cover);
         Palette p = Palette.from(coverBitmap).generate();
-        int color = p.getMutedSwatch().getRgb();
-
+        int color;
+        if(p.getMutedSwatch()!=null) {
+            color = p.getMutedSwatch().getRgb();
+        } else {
+            color = R.color.colorAccent;
+        }
         // Set App Bar
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.album_activity_toolbar_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.album_activity_toolbar);
@@ -57,7 +60,7 @@ public class AlbumActivity extends AppCompatActivity {
         setTitle(album.getTitle());
 
         ImageView coverView = (ImageView) findViewById(R.id.cover_toolbar);
-        coverView.setImageResource(album.getCover());
+        coverView.setImageResource(R.drawable.default_cover);
 
         // Set floating button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.album_floating_button);
@@ -76,11 +79,11 @@ public class AlbumActivity extends AppCompatActivity {
 
         // Set artist
         TextView artistText = (TextView) findViewById(R.id.artist_text);
-        artistText.setText(album.getAuthor());
+        artistText.setText(album.getArtist());
 
         // Set year
         TextView yearText = (TextView) findViewById(R.id.year_text);
-        yearText.setText(album.getYear());
+        yearText.setText(album.getDate());
 
         // Set stars
         List<ImageView> stars = new ArrayList<ImageView>();

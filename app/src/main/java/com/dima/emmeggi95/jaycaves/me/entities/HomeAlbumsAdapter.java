@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dima.emmeggi95.jaycaves.me.Album;
 import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
 import com.dima.emmeggi95.jaycaves.me.R;
 
@@ -23,8 +24,8 @@ import java.util.List;
 public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<HomeAlbum> albumList;
-    private static HomeAlbum header;
+    private List<Album> albumList;
+    private static Album header;
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -33,10 +34,10 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * @param mContext
      * @param albumList
      */
-    public HomeAlbumsAdapter(Context mContext, List<HomeAlbum> albumList) {
+    public HomeAlbumsAdapter(Context mContext, List<Album> albumList) {
         this.context = mContext;
         if(header==null){
-            header = new HomeAlbum(context.getResources().getString(R.string.home_header_title));
+            header = new Album(context.getResources().getString(R.string.home_header_title));
         }
         if(albumList.get(0)!=header){
             albumList.add(0, header);
@@ -110,15 +111,15 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        HomeAlbum album = albumList.get(position);
+        Album album = albumList.get(position);
         if(holder instanceof HeaderViewHolder){
             ((HeaderViewHolder) holder).text.setText(album.getTitle());
         }else if(holder instanceof ItemViewHolder){
             ((ItemViewHolder) holder).title.setText(album.getTitle());
-            ((ItemViewHolder) holder).author.setText(album.getAuthor());
-            ((ItemViewHolder) holder).genre.setText(album.getGenre());
+            ((ItemViewHolder) holder).author.setText(album.getArtist());
+            ((ItemViewHolder) holder).genre.setText(album.getGenre1());
             ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
-            ((ItemViewHolder) holder).cover.setImageResource(album.getCover());
+            //((ItemViewHolder) holder).cover.setImageResource();
 
             //Set rating stars
             int integerScore = (int) album.getScore();
@@ -144,7 +145,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    private HomeAlbum getItem(int position) {
+    private Album getItem(int position) {
         return albumList.get(position);
     }
 
