@@ -1,7 +1,10 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.widget.ImageView;
+
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ public class Album implements Serializable {
     private String genre2;
     private String genre3;
     private String cover;
+    private File cover_file;
 
     private List<Review> reviews = new ArrayList<>();
 
@@ -129,5 +133,13 @@ public class Album implements Serializable {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public File getCover_file() {
+        return cover_file;
+    }
+
+    public void setCover_file(File cover_file) {
+        this.cover_file = cover_file;
     }
 }

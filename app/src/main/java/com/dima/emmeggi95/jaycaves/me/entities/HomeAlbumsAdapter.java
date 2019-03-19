@@ -68,6 +68,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             stars.add((ImageView) view.findViewById(R.id.star_4));
             stars.add((ImageView) view.findViewById(R.id.star_5));
             card = (CardView) view.findViewById(R.id.card);
+
         }
     }
 
@@ -119,7 +120,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((ItemViewHolder) holder).author.setText(album.getArtist());
             ((ItemViewHolder) holder).genre.setText(album.getGenre1());
             ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
-            //((ItemViewHolder) holder).cover.setImageResource();
+            ((ItemViewHolder) holder).cover.setImageURI(android.net.Uri.parse(album.getCover_file().toURI().toString()));
 
             //Set rating stars
             int integerScore = (int) album.getScore();

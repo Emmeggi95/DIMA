@@ -1,16 +1,33 @@
 package com.dima.emmeggi95.jaycaves.me.view_models;
 
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.dima.emmeggi95.jaycaves.me.Album;
+import com.dima.emmeggi95.jaycaves.me.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,24 +37,54 @@ public class HomeAlbumsViewModel extends ViewModel {
     private List<Album> albumList = new ArrayList<>();
 
     private FirebaseDatabase database;
+    private FirebaseStorage storage;
+    private StorageReference reference;
+    private File localFile;
 
     public HomeAlbumsViewModel(){
 
         database = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
+        reference = storage.getReference("Album_covers");
         database.getReference("albums").orderByKey().limitToFirst(10).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                for(DataSnapshot d : data){
-                    albumList.add(d.getValue(Album.class));
+                for(final DataSnapshot d : data){
+
+                    Album tempAlbum = d.getValue(Album.class);
+                    try {
+                        localFile= File.createTempFile("album", "jpeg");
+                        reference.child(tempAlbum.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                    System.out.println("COULD NOT DOWNLOAD IMAGE!");
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        System.out.println("COULD NOT CREATE FILE");
+                    }
+
+                    tempAlbum.setCover_file(localFile);
+
+                    // Add album to list
+                    albumList.add(tempAlbum);
+
                 }
                 albums.postValue(albumList);
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    System.out.println("DATABASE DENIED DOWNLOAD");
             }
         });
 
