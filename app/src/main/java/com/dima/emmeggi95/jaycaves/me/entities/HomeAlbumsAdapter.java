@@ -25,10 +25,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private List<Album> albumList;
-    private static Album header;
-
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
 
     /**
      * @param mContext
@@ -36,12 +32,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public HomeAlbumsAdapter(Context mContext, List<Album> albumList) {
         this.context = mContext;
-        if(header==null){
-            header = new Album(context.getResources().getString(R.string.home_header_title));
-        }
-        if(albumList.get(0)!=header){
-            albumList.add(0, header);
-        }
         this.albumList = albumList;
     }
 
@@ -73,77 +63,53 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     /**
-     * Holder to manage the header of the RecyclerView
-     */
-    public class HeaderViewHolder extends RecyclerView.ViewHolder {
-        public TextView text;
-        
-        public HeaderViewHolder(View view) {
-            super(view);
-            text = (TextView) view.findViewById(R.id.home_header_text);
-        }
-    }
-
-    /**
-     * Choose the layout to inflate based on the viewType (item or header)
      * @param parent
      * @param viewType
      * @return
      */
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == TYPE_HEADER){
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.header_home, parent, false);
-            return new HeaderViewHolder(itemView);
-        } else if (viewType == TYPE_ITEM){
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.home_album_card, parent, false);
-            return new ItemViewHolder(itemView);
-        }
-        throw new RuntimeException("No match for " + viewType + ".");
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.home_album_card, parent, false);
+        return new ItemViewHolder(itemView);
     }
 
     /**
      * Set the parameters of each item from the corresponding Album in albumList
+     *
      * @param holder
      * @param position
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Album album = albumList.get(position);
-        if(holder instanceof HeaderViewHolder){
-            ((HeaderViewHolder) holder).text.setText(album.getTitle());
-        }else if(holder instanceof ItemViewHolder){
-            ((ItemViewHolder) holder).title.setText(album.getTitle());
-            ((ItemViewHolder) holder).author.setText(album.getArtist());
-            ((ItemViewHolder) holder).genre.setText(album.getGenre1());
-            ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
-            ((ItemViewHolder) holder).cover.setImageURI(android.net.Uri.parse(album.getCover_file().toURI().toString()));
+        ((ItemViewHolder) holder).title.setText(album.getTitle());
+        ((ItemViewHolder) holder).author.setText(album.getArtist());
+        ((ItemViewHolder) holder).genre.setText(album.getGenre1());
+        ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
+        //((ItemViewHolder) holder).cover.setImageResource();
 
-            //Set rating stars
-            int integerScore = (int) album.getScore();
-            int i;
-            for(i=0; i<integerScore; i++){
-                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_24dp);
-            }
-            float decimalPart = (float) album.getScore() - integerScore;
-            if(decimalPart >= 0.5){
-                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
-            }
-
-            //Set listener to open AlbumActivity
-            ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
-                @Override
-                public void onClick(View v){
-                    Intent intent = new Intent(context, AlbumActivity.class);
-                    intent.putExtra("album", albumList.get(position));
-                    context.startActivity(intent);
-                }
-            });
+        //Set rating stars
+        int integerScore = (int) album.getScore();
+        int i;
+        for (i = 0; i < integerScore; i++) {
+            ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+        }
+        float decimalPart = (float) album.getScore() - integerScore;
+        if (decimalPart >= 0.5) {
+            ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
         }
 
+        //Set listener to open AlbumActivity
+        ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AlbumActivity.class);
+                intent.putExtra("album", albumList.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     private Album getItem(int position) {
@@ -153,21 +119,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemCount() {
         return albumList.size();
-    }
-
-    /**
-     * This method is used "behind the scenes" in the onCreateViewHolder to set the header in first position and the items in all the following positions in the RecyclerView
-     * @param position
-     * @return
-     */
-    @Override
-    public int getItemViewType(int position) {
-        if (isPositionHeader(position))
-            return TYPE_HEADER;
-        return TYPE_ITEM;
-    }
-    private boolean isPositionHeader(int position) {
-        return position == 0;
     }
 
 }
