@@ -25,10 +25,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private List<Album> albumList;
-    private static Album header;
-
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
 
     /**
      * @param mContext
@@ -36,12 +32,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public HomeAlbumsAdapter(Context mContext, List<Album> albumList) {
         this.context = mContext;
-        if (header == null) {
-            header = new Album(context.getResources().getString(R.string.home_header_title));
-        }
-        if (albumList.get(0) != header) {
-            albumList.add(0, header);
-        }
         this.albumList = albumList;
     }
 
@@ -72,15 +62,13 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     /**
-     * Choose the layout to inflate based on the viewType (item or header)
-     *
      * @param parent
      * @param viewType
      * @return
      */
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.home_album_card, parent, false);
         return new ItemViewHolder(itemView);
