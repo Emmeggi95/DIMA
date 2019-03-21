@@ -1,9 +1,11 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import java.io.Serializable;
+
 /**
  * Data objects to be stored in the real-time db related to artists
  */
-public class Artist {
+public class Artist implements Serializable {
 
     private String name;
     private String birthdate;

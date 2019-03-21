@@ -133,15 +133,6 @@ public class AlbumActivity extends AppCompatActivity {
         Button seeAllReviewsButton = (Button) findViewById(R.id.all_reviews_button);
         if(album.getReviews().size()>0){
             seeAllReviewsButton.setEnabled(true);
-            final Context context = this;
-            seeAllReviewsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ReviewsActivity.class);
-                    intent.putExtra("album", album);
-                    ((AlbumActivity) context).startActivity(intent);
-                }
-            });
         } else {
             seeAllReviewsButton.setEnabled(false);
         }
@@ -157,7 +148,17 @@ public class AlbumActivity extends AppCompatActivity {
         seeAllReviewsButton.setEnabled(false);
     }
 
-    public void startReviewsActivity(){
+    public void startReviewsActivity(View view){
+        Intent intent = new Intent(this, ReviewsActivity.class);
+        intent.putExtra("album", album);
+        startActivity(intent);
+    }
 
+    public void startArtistActivity(View view){
+        Intent intent = new Intent(this, ArtistActivity.class);
+        // Retrieve information about the artist...
+        Artist artist = new Artist("Pietrus", "25/4/1884", "A long story bla bla bla...", "Gothic Rock", null);
+        intent.putExtra("artist", artist);
+        startActivity(intent);
     }
 }

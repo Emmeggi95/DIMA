@@ -70,7 +70,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     /**
      * @param parent
-     * @param viewType
+     * @param i
      * @return
      */
     @NonNull
