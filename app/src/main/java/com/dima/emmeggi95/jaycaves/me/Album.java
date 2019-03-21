@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
@@ -20,7 +21,7 @@ public class Album implements Serializable {
     private String genre2;
     private String genre3;
     private String cover;
-    private File cover_file;
+    private Bitmap cover_file;
 
     private List<Review> reviews = new ArrayList<>();
 
@@ -135,11 +136,11 @@ public class Album implements Serializable {
         this.reviews = reviews;
     }
 
-    public File getCover_file() {
+    public Bitmap getCover_file() {
         return cover_file;
     }
 
-    public void setCover_file(File cover_file) {
+    public void setCover_file(Bitmap cover_file) {
         this.cover_file = cover_file;
     }
 }

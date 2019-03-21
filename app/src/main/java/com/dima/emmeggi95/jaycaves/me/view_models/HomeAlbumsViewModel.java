@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class HomeAlbumsViewModel extends ViewModel {
 
@@ -51,10 +53,10 @@ public class HomeAlbumsViewModel extends ViewModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                for(final DataSnapshot d : data){
+                for(DataSnapshot d : data){
 
                     Album tempAlbum = d.getValue(Album.class);
-                    try {
+                  /*  try {
                         localFile= File.createTempFile("album", "jpeg");
                         reference.child(tempAlbum.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                             @Override
@@ -72,12 +74,15 @@ public class HomeAlbumsViewModel extends ViewModel {
                         System.out.println("COULD NOT CREATE FILE");
                     }
 
-                    tempAlbum.setCover_file(localFile);
+                    String filePath = localFile.getPath();
+                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                    tempAlbum.setCover_file(bitmap); */
 
                     // Add album to list
                     albumList.add(tempAlbum);
 
                 }
+
                 albums.postValue(albumList);
 
             }
