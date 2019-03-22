@@ -205,7 +205,12 @@ public class NewArtistFragment extends Fragment {
 
             // Temp variables to parse user inputs and store query results
             String tempArtistName = newArtistNameInput.getText().toString();
-            String parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+            String parsedArtistName;
+            if(tempArtistName.endsWith(" ")) //remove last space input if present
+            parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1,tempArtistName.length()-1);
+            else
+            parsedArtistName = tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+
             String tempGenre1= newArtistGenreInput1.getText().toString();
             String parsedGenre1= tempGenre1.substring(0,1).toUpperCase()+ tempGenre1.substring(1);
             String tempGenre2= newArtistGenreInput1.getText().toString();

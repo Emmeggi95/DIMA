@@ -128,7 +128,10 @@ public class NewAlbumFragment extends Fragment {
                 String tempArtistName = s.toString();
                 String parsedArtistName = "";
                 if (s.toString().length()>0)
-                    parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+                    if (parsedArtistName.endsWith(" "))
+                        parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1, tempArtistName.length()-1);
+                    else
+                        parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
 
                 // Check existence of typed artist in real time db
                 database.getReference("artists").orderByKey().equalTo(parsedArtistName)
@@ -250,9 +253,18 @@ public class NewAlbumFragment extends Fragment {
 
         // Temp variables to parse user inputs
         String tempAlbumName = newAlbumNameInput.getText().toString();
-        final String parsedAlbumName = tempAlbumName.substring(0, 1).toUpperCase() + tempAlbumName.substring(1);
+        String parsedAlbumName;
+        if(tempAlbumName.endsWith(" ")) //remove last space input if present
+            parsedAlbumName= tempAlbumName.substring(0, 1).toUpperCase() + tempAlbumName.substring(1,tempAlbumName.length()-1);
+        else
+            parsedAlbumName = tempAlbumName.substring(0, 1).toUpperCase() + tempAlbumName.substring(1);
+        final String finalAlbumName= parsedAlbumName;
         String tempArtistName = newAlbumArtistInput.getText().toString();
-        String parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
+        String parsedArtistName;
+        if(tempArtistName.endsWith(" ")) //remove last space input if present
+            parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1,tempArtistName.length()-1);
+        else
+            parsedArtistName = tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);
         String tempGenre1= newAlbumGenreInput1.getText().toString();
         String parsedGenre1= tempGenre1.substring(0,1).toUpperCase()+ tempGenre1.substring(1);
         String tempGenre2= newAlbumGenreInput1.getText().toString();
@@ -296,7 +308,7 @@ public class NewAlbumFragment extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Snackbar.make(getActivity().getCurrentFocus(),R.string.album_cover_error,Snackbar.LENGTH_LONG).show();
-                                dbReference.child(parsedAlbumName).removeValue();
+                                dbReference.child(finalAlbumName).removeValue();
 
                     }
                 });
