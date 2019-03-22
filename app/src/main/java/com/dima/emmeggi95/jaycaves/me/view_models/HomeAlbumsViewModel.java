@@ -39,48 +39,17 @@ public class HomeAlbumsViewModel extends ViewModel {
     private List<Album> albumList = new ArrayList<>();
 
     private FirebaseDatabase database;
-    private FirebaseStorage storage;
-    private StorageReference reference;
-    private File localFile;
-
     public HomeAlbumsViewModel(){
 
         database = FirebaseDatabase.getInstance();
-        storage = FirebaseStorage.getInstance();
-        reference = storage.getReference("Album_covers");
         database.getReference("albums").orderByKey().limitToFirst(10).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for(DataSnapshot d : data){
-
-                    Album tempAlbum = d.getValue(Album.class);
-                  /*  try {
-                        localFile= File.createTempFile("album", "jpeg");
-                        reference.child(tempAlbum.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                    System.out.println("COULD NOT DOWNLOAD IMAGE!");
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        System.out.println("COULD NOT CREATE FILE");
-                    }
-
-                    String filePath = localFile.getPath();
-                    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                    tempAlbum.setCover_file(bitmap); */
-
                     // Add album to list
-                    albumList.add(tempAlbum);
-
+                    albumList.add(d.getValue(Album.class));
                 }
 
                 albums.postValue(albumList);

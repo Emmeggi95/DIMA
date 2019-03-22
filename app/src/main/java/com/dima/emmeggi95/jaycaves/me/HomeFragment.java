@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.view_models.HomeAlbumsViewModel;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
 
     private HomeAlbumsViewModel viewModel;
 
@@ -42,7 +45,6 @@ public class HomeFragment extends Fragment {
 
         // load data from ViewModel
         viewModel = ViewModelProviders.of(getActivity()).get(HomeAlbumsViewModel.class);
-
 
         final Observer<List<Album>> observer = new Observer<List<Album>>() {
             @Override
