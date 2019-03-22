@@ -76,23 +76,24 @@ public class AlbumActivity extends AppCompatActivity {
         storage= FirebaseStorage.getInstance();
         storageReference= storage.getReference("Album_covers");
 
-        try {
-            localFile = File.createTempFile("album","jpeg");
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        storageReference.child(album.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                setImage(coverView, localFile);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+        if(album.getCover()!=null && album.getCover()!="") {
+            try {
+                localFile = File.createTempFile("album", "jpeg");
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-        });
-
+            storageReference.child(album.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    setImage(coverView, localFile);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+        }
 
         // Set floating button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.album_floating_button);
@@ -189,7 +190,7 @@ public class AlbumActivity extends AppCompatActivity {
     public void startArtistActivity(View view){
         Intent intent = new Intent(this, ArtistActivity.class);
         // Retrieve information about the artist...
-        Artist artist = new Artist("Pietrus", "25/4/1884", "A long story bla bla bla...", "Gothic Rock", null);
+        Artist artist = new Artist("Pietrus", "25/4/1884", getResources().getString(R.string.long_text), "Gothic Rock", null);
         intent.putExtra("artist", artist);
         startActivity(intent);
     }

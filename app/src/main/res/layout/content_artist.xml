@@ -3,56 +3,83 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/layout_margin"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.dima.emmeggi95.jaycaves.me.ArtistActivity"
     tools:showIn="@layout/activity_artist">
 
     <LinearLayout
+        android:id="@+id/artist_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/birthday_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="@string/birthdate_default" />
+            android:layout_marginLeft="@dimen/layout_margin"
+            android:layout_marginTop="@dimen/layout_margin"
+            android:layout_marginRight="@dimen/layout_margin"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/genre1_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="@string/artist_genre_default" />
+            <TextView
+                android:id="@+id/genre1_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/artist_genre_default" />
 
-        <TextView
-            android:id="@+id/genre2_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="@string/artist_genre_default"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/genre3_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/artist_genre_default"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/genre3_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="@string/artist_genre_default"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/birthday_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/birthdate_default" />
 
-        <TextView
-            android:id="@+id/artist_description_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/artist_description_default" />
+            <TextView
+                android:id="@+id/genre2_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/artist_genre_default"
+                android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/artist_albums_recyclerview"
+            <TextView
+                android:id="@+id/artist_description_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/artist_description_default" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:text="@string/album_list"
+                android:textColor="?attr/colorTextOnBackground"
+                android:textSize="@dimen/album_list_header"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/artist_albums_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true" />
+        </RelativeLayout>
+
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

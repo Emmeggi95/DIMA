@@ -4,15 +4,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbumsAdapter;
+import com.dima.emmeggi95.jaycaves.me.entities.ArtistAlbumsAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dima.emmeggi95.jaycaves.me.layout.GridSpacingItemDecoration;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -25,10 +32,15 @@ import java.io.IOException;
 public class ArtistActivity extends AppCompatActivity {
 
     Artist artist;
+    List<Album> albums;
     FirebaseStorage storage;
     StorageReference storageReference;
     File localFile;
     ImageView cover;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +80,7 @@ public class ArtistActivity extends AppCompatActivity {
         }
         if(artist.getCover()!=null){
 
-            cover= findViewById(R.id.imageView2);
+            cover= findViewById(R.id.artist_cover);
             storage= FirebaseStorage.getInstance();
             storageReference= storage.getReference("Artist_covers");
 
@@ -90,6 +102,33 @@ public class ArtistActivity extends AppCompatActivity {
             });
 
         }
+
+        // Get color from artist cover and set it to the UI elements
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_cover);
+        Palette p = Palette.from(bitmap).generate();
+        int color;
+        if(p.getMutedSwatch()!=null)
+            color = p.getMutedSwatch().getRgb();
+        else
+            color = R.color.colorAccent;
+        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.artist_toolbar_layout);
+        toolbarLayout.setBackgroundColor(color);
+        toolbarLayout.setStatusBarScrimColor(color);
+
+        // Download the list of albums by this artist
+        // ...
+        albums = new ArrayList<>();
+        albums.add(new Album("1st album", "1977", 4.37, "Pietrus", "Gothic Rock", ""));
+        albums.add(new Album("2nd album", "1979", 4.12, "Pietrus", "Gothic Rock", ""));
+        albums.add(new Album("3rd album", "1981", 3.48, "Pietrus", "Gothic Rock", ""));
+
+        // Set album list
+        recyclerView = (RecyclerView) findViewById(R.id.artist_albums_recyclerview);
+        layoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, getResources().getDimensionPixelSize(R.dimen.layout_margin), true));
+        adapter = new ArtistAlbumsAdapter(this, albums);
+        recyclerView.setAdapter(adapter);
     }
 
     private void setImage(ImageView cover, File file){

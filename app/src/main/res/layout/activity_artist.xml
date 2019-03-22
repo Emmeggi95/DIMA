@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/artist_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -24,9 +24,9 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/artist_cover"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/artist_cover_height"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/default_artist" />
 

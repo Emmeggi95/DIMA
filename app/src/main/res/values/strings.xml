@@ -124,11 +124,13 @@
     <string name="birthdate_default">11/07/1995</string>
     <string name="artist_description_default">Description...</string>
     <string name="artist_genre_default">Genre</string>
+    <string name="album_list">Albums</string>
+    <string name="artist_album_title_default">Title</string>
+    <string name="artist_album_date_default">Date</string>
 
     <!--Miscellaneous-->
     <string name="long_text">
-        "Material is the metaphor.\n\n"
-
+        "Material is the metaphor.\n"
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic.\n"
@@ -138,7 +140,7 @@
         "world, without breaking the rules of physics.\n"
         "The fundamentals of light, surface, and movement are key to conveying how objects move, "
         "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
+        "seams, divides space, and indicates moving parts."
     </string>
 
     <!-- Error Messages -->
