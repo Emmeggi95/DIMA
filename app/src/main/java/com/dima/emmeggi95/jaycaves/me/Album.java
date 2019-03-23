@@ -22,6 +22,7 @@ public class Album implements Serializable {
     private String genre3;
     private String cover;
     private Bitmap cover_file;
+    private boolean downloadedImage;
 
     private List<Review> reviews = new ArrayList<>();
 
@@ -39,6 +40,7 @@ public class Album implements Serializable {
         this.genre2 = genre2;
         this.genre3 = genre3;
         this.cover = cover;
+        downloadedImage=false;
     }
 
     public Album(String title, String date, double score, String artist, String genre1, String cover) {
@@ -48,6 +50,7 @@ public class Album implements Serializable {
         this.artist = artist;
         this.genre1 = genre1;
         this.cover = cover;
+        downloadedImage=false;
     }
 
     public Album(String title, String date, double score, String artist, String genre1, String genre2, String cover) {
@@ -58,6 +61,7 @@ public class Album implements Serializable {
         this.genre1 = genre1;
         this.genre2 = genre2;
         this.cover = cover;
+        downloadedImage=false;
     }
 
     public Album(String title){
@@ -142,5 +146,13 @@ public class Album implements Serializable {
 
     public void setCover_file(Bitmap cover_file) {
         this.cover_file = cover_file;
+    }
+
+    public boolean isDownloadedImage() {
+        return downloadedImage;
+    }
+
+    public void setDownloadedImage(boolean downloadedImage) {
+        this.downloadedImage = downloadedImage;
     }
 }

@@ -1,6 +1,5 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -61,39 +60,20 @@ public class AlbumActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.album_activity_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 finish();
             }
         });
-
         setTitle(album.getTitle());
 
-        coverView = (ImageView) findViewById(R.id.cover_toolbar);
-        coverView.setImageResource(R.drawable.default_cover);
-        storage= FirebaseStorage.getInstance();
-        storageReference= storage.getReference("Album_covers");
 
-        if(album.getCover()!=null && album.getCover()!="") {
-            try {
-                localFile = File.createTempFile("album", "jpeg");
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            storageReference.child(album.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    setImage(coverView, localFile);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            });
-        }
+        // Set Cover Image
+        coverView = findViewById(R.id.cover_toolbar);
+        coverView.setImageResource(R.drawable.default_cover);
+        setCoverRoutine();
+
 
         // Set floating button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.album_floating_button);
@@ -104,6 +84,7 @@ public class AlbumActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
 
         // Set color
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
@@ -195,7 +176,47 @@ public class AlbumActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setImage(ImageView cover, File file){
+
+    private void setCoverRoutine(){
+        // If cover already downloaded, there is no need to download it again
+      /*  if (album.isDownloadedImage()){
+            localFile= (File) getIntent().getSerializableExtra("cover");
+            String filePath= localFile.getPath();
+            Bitmap map = BitmapFactory.decodeFile(filePath);
+            coverView.setImageBitmap(map);
+        }
+        else { */
+
+      if (album.getCover()!=null && album.getCover()!=""){
+            storage = FirebaseStorage.getInstance();
+            storageReference = storage.getReference("Album_covers");
+
+            try {
+                localFile = File.createTempFile("album", "jpeg");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            storageReference.child(album.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    setImageFromFile(coverView, localFile);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+        }
+    }
+
+    /**
+     * Sets the cover content from a local file
+     * @param cover
+     * @param file
+     * @author jaycaves
+     */
+    private void setImageFromFile(ImageView cover, File file){
         String filePath= file.getPath();
         Bitmap map = BitmapFactory.decodeFile(filePath);
         cover.setImageBitmap(map);

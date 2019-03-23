@@ -108,7 +108,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        Album album = albumList.get(position);
+        final Album album = albumList.get(position);
         ((ItemViewHolder) holder).title.setText(album.getTitle());
         ((ItemViewHolder) holder).author.setText(album.getArtist());
         ((ItemViewHolder) holder).genre.setText(album.getGenre1());
@@ -121,7 +121,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         storageReference.child(album.getCover()).getFile(localFiles.get(position)).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    setImage(holder, localFiles.get(position));
+                    setImageFromFile(holder, localFiles.get(position),album);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -147,6 +147,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", albumList.get(position));
+                //intent.putExtra("cover", localFiles.get(position));
                 context.startActivity(intent);
             }
         });
@@ -161,12 +162,21 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return albumList.size();
     }
 
-    private void setImage(RecyclerView.ViewHolder holder, File file){
+
+    /**
+     * Sets the cover content from a local file. It sets then the ImageView as visible, while making the loading bar invisible.
+     * @param holder
+     * @param file
+     * @author jaycaves
+     */
+    private void setImageFromFile(RecyclerView.ViewHolder holder, File file, Album album){
         String filePath= file.getPath();
         Bitmap map = BitmapFactory.decodeFile(filePath);
         ((ItemViewHolder) holder).cover.setImageBitmap(map);
         ((ItemViewHolder) holder).loading.setVisibility(View.GONE);
         ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);
+        //album.setCover_file(map);
+        //album.setDownloadedImage(true);
 
     }
 
