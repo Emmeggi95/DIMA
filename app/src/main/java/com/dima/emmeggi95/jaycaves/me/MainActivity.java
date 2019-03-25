@@ -1,8 +1,10 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
@@ -356,6 +359,5 @@ public class MainActivity extends AppCompatActivity
                 titleTextView.setTypeface(null);
         }
     }
-
 
 }

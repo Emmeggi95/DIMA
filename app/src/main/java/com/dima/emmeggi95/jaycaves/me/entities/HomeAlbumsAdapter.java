@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.Album;
 import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
+import com.dima.emmeggi95.jaycaves.me.CoverCache;
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,6 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * This class is used to inflate the content in the RecyclerView in the Home Page.
@@ -70,7 +74,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ItemViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.text_album_title);
+            title= view.findViewById(R.id.text_album_title);
             author = (TextView) view.findViewById(R.id.text_author);
             genre = (TextView) view.findViewById(R.id.text_genre);
             cover = (ImageView) view.findViewById(R.id.image_cover);
@@ -113,22 +117,12 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ((ItemViewHolder) holder).author.setText(album.getArtist());
         ((ItemViewHolder) holder).genre.setText(album.getGenre1());
         ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
-        //((ItemViewHolder) holder).cover;
 
-        // Fetch image from storage
-        storage= FirebaseStorage.getInstance();
-        storageReference= storage.getReference("Album_covers");
-        storageReference.child(album.getCover()).getFile(localFiles.get(position)).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    setImageFromFile(holder, localFiles.get(position),album);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                    System.out.println(e.getMessage());
-            }
-        });
+       // Fetch image from storage
+        CoverCache.retrieveCover(album.getCover(),((ItemViewHolder) holder).cover,
+                context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
+        ((ItemViewHolder) holder).loading.setVisibility(View.GONE);
+        ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);
 
         //Set rating stars
         int integerScore = (int) album.getScore();
@@ -147,7 +141,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", albumList.get(position));
-                //intent.putExtra("cover", localFiles.get(position));
                 context.startActivity(intent);
             }
         });
@@ -175,8 +168,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ((ItemViewHolder) holder).cover.setImageBitmap(map);
         ((ItemViewHolder) holder).loading.setVisibility(View.GONE);
         ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);
-        //album.setCover_file(map);
-        //album.setDownloadedImage(true);
+
 
     }
 

@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,14 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +30,6 @@ import static android.view.View.GONE;
 public class AlbumActivity extends AppCompatActivity {
 
     Album album;
-    FirebaseStorage storage;
-    StorageReference storageReference;
-    File localFile;
     ImageView coverView;
 
     @Override
@@ -178,47 +170,11 @@ public class AlbumActivity extends AppCompatActivity {
 
 
     private void setCoverRoutine(){
-        // If cover already downloaded, there is no need to download it again
-      /*  if (album.isDownloadedImage()){
-            localFile= (File) getIntent().getSerializableExtra("cover");
-            String filePath= localFile.getPath();
-            Bitmap map = BitmapFactory.decodeFile(filePath);
-            coverView.setImageBitmap(map);
-        }
-        else { */
 
       if (album.getCover()!=null && album.getCover()!=""){
-            storage = FirebaseStorage.getInstance();
-            storageReference = storage.getReference("Album_covers");
-
-            try {
-                localFile = File.createTempFile("album", "jpeg");
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            storageReference.child(album.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    setImageFromFile(coverView, localFile);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            });
-        }
+          CoverCache.retrieveCover(album.getCover(),coverView,
+                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));}
     }
 
-    /**
-     * Sets the cover content from a local file
-     * @param cover
-     * @param file
-     * @author jaycaves
-     */
-    private void setImageFromFile(ImageView cover, File file){
-        String filePath= file.getPath();
-        Bitmap map = BitmapFactory.decodeFile(filePath);
-        cover.setImageBitmap(map);
-    }
+
 }
