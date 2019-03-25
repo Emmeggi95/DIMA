@@ -119,10 +119,24 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
 
        // Fetch image from storage
-        CoverCache.retrieveCover(album.getCover(),((ItemViewHolder) holder).cover,
+        storage= FirebaseStorage.getInstance();
+        storageReference=storage.getReference("Album_covers");
+        storageReference.child(album.getCover()).getFile(localFiles.get(position)).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                setImageFromFile(holder,localFiles.get(position),album);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
+        /*CoverCache.retrieveCover(album.getCover(),((ItemViewHolder) holder).cover,
                 context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
         ((ItemViewHolder) holder).loading.setVisibility(View.GONE);
-        ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);
+        ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);*/
 
         //Set rating stars
         int integerScore = (int) album.getScore();
