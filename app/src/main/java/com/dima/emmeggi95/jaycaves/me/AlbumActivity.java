@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
@@ -31,6 +32,7 @@ public class AlbumActivity extends AppCompatActivity {
 
     Album album;
     ImageView coverView;
+    ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class AlbumActivity extends AppCompatActivity {
 
 
         // Set Cover Image
+        loading= findViewById(R.id.loading_album);
         coverView = findViewById(R.id.cover_toolbar);
         coverView.setImageResource(R.drawable.default_cover);
         setCoverRoutine();
@@ -172,7 +175,7 @@ public class AlbumActivity extends AppCompatActivity {
     private void setCoverRoutine(){
 
       if (album.getCover()!=null && album.getCover()!=""){
-          CoverCache.retrieveCover(album.getCover(),coverView,
+          CoverCache.retrieveCover(album.getCover(),coverView, loading,
                     getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));}
     }
 

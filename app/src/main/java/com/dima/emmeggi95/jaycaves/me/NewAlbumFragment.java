@@ -128,7 +128,7 @@ public class NewAlbumFragment extends Fragment {
                 String tempArtistName = s.toString();
                 String parsedArtistName = "";
                 if (s.toString().length()>0)
-                    if (parsedArtistName.endsWith(" "))
+                    if (tempArtistName.endsWith(" "))
                         parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1, tempArtistName.length()-1);
                     else
                         parsedArtistName= tempArtistName.substring(0, 1).toUpperCase() + tempArtistName.substring(1);

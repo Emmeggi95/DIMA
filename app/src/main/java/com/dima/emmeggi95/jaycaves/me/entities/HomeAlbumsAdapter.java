@@ -18,9 +18,6 @@ import com.dima.emmeggi95.jaycaves.me.Album;
 import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
 import com.dima.emmeggi95.jaycaves.me.CoverCache;
 import com.dima.emmeggi95.jaycaves.me.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -40,8 +37,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context context;
     private List<Album> albumList;
     private static Album header;
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
     private ArrayList<File> localFiles;
 
     /**
@@ -119,24 +114,9 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
 
        // Fetch image from storage
-        storage= FirebaseStorage.getInstance();
-        storageReference=storage.getReference("Album_covers");
-        storageReference.child(album.getCover()).getFile(localFiles.get(position)).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                setImageFromFile(holder,localFiles.get(position),album);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                System.err.println(e.getMessage());
-            }
-        });
-
-        /*CoverCache.retrieveCover(album.getCover(),((ItemViewHolder) holder).cover,
+        CoverCache.retrieveCover(album.getCover(),((ItemViewHolder) holder).cover, ((ItemViewHolder) holder).loading,
                 context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
-        ((ItemViewHolder) holder).loading.setVisibility(View.GONE);
-        ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);*/
+
 
         //Set rating stars
         int integerScore = (int) album.getScore();
@@ -170,20 +150,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
-    /**
-     * Sets the cover content from a local file. It sets then the ImageView as visible, while making the loading bar invisible.
-     * @param holder
-     * @param file
-     * @author jaycaves
-     */
-    private void setImageFromFile(RecyclerView.ViewHolder holder, File file, Album album){
-        String filePath= file.getPath();
-        Bitmap map = BitmapFactory.decodeFile(filePath);
-        ((ItemViewHolder) holder).cover.setImageBitmap(map);
-        ((ItemViewHolder) holder).loading.setVisibility(View.GONE);
-        ((ItemViewHolder) holder).cover.setVisibility(View.VISIBLE);
 
-
-    }
 
 }
