@@ -97,6 +97,12 @@
     <string name="upload_image">Upload image</string>
     <string name="upload_image_2">Upload Image</string>
 
+    <!--Generic-->
+    <string name="title_default">Title</string>
+    <string name="artist_default">Artist</string>
+    <string name="genre_default">Genre</string>
+    <string name="date_default">yyyy</string>
+
     <!-- Album Card -->
     <string name="default_album_title">Album title</string>
     <string name="default_author">Author</string>
@@ -127,6 +133,15 @@
     <string name="album_list">Albums</string>
     <string name="artist_album_title_default">Title</string>
     <string name="artist_album_date_default">Date</string>
+
+    <!--Charts Fragment-->
+    <string name="tab_all_time">All Time</string>
+    <string name="tab_genre">Genre</string>
+    <string name="tab_year">Year</string>
+    <string name="votes_number_text_default">0 v.</string>
+    <string name="all_time_header">All Time Chart</string>
+    <string name="genre_header">Chart per genre</string>
+    <string name="year_header">Chart per year</string>
 
     <!--Miscellaneous-->
     <string name="long_text">
