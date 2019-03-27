@@ -2,6 +2,7 @@ package com.dima.emmeggi95.jaycaves.me;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.ArtistAlbumsAdapter;
@@ -22,6 +24,11 @@ import java.util.List;
 import com.dima.emmeggi95.jaycaves.me.layout.GridSpacingItemDecoration;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,14 +36,15 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *
+ */
 public class ArtistActivity extends AppCompatActivity {
 
     Artist artist;
     List<Album> albums;
-    FirebaseStorage storage;
-    StorageReference storageReference;
-    File localFile;
     ImageView cover;
+    ProgressBar loading;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -50,6 +58,7 @@ public class ArtistActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -61,6 +70,8 @@ public class ArtistActivity extends AppCompatActivity {
         artist = (Artist) getIntent().getSerializableExtra("artist");
 
         // Set artist attributes
+        loading= findViewById(R.id.loading_artist);
+        cover= findViewById(R.id.artist_cover);
         setTitle(artist.getName());
         TextView birthdayText = (TextView) findViewById(R.id.birthday_text);
         TextView descriptionText = (TextView) findViewById(R.id.artist_description_text);
@@ -78,62 +89,66 @@ public class ArtistActivity extends AppCompatActivity {
             genre3Text.setText(artist.getGenre3());
             genre3Text.setVisibility(View.VISIBLE);
         }
-        if(artist.getCover()!=null){
 
-            cover= findViewById(R.id.artist_cover);
-            storage= FirebaseStorage.getInstance();
-            storageReference= storage.getReference("Artist_covers");
-
-            try {
-                localFile = File.createTempFile("artist","jpeg");
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            storageReference.child(artist.getCover()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    setImage(cover, localFile);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            });
-
-        }
+        // Retrieve cover from cache
+        CoverCache.retrieveCover(artist.getCover(), cover,loading, getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ARTIST,MODE_PRIVATE));
 
         // Get color from artist cover and set it to the UI elements
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_cover);
+        BitmapDrawable drawable;
+        Bitmap bitmap; //= BitmapFactory.decodeResource(getResources(), R.drawable.default_cover);
+       // if (cover.getVisibility() == View.VISIBLE) {
+            drawable = (BitmapDrawable) cover.getDrawable();
+            bitmap = drawable.getBitmap();
+       // }
         Palette p = Palette.from(bitmap).generate();
         int color;
-        if(p.getMutedSwatch()!=null)
+        if(p.getMutedSwatch()!=null) {
             color = p.getMutedSwatch().getRgb();
-        else
+        } else {
             color = R.color.colorAccent;
-        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.artist_toolbar_layout);
+        }
+        CollapsingToolbarLayout toolbarLayout = findViewById(R.id.artist_toolbar_layout);
         toolbarLayout.setBackgroundColor(color);
         toolbarLayout.setStatusBarScrimColor(color);
 
-        // Download the list of albums by this artist
-        // ...
-        albums = new ArrayList<>();
-        albums.add(new Album("1st album", "1977", 4.37, "Pietrus", "Gothic Rock", ""));
-        albums.add(new Album("2nd album", "1979", 4.12, "Pietrus", "Gothic Rock", ""));
-        albums.add(new Album("3rd album", "1981", 3.48, "Pietrus", "Gothic Rock", ""));
 
-        // Set album list
-        recyclerView = (RecyclerView) findViewById(R.id.artist_albums_recyclerview);
-        layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, getResources().getDimensionPixelSize(R.dimen.layout_margin), true));
-        adapter = new ArtistAlbumsAdapter(this, albums);
-        recyclerView.setAdapter(adapter);
+        initAlbums();
+
     }
 
-    private void setImage(ImageView cover, File file){
-        String filePath= file.getPath();
-        Bitmap map = BitmapFactory.decodeFile(filePath);
-        cover.setImageBitmap(map);
+
+    /**
+     *
+     */
+    private void initAlbums() {
+
+        albums= new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference("albums").orderByChild("artist").equalTo(artist.getName()).addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for(DataSnapshot d : data){
+                    // Add album to list
+                    albums.add(d.getValue(Album.class));
+
+                }
+                System.out.println(albums);
+                // Set album list
+                recyclerView = findViewById(R.id.artist_albums_recyclerview);
+                layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, getResources().getDimensionPixelSize(R.dimen.layout_margin), true));
+                adapter = new ArtistAlbumsAdapter(getApplicationContext(), albums);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("DATABASE DENIED DOWNLOAD");
+            }
+        });
+
     }
+
 }

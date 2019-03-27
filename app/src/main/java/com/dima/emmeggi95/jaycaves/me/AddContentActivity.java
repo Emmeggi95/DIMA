@@ -4,22 +4,19 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.RelativeLayout;
-import android.widget.Toolbar;
-
 
 
 public class AddContentActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
+    private ViewPagerCustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_content);
         viewPager= findViewById(R.id.pager);
-        adapter= new ViewPagerAdapter(getSupportFragmentManager());
+        adapter= new ViewPagerCustomAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -41,14 +48,7 @@ public class AlbumActivity extends AppCompatActivity {
 
         // Get album from intent extra
         album = (Album) getIntent().getSerializableExtra("album");
-        Bitmap coverBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_cover);
-        Palette p = Palette.from(coverBitmap).generate();
-        int color;
-        if(p.getMutedSwatch()!=null) {
-            color = p.getMutedSwatch().getRgb();
-        } else {
-            color = R.color.colorAccent;
-        }
+
         // Set App Bar
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.album_activity_toolbar_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.album_activity_toolbar);
@@ -67,7 +67,21 @@ public class AlbumActivity extends AppCompatActivity {
         loading= findViewById(R.id.loading_album);
         coverView = findViewById(R.id.cover_toolbar);
         coverView.setImageResource(R.drawable.default_cover);
-        setCoverRoutine();
+
+        // Retrieve cover from cache
+        CoverCache.retrieveCover(album.getCover(),coverView, loading,
+                getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
+
+        // Get color from artist cover and set it to the UI elements
+        BitmapDrawable drawable = (BitmapDrawable) coverView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        Palette p = Palette.from(bitmap).generate();
+        int color;
+        if(p.getMutedSwatch()!=null) {
+            color = p.getMutedSwatch().getRgb();
+        } else {
+            color = R.color.colorAccent;
+        }
 
 
         // Set floating button
@@ -127,7 +141,7 @@ public class AlbumActivity extends AppCompatActivity {
         TextView reviewDate = (TextView) findViewById(R.id.review_date);
         TextView reviewBody = (TextView) findViewById(R.id.review_body);
         TextView reviewRating = (TextView) findViewById(R.id.review_rating_text);
-        TextView reviewLikes = (TextView) findViewById(R.id.likes_number);
+        TextView reviewLikes = findViewById(R.id.likes_number);
         Review featuredReview = album.getReviews().get(0);
         reviewTitle.setText(featuredReview.getTitle());
         reviewAuthor.setText(featuredReview.getAuthor());
@@ -164,20 +178,27 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     public void startArtistActivity(View view){
-        Intent intent = new Intent(this, ArtistActivity.class);
+        final Intent intent = new Intent(this, ArtistActivity.class);
         // Retrieve information about the artist...
-        Artist artist = new Artist("Pietrus", "25/4/1884", getResources().getString(R.string.long_text), "Gothic Rock", null);
-        intent.putExtra("artist", artist);
-        startActivity(intent);
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("artists");
+        reference.orderByKey().equalTo(album.getArtist()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Artist artist = new Artist();
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for(DataSnapshot d : data){
+                    artist= d.getValue(Artist.class);
+                }
+                intent.putExtra("artist", artist);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
-
-
-    private void setCoverRoutine(){
-
-      if (album.getCover()!=null && album.getCover()!=""){
-          CoverCache.retrieveCover(album.getCover(),coverView, loading,
-                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));}
-    }
-
 
 }

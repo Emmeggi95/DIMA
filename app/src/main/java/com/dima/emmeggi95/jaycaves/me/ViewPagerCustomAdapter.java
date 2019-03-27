@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerCustomAdapter extends FragmentStatePagerAdapter {
 
-    public ViewPagerAdapter(FragmentManager fm) {
+    public ViewPagerCustomAdapter(FragmentManager fm) {
         super(fm);
     }
 
