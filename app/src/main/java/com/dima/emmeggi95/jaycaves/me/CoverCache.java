@@ -18,7 +18,8 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 
 /**
- * Implementation of a cache for Album Covers
+ * Implementation of a cache for album covers. It saves bitmaps into a @LruCache, avoids re-downloading of cached images, speeds up the look-up.
+ * @see LruCache
  */
 public class CoverCache {
 
@@ -36,7 +37,14 @@ public class CoverCache {
         }
     };
 
-
+    /**
+     * Given the @id, retrieves the corresponding cover, loads it as content of @view. Makes the @progress bar invisible when content is ready. @directory is the internal storage reference for the lookup of persistent app data. Search starts within local Lru.
+     * In case of miss, the image is either retrieved from persistent storage or downloaded from the FirebaseStorage then saved in cache.
+     * @param id
+     * @param view
+     * @param progressBar
+     * @param directory
+     */
     public static void retrieveCover(final String id, final ImageView view, final ProgressBar progressBar, final File directory) {
 
         Bitmap result = mCache.get(id);

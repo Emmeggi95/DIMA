@@ -165,7 +165,7 @@ public class NewArtistFragment extends Fragment {
 
 
         /**
-         *
+         * It is used to capture and display user selection of the cover image
          * @param requestCode
          * @param resultCode
          * @param data

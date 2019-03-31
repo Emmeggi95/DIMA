@@ -26,7 +26,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 /**
- *
+ * Adapter to display albums into a RecyclerView in @ArtistActivity
+ * @see com.dima.emmeggi95.jaycaves.me.ArtistActivity
  */
 public class ArtistAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -38,6 +39,9 @@ public class ArtistAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.albums = albums;
     }
 
+    /**
+     * Defines single item's structure and contents
+     */
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
        public TextView title, date, rating;

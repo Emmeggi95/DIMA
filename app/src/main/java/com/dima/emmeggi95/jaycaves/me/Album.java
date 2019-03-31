@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Data objects to be stored in the real-time db related to albums
  */
 public class Album implements Serializable {
 

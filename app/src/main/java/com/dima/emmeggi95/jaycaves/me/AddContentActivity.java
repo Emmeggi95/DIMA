@@ -5,7 +5,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-
+/**
+ * New content is inserted in the system through this activity. There are two main fragments: @NewAlbumFragment, where user can insert new albums, and @NewArtistFragment, where user can insert new artists
+ * @see NewAlbumFragment
+ * @see NewArtistFragment
+ */
 public class AddContentActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
@@ -48,9 +52,6 @@ public class AddContentActivity extends AppCompatActivity {
 
             }
         });
-
-
-
 
 
     }

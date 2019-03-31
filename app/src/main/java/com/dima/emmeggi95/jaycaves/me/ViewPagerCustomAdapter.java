@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+/**
+ * Custom Adapter to allow swiping of tabs in the @AddContentActivity
+ * @see AddContentActivity
+ */
 public class ViewPagerCustomAdapter extends FragmentStatePagerAdapter {
 
     public ViewPagerCustomAdapter(FragmentManager fm) {

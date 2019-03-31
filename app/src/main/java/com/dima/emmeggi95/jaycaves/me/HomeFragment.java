@@ -19,6 +19,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
+/**
+ * Fragment that appears in the MainActivity once user has successfully registered/logged in
+ */
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;

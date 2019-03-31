@@ -35,6 +35,9 @@ import java.util.List;
 
 import static android.view.View.GONE;
 
+/**
+ * Activity to display info related to a certain album fetched from the system
+ */
 public class AlbumActivity extends AppCompatActivity {
 
     Album album;

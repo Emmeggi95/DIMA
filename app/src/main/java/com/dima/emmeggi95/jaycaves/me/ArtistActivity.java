@@ -37,7 +37,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
+ * Activity to display info related to a certain artist fetched from the system
  */
 public class ArtistActivity extends AppCompatActivity {
 
@@ -118,7 +118,7 @@ public class ArtistActivity extends AppCompatActivity {
 
 
     /**
-     *
+     * Fetches and displays every album released by a certain artist
      */
     private void initAlbums() {
 
