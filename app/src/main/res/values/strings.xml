@@ -135,13 +135,11 @@
     <string name="artist_album_date_default">Date</string>
 
     <!--Charts Fragment-->
-    <string name="tab_all_time">All Time</string>
-    <string name="tab_genre">Genre</string>
-    <string name="tab_year">Year</string>
+    <string name="genre_filter">Genre</string>
+    <string name="year_filter">Year</string>
     <string name="votes_number_text_default">0 v.</string>
-    <string name="all_time_header">All Time Chart</string>
-    <string name="genre_header">Chart per genre</string>
-    <string name="year_header">Chart per year</string>
+    <string name="all_years">All Time</string>
+    <string name="all_genres">All Genres</string>
 
     <!--Miscellaneous-->
     <string name="long_text">

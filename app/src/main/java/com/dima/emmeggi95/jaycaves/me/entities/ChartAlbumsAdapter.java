@@ -23,6 +23,7 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     List<Album> albums;
 
     public ChartAlbumsAdapter(Context context, List<Album> albums) {
+        System.out.println(this.getClass().toString() + ": recycler adapter created.");//DEBUG
         this.context = context;
         this.albums = albums;
     }
@@ -58,7 +59,7 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         final Album album = albums.get(i);
 
         // Set album info
-        ((ItemViewHolder) holder).rank.setText(i+1);
+        ((ItemViewHolder) holder).rank.setText(String.valueOf(i+1));
         ((ItemViewHolder) holder).title.setText(album.getTitle());
         ((ItemViewHolder) holder).artist.setText(album.getArtist());
         ((ItemViewHolder) holder).score.setText(String.format("%.2f", album.getScore()));
@@ -80,6 +81,6 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return albums.size();
     }
 }
