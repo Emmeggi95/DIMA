@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.dima.emmeggi95.jaycaves.me.entities.ChartAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.view_models.GenresViewModel;
@@ -33,7 +35,12 @@ public class ChartsFragment extends Fragment {
     GenresViewModel genresViewModel;
     List<String> years;
 
+    List<String> genres;
+
     int FIRST_YEAR = 1950;
+
+    String selectedGenre;
+    String selectedYear;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,12 +72,15 @@ public class ChartsFragment extends Fragment {
 
         // Get genres from ViewModel
         genresViewModel = ViewModelProviders.of(getActivity()).get(GenresViewModel.class);
+        genres = new ArrayList<>();
 
         // Set genres to spinner
         final Observer genresObserver = new Observer<List<String>>() {
             @Override
-            public void onChanged(@Nullable List<String> genres) {
-                genres.add(0, getResources().getString(R.string.all_genres));
+            public void onChanged(@Nullable List<String> genresList) {
+                genres.clear();
+                genres.add(getResources().getString(R.string.all_genres));
+                genres.addAll(genresList);
                 ArrayAdapter<String> genresArray = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, genres);
                 genresSpinner.setAdapter(genresArray);
             }
@@ -88,6 +98,44 @@ public class ChartsFragment extends Fragment {
         // Set years to spinner
         ArrayAdapter<String> yearsArray = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, years);
         yearsSpinner.setAdapter(yearsArray);
+
+        // Set listener on both spinners
+        genresSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Bisognerebbe inserire un loading per la connessione al database
+                selectedGenre = parent.getItemAtPosition(position).toString();
+                // Connect to database to retrieve the updated list
+                if(selectedGenre.equals(getResources().getString(R.string.all_genres))){
+                    // don't filter by genre
+                } else {
+                    // filter by selected genre
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        yearsSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedYear = parent.getItemAtPosition(position).toString();
+                // Connect to database to retrieve the updated list
+                if(selectedYear.equals(getResources().getString(R.string.all_years))){
+                    // don't filter by genre
+                } else {
+                    // filter by selected genre
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return view;
     }
