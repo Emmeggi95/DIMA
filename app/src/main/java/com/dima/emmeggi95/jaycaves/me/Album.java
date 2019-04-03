@@ -1,11 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,8 +136,5 @@ public class Album implements Serializable {
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
-
-
-
 
 }

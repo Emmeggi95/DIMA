@@ -141,6 +141,9 @@
     <string name="all_years">All Time</string>
     <string name="all_genres">All Genres</string>
 
+    <!-- Fresh Fragment-->
+    <string name="fresh_header">New Releases</string>
+
     <!--Miscellaneous-->
     <string name="long_text">
         "Material is the metaphor.\n"
@@ -278,6 +281,11 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+
+    <!-- Search -->
+    <string name="search_hint">Search for album/artist…</string>
+    <string name="artist_search_header">Artists</string>
+    <string name="album_search_header">Albums</string>
 
 
 </resources>

@@ -108,4 +108,5 @@ public class Artist implements Serializable {
                 ", birthdate:'" + birthdate + '\''+
                 '}';
     }
+
 }

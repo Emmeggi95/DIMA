@@ -30,7 +30,6 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private List<Album> albumList;
-    private static Album header;
 
 
     /**

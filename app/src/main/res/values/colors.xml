@@ -17,7 +17,7 @@
     <color name="colorTextOnPrimary">#000000</color>
     <color name="colorTextOnSecondary">#ffffff</color>
     <color name="colorTextOnAccent">@color/colorTextOnSecondary</color>
-    <color name="colorTextOnLightBackgroud">#000000</color>
+    <color name="colorTextOnLightBackground">#000000</color>
     <color name="colorTextOnDarkBackground">#ffffff</color>
     <color name="colorDarkText">#000000</color>
     <color name="colorLightText">#ffffff</color>

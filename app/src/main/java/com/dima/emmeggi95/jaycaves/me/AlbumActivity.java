@@ -72,8 +72,10 @@ public class AlbumActivity extends AppCompatActivity {
         coverView.setImageResource(R.drawable.default_cover);
 
         // Retrieve cover from cache
-        CoverCache.retrieveCover(album.getCover(),coverView, loading,
-                getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
+        if (album.getCover()!=null && album.getCover()!="") {
+            CoverCache.retrieveCover(album.getCover(),coverView, loading,
+                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
+        }
 
         // Get color from artist cover and set it to the UI elements
         BitmapDrawable drawable = (BitmapDrawable) coverView.getDrawable();

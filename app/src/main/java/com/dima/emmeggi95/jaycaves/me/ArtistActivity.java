@@ -91,7 +91,9 @@ public class ArtistActivity extends AppCompatActivity {
         }
 
         // Retrieve cover from cache
-        CoverCache.retrieveCover(artist.getCover(), cover,loading, getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ARTIST,MODE_PRIVATE));
+        if (artist.getCover()!=null && artist.getCover()!="") {
+            CoverCache.retrieveCover(artist.getCover(), cover,loading, getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ARTIST,MODE_PRIVATE));
+        }
 
         // Get color from artist cover and set it to the UI elements
         BitmapDrawable drawable;

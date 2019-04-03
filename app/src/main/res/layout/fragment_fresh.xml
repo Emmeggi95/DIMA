@@ -3,35 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context="com.dima.emmeggi95.jaycaves.me.FreshFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/fresh_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/home_header_title"
+            android:layout_margin="@dimen/layout_margin"
+            android:text="@string/fresh_header"
             android:textColor="@color/colorTextOnLightBackground"
             android:textSize="@dimen/header_text_size"
             android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/home_recycler_view"
+            android:id="@+id/fresh_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbars="vertical" >
-
-        </android.support.v7.widget.RecyclerView>
-
+            android:layout_height="match_parent" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

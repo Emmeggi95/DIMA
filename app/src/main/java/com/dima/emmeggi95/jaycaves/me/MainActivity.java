@@ -1,7 +1,9 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity
     LoadingFragment loadingFragment;
     HomeFragment homeFragment;
     ChartsFragment chartsFragment;
-    ForumFragment forumFragment;
+    FreshFragment freshFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         loadingFragment = new LoadingFragment();
         homeFragment = new HomeFragment();
         chartsFragment = new ChartsFragment();
-        forumFragment = new ForumFragment();
+        freshFragment = new FreshFragment();
 
         // Initialize custom fonts
         floydFont = Typeface.createFromAsset(getAssets(), "fonts/floyd.TTF");
@@ -161,8 +164,8 @@ public class MainActivity extends AppCompatActivity
                         case R.id.nav_charts:
                             setFragment(chartsFragment);
                             break;
-                        case R.id.nav_forum:
-                            setFragment(forumFragment);
+                        case R.id.nav_fresh:
+                            setFragment(freshFragment);
                             break;
                         case R.id.nav_settings:
                             goToActivity(SettingsActivity.class);
@@ -256,9 +259,9 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_charts) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.title_charts, 0);
-            } else if (id == R.id.nav_forum) {
+            } else if (id == R.id.nav_fresh) {
                 setLoadingFragment();
-                setToolbarTitle(R.string.title_forum, 0);
+                setToolbarTitle(R.string.title_fresh, 0);
             }
         }
 
@@ -299,6 +302,24 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_app_bar_main, menu);
+
+        /*
+        // Get SearchView and set searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if(searchPlate!=null){
+            searchPlate.setBackgroundColor(Color.BLUE);
+            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
+            if(searchText!=null){
+                searchText.setTextColor(Color.BLACK);
+                searchText.setHintTextColor(Color.GRAY);
+            }
+        }*/
+
         return true;
     }
 
@@ -311,8 +332,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+            goToActivity(SearchableActivity.class);
             return true;
         }
 
