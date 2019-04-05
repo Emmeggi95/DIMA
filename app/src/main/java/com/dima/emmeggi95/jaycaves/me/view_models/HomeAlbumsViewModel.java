@@ -35,8 +35,8 @@ import java.util.concurrent.CountDownLatch;
 
 public class HomeAlbumsViewModel extends ViewModel {
 
-    private MutableLiveData<List<Album>> albums = new MutableLiveData<>();
-    private List<Album> albumList = new ArrayList<>();
+    private static MutableLiveData<List<Album>> albums = new MutableLiveData<>();
+    private static List<Album> albumList = new ArrayList<>();
 
     private FirebaseDatabase database;
     public HomeAlbumsViewModel(){

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FreshAlbumsViewModel extends ViewModel {
 
-    MutableLiveData<List<Album>> albums = new MutableLiveData<>();
+    private static MutableLiveData<List<Album>> albums = new MutableLiveData<>();
 
     public FreshAlbumsViewModel() {
 

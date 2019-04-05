@@ -3,6 +3,7 @@ package com.dima.emmeggi95.jaycaves.me;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.view_models.HomeAlbumsViewModel;

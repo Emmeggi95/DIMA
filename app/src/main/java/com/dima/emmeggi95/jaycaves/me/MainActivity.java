@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -157,9 +158,6 @@ public class MainActivity extends AppCompatActivity
                 if (selectionChanged) {
                     selectionChanged = false;
                     switch (clickedNavItem) {
-                        case R.id.nav_account:
-                            goToActivity(AccountActivity.class);
-                            break;
                         case R.id.nav_home:
                             setFragment(homeFragment);
                             break;
@@ -168,9 +166,6 @@ public class MainActivity extends AppCompatActivity
                             break;
                         case R.id.nav_fresh:
                             setFragment(freshFragment);
-                            break;
-                        case R.id.nav_settings:
-                            goToActivity(SettingsActivity.class);
                             break;
                         case R.id.nav_playlists:
                             setFragment(playlistsFragment);
@@ -249,8 +244,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (clickedNavItem != id) {
-            clickedNavItem = id;
-            selectionChanged = true;
+            if (id != R.id.nav_account && id != R.id.nav_settings) {
+                clickedNavItem = id;
+                selectionChanged = true;
+            }
 
             // Set a blank fragment before loading the actual fragment to avoid lags
             if (id == R.id.nav_home) {
@@ -265,6 +262,10 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_playlists) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.title_playlists, 0);
+            } else if (id == R.id.nav_account) {
+                goToActivity(AccountActivity.class);
+            } else if (id == R.id.nav_settings) {
+                goToActivity(SettingsActivity.class);
             }
         }
 

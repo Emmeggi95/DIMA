@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GenresViewModel extends ViewModel {
 
-    private MutableLiveData<List<String>> genres = new MutableLiveData<>();
+    private static MutableLiveData<List<String>> genres = new MutableLiveData<>();
 
     public GenresViewModel(){
 
