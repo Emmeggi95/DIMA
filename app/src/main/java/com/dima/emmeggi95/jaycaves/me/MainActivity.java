@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     HomeFragment homeFragment;
     ChartsFragment chartsFragment;
     FreshFragment freshFragment;
+    PlaylistsFragment playlistsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity
         homeFragment = new HomeFragment();
         chartsFragment = new ChartsFragment();
         freshFragment = new FreshFragment();
+        playlistsFragment = new PlaylistsFragment();
 
         // Initialize custom fonts
         floydFont = Typeface.createFromAsset(getAssets(), "fonts/floyd.TTF");
@@ -169,6 +171,9 @@ public class MainActivity extends AppCompatActivity
                             break;
                         case R.id.nav_settings:
                             goToActivity(SettingsActivity.class);
+                            break;
+                        case R.id.nav_playlists:
+                            setFragment(playlistsFragment);
                             break;
                     }
                 }
@@ -248,11 +253,6 @@ public class MainActivity extends AppCompatActivity
             selectionChanged = true;
 
             // Set a blank fragment before loading the actual fragment to avoid lags
-            if (id == R.id.nav_home || id == R.id.nav_charts || id == R.id.nav_forum) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_main, loadingFragment);
-                ft.commit();
-            }
             if (id == R.id.nav_home) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.app_name, 2);
@@ -262,6 +262,9 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_fresh) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.title_fresh, 0);
+            } else if (id == R.id.nav_playlists) {
+                setLoadingFragment();
+                setToolbarTitle(R.string.title_playlists, 0);
             }
         }
 
@@ -302,24 +305,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_app_bar_main, menu);
-
-        /*
-        // Get SearchView and set searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-        View searchPlate = searchView.findViewById(searchPlateId);
-        if(searchPlate!=null){
-            searchPlate.setBackgroundColor(Color.BLUE);
-            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
-            if(searchText!=null){
-                searchText.setTextColor(Color.BLACK);
-                searchText.setHintTextColor(Color.GRAY);
-            }
-        }*/
-
         return true;
     }
 

@@ -1,0 +1,106 @@
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dima.emmeggi95.jaycaves.me.PlaylistsFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/playlist1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tall_row">
+
+            <ImageView
+                android:id="@+id/playlist1_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin"
+                android:src="@drawable/ic_favorite_border_black_24dp"
+                android:tint="@android:color/holo_red_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/playlist1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/layout_margin"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/playlist1"
+                android:textAppearance="@style/PrimaryTextTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/playlist1_symbol"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/playlist2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tall_row">
+
+            <ImageView
+                android:id="@+id/playlist2_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin"
+                android:src="@drawable/ic_baseline_check_circle_outline_24px"
+                android:tint="@android:color/holo_green_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/playlist2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/layout_margin"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/playlist2"
+                android:textAppearance="@style/PrimaryTextTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/playlist2_symbol"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/playlist3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tall_row">
+
+            <ImageView
+                android:id="@+id/playlist3_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_margin"
+                android:src="@drawable/ic_repeat_black_24dp"
+                android:tint="@android:color/holo_blue_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/playlist3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/layout_margin"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/playlist3"
+                android:textAppearance="@style/PrimaryTextTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/playlist3_symbol"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -144,6 +144,10 @@
     <!-- Fresh Fragment-->
     <string name="fresh_header">New Releases</string>
 
+    <string name="playlist1">Favorites</string>
+    <string name="playlist2">To Listen</string>
+    <string name="playlist3">On the Go</string>
+
     <!--Miscellaneous-->
     <string name="long_text">
         "Material is the metaphor.\n"
