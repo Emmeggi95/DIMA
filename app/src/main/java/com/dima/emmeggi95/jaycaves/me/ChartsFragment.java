@@ -13,14 +13,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.dima.emmeggi95.jaycaves.me.entities.ChartAlbumsAdapter;
+import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbumsAdapter;
+import com.dima.emmeggi95.jaycaves.me.view_models.ChartViewModel;
+import com.dima.emmeggi95.jaycaves.me.view_models.ChartViewModelFactory;
 import com.dima.emmeggi95.jaycaves.me.view_models.GenresViewModel;
+import com.dima.emmeggi95.jaycaves.me.view_models.YearViewModel;
 
-import java.time.Year;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class ChartsFragment extends Fragment {
@@ -33,11 +34,12 @@ public class ChartsFragment extends Fragment {
     Spinner yearsSpinner;
 
     GenresViewModel genresViewModel;
-    List<String> years;
+    YearViewModel yearsViewModel;
+    ChartViewModel chartViewModel;
 
+    List<String> years;
     List<String> genres;
 
-    int FIRST_YEAR = 1950;
 
     String selectedGenre;
     String selectedYear;
@@ -51,30 +53,13 @@ public class ChartsFragment extends Fragment {
 
         // Set the recycler view
         chartsRecyclerView = view.findViewById(R.id.charts_recycler_view);
-
         chartsLayoutManager = new LinearLayoutManager(getActivity());
-
-        // Connect to the database and download data without filters
-
-        // Temp...
-        List<Album> albumList = new ArrayList<>();
-        albumList.add(new Album("Album #1", "1995", 4.17, "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #2", "1995", 4.17, "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #3", "1995", 4.17, "Artist ABC", "Rock", ""));
-        chartsAdapter = new ChartAlbumsAdapter(getActivity(), albumList);
-
         chartsRecyclerView.setLayoutManager(chartsLayoutManager);
-        chartsRecyclerView.setAdapter(chartsAdapter);
 
-        // Get spinners
+        // Genres spinner init
         genresSpinner = view.findViewById(R.id.genre_spinner);
-        yearsSpinner = view.findViewById(R.id.year_spinner);
-
-        // Get genres from ViewModel
-        genresViewModel = ViewModelProviders.of(getActivity()).get(GenresViewModel.class);
+        genresViewModel = ViewModelProviders.of(getActivity()).get(GenresViewModel.class); // Get genres from ViewModel
         genres = new ArrayList<>();
-
-        // Set genres to spinner
         final Observer genresObserver = new Observer<List<String>>() {
             @Override
             public void onChanged(@Nullable List<String> genresList) {
@@ -86,57 +71,65 @@ public class ChartsFragment extends Fragment {
             }
         };
         genresViewModel.getData().observe(this, genresObserver);
-
-        // Generate years
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        years = new ArrayList<>();
-        years.add(getResources().getString(R.string.all_years));
-        for(int i = currentYear; i>=FIRST_YEAR; i--){
-            years.add(String.valueOf(i));
-        }
-
-        // Set years to spinner
-        ArrayAdapter<String> yearsArray = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, years);
-        yearsSpinner.setAdapter(yearsArray);
-
-        // Set listener on both spinners
-        genresSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+        genresSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() { // Set listener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Bisognerebbe inserire un loading per la connessione al database
                 selectedGenre = parent.getItemAtPosition(position).toString();
-                // Connect to database to retrieve the updated list
-                if(selectedGenre.equals(getResources().getString(R.string.all_genres))){
-                    // don't filter by genre
-                } else {
-                    // filter by selected genre
-                }
+                if(selectedYear!=null) // avoid duplication
+                    chartViewModel.setData(selectedGenre,selectedYear);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        yearsSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+        // Years spinner init
+        yearsSpinner = view.findViewById(R.id.year_spinner);
+        yearsViewModel = ViewModelProviders.of(getActivity()).get(YearViewModel.class);
+        years= new ArrayList<>();
+        final Observer yearsObserver = new Observer<List<String>>() {
+            @Override
+            public void onChanged(@Nullable List<String> yearsList) {
+                years.clear();
+                years.add(getResources().getString(R.string.all_years));
+                years.addAll(yearsList);
+                ArrayAdapter<String> yearsArray = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, years);
+                yearsSpinner.setAdapter(yearsArray);
+            }
+        };
+        yearsViewModel.getData().observe(this, yearsObserver);
+        yearsSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() { // Set listener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedYear = parent.getItemAtPosition(position).toString();
-                // Connect to database to retrieve the updated list
-                if(selectedYear.equals(getResources().getString(R.string.all_years))){
-                    // don't filter by genre
-                } else {
-                    // filter by selected genre
-                }
+                chartViewModel.setData(selectedGenre,selectedYear);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        // Init ChartViewModel
+        chartViewModel = ViewModelProviders.of(getActivity(),
+                new ChartViewModelFactory(selectedYear,selectedGenre)).get(ChartViewModel.class);
+
+        final Observer observer = new Observer<List<Album>>() {
+            @Override
+            public void onChanged(@Nullable List<Album> chartAlbums) {
+                chartsAdapter = new ChartAlbumsAdapter(getActivity(), chartAlbums);
+                chartsRecyclerView.setAdapter(chartsAdapter);
+                System.out.println("CHANGED LIST");
+            }
+        };
+
+        chartViewModel.getData().observe(this, observer);
+
 
         return view;
     }
+
+
+
+
 }

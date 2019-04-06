@@ -47,6 +47,7 @@ public class HomeAlbumsViewModel extends ViewModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                albumList.clear();
                 for(DataSnapshot d : data){
                     // Add album to list
                     albumList.add(d.getValue(Album.class));

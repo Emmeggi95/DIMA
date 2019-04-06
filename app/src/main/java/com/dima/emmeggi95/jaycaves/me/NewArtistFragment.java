@@ -31,6 +31,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
@@ -163,6 +164,14 @@ public class NewArtistFragment extends Fragment {
         return found;
     }
 
+    private boolean isYearValid(EditText editText){
+
+        int selectedYear= Integer.parseInt(editText.getText().toString());
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        return ((selectedYear<currentYear) && (selectedYear>0));
+    }
+
 
         /**
          * It is used to capture and display user selection of the cover image
@@ -194,7 +203,7 @@ public class NewArtistFragment extends Fragment {
 
             return (isNotEmpty(newArtistNameInput) && isNotEmpty(newArtistReleaseDateInput) && isNotEmpty(newArtistStory)
                     && isNotEmpty(newArtistGenreInput1) && newArtistPicture.isActivated() && isGenreValid(newArtistGenreInput1)
-                    && (!isNotEmpty(newArtistGenreInput2) || isGenreValid(newArtistGenreInput2))
+                    && isYearValid (newArtistReleaseDateInput) && (!isNotEmpty(newArtistGenreInput2) || isGenreValid(newArtistGenreInput2))
                     && ((!isNotEmpty(newArtistGenreInput3) || isGenreValid(newArtistGenreInput3))));
         }
 
@@ -301,6 +310,9 @@ public class NewArtistFragment extends Fragment {
             }
             else if(!isGenreValid(newArtistGenreInput3)) {
                 Snackbar.make(getActivity().getCurrentFocus(), R.string.genre3_error, Snackbar.LENGTH_LONG).show();
+            }
+            else if(!isYearValid(newArtistReleaseDateInput)){
+                Snackbar.make(getActivity().getCurrentFocus(), "Please insert a valid date!", Snackbar.LENGTH_LONG).show();
             }
         }
 

@@ -9,13 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.Album;
 import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
+import com.dima.emmeggi95.jaycaves.me.CoverCache;
 import com.dima.emmeggi95.jaycaves.me.R;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -23,7 +27,6 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     List<Album> albums;
 
     public ChartAlbumsAdapter(Context context, List<Album> albums) {
-        System.out.println(this.getClass().toString() + ": recycler adapter created.");//DEBUG
         this.context = context;
         this.albums = albums;
     }
@@ -33,6 +36,7 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         CardView card;
         TextView rank, title, artist, score, votes;
         ImageView cover;
+        ProgressBar loading;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -44,6 +48,7 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             score = (TextView) itemView.findViewById(R.id.chart_rating_text);
             votes = (TextView) itemView.findViewById(R.id.votes_number_text);
             cover = (ImageView) itemView.findViewById(R.id.chart_cover);
+            loading= itemView.findViewById(R.id.loading_chart_album_card);
         }
     }
 
@@ -66,9 +71,10 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((ItemViewHolder) holder).votes.setText("n/a");// Da implementare!
 
         // Set cover
-        // ...
+        CoverCache.retrieveCover(album.getCover(), ((ChartAlbumsAdapter.ItemViewHolder)holder).cover, ((ChartAlbumsAdapter.ItemViewHolder)holder).loading,
+                context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
 
-        // Set on click
+        // Set on click to album activity
         ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -29,7 +29,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.security.SecureRandom;
+import java.time.Year;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 
@@ -222,7 +224,7 @@ public class NewAlbumFragment extends Fragment {
 
         return (isNotEmpty(newAlbumNameInput) && isNotEmpty(newAlbumReleaseDateInput) && isNotEmpty(newAlbumArtistInput)
                 && isNotEmpty(newAlbumGenreInput1) && newAlbumPicture.isActivated() && checkedArtist && !tempArtist.isEmpty()
-                && isGenreValid(newAlbumGenreInput1) && (!isNotEmpty(newAlbumGenreInput2) || isGenreValid(newAlbumGenreInput2))
+                && isGenreValid(newAlbumGenreInput1) && isYearValid(newAlbumReleaseDateInput) && (!isNotEmpty(newAlbumGenreInput2) || isGenreValid(newAlbumGenreInput2))
                 && ((!isNotEmpty(newAlbumGenreInput3) || isGenreValid(newAlbumGenreInput3))));
     }
 
@@ -243,6 +245,14 @@ public class NewAlbumFragment extends Fragment {
         }
 
         return found;
+    }
+
+    private boolean isYearValid(EditText editText){
+
+        int selectedYear= Integer.parseInt(editText.getText().toString());
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        return ((selectedYear<currentYear) && (selectedYear>0));
     }
 
 
@@ -366,6 +376,9 @@ public class NewAlbumFragment extends Fragment {
         else if(!isGenreValid(newAlbumGenreInput3)) {
             Snackbar.make(getActivity().getCurrentFocus(), R.string.genre3_error, Snackbar.LENGTH_LONG).show();
         }
+        else if(!isYearValid(newAlbumReleaseDateInput)){
+            Snackbar.make(getActivity().getCurrentFocus(), "Please insert a valid date!", Snackbar.LENGTH_LONG).show();
+        }
     }
 
 
@@ -386,6 +399,8 @@ public class NewAlbumFragment extends Fragment {
             buf[idx] = symbols[new SecureRandom().nextInt(symbols.length)];
         return new String(buf);
     }
+
+
 
 
 }

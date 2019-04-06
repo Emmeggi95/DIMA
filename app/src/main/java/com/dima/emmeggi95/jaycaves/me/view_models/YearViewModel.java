@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
+
+import com.dima.emmeggi95.jaycaves.me.Album;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,46 +14,45 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenresViewModel extends ViewModel {
+public class YearViewModel extends ViewModel {
 
-    private static MutableLiveData<List<String>> genres = new MutableLiveData<>();
-    private List<String> genreList;
-
+    private static MutableLiveData<List<String>> albumYears = new MutableLiveData<>();
+    private List<String> yearsList;
     private FirebaseDatabase database;
 
-    public GenresViewModel(){
+    public YearViewModel() {
 
-        // Fetch genres
+        // Fetch years
         database= FirebaseDatabase.getInstance();
-        genreList = new ArrayList<>();
-        database.getReference("genres").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+        yearsList = new ArrayList<>();
+        database.getReference("albums").orderByChild("date").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 // insert genres into list
-                for (DataSnapshot d : data)
-                    genreList.add(d.getKey());
+                for (DataSnapshot d : data){
+                    String year= d.getValue(Album.class).getDate();
+                    if (!yearsList.contains(year))
+                        yearsList.add(year);
+
+                }
+
 
                 // notify change
-                genres.postValue(genreList);
+                albumYears.postValue(yearsList);
 
 
             }
+
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // INTERNAL ERROR
             }
         });
-
-        /*genreList.add("Rock");
-        genreList.add("Classical");
-        genreList.add("Hip-Hop");
-        genreList.add("Pop");
-        genreList.add("Jazz");
-*/
-
-
     }
 
-    public LiveData<List<String>> getData(){ return genres; }
+    public LiveData<List<String>> getData(){ return albumYears; }
 }
+

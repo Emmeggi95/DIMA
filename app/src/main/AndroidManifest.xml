@@ -50,7 +50,6 @@
         <activity
             android:name=".AddContentActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".CreateNewAlbumActivity" />
         <activity
             android:name=".AlbumActivity"
             android:label="@string/title_activity_album"
