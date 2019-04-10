@@ -1,5 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -120,7 +122,8 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", albumList.get(position));
-                context.startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, ((ItemViewHolder) holder).cover, "album_cover");
+                context.startActivity(intent, options.toBundle());
             }
         });
     }

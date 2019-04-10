@@ -1,5 +1,11 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.animation.Animator;
+import android.annotation.SuppressLint;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -7,12 +13,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.transition.Fade;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,7 +30,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
+import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +44,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import android.arch.lifecycle.Observer;
 
 import static android.view.View.GONE;
 
@@ -44,13 +57,54 @@ public class AlbumActivity extends AppCompatActivity {
     ImageView coverView;
     ProgressBar loading;
 
+    FloatingActionButton fab;
+
+    PlaylistsViewModel playlistsViewModel;
+    List<Playlist> playlists;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         setContentView(R.layout.activity_album);
 
         // Get album from intent extra
         album = (Album) getIntent().getSerializableExtra("album");
+
+        playlistsViewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
+        final Observer<List<Playlist>> observer = new Observer<List<Playlist>>() {
+            @Override
+            public void onChanged(@Nullable List<Playlist> data) {
+                playlists = data;
+            }
+        };
+        playlistsViewModel.getData().observe(this, observer);
+
+        // Set floating button
+        fab = (FloatingActionButton) findViewById(R.id.album_floating_button);
+        final Context thisActivity = this;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                String[] playlistNames = new String[playlists.size()];
+                for(int i=0; i<playlists.size(); i++){
+                    playlistNames[i] = playlists.get(i).getName();
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+                builder.setTitle(getResources().getString(R.string.choose_playlist));
+                builder.setItems(playlistNames, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        playlistsViewModel.addAlbum(which, album);
+                        Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                });
+                builder.show();
+            }
+        });
+        fab.animate().scaleX(1).setDuration(300).setStartDelay(300);
+        fab.animate().scaleY(1).setDuration(300).setStartDelay(300);
 
         // Set App Bar
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.album_activity_toolbar_layout);
@@ -60,11 +114,11 @@ public class AlbumActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                finish();
+                fab.animate().scaleX(0).setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime)).setListener(null);
+                onBackPressed();
             }
         });
         setTitle(album.getTitle());
-
 
         // Set Cover Image
         loading= findViewById(R.id.loading_album);
@@ -87,18 +141,6 @@ public class AlbumActivity extends AppCompatActivity {
         } else {
             color = R.color.colorAccent;
         }
-
-
-        // Set floating button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.album_floating_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
 
         // Set color
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
@@ -138,6 +180,12 @@ public class AlbumActivity extends AppCompatActivity {
         } else {
             hideFeaturedReview();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        hideFab();
     }
 
     public void showFeaturedReview(){
@@ -204,6 +252,12 @@ public class AlbumActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void hideFab(){
+        fab.clearAnimation();
+        fab.setVisibility(GONE);
     }
 
 }

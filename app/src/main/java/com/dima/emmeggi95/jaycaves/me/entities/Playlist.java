@@ -46,5 +46,6 @@ public class Playlist implements Serializable {
 
     public void addEntry(Album album){
         albums.add(album);
+        // Database connection...
     }
 }

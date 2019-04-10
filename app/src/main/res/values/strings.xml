@@ -144,9 +144,12 @@
     <!-- Fresh Fragment-->
     <string name="fresh_header">New Releases</string>
 
+    <!-- Playlist -->
     <string name="playlist1">Favorites</string>
     <string name="playlist2">To Listen</string>
     <string name="playlist3">On the Go</string>
+    <string name="added_to">added to</string>
+    <string name="choose_playlist">Choose a playlist</string>
 
     <!--Miscellaneous-->
     <string name="long_text">

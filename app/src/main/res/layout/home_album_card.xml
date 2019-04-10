@@ -41,7 +41,8 @@
                     android:contentDescription="TODO"
                     android:scaleType="centerCrop"
                     android:src="@drawable/default_cover"
-                    android:visibility="gone"/>
+                    android:transitionName="album_cover"
+                    android:visibility="gone" />
 
                 <ProgressBar
                     android:id="@+id/loading_cover"

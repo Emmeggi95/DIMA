@@ -13,6 +13,10 @@
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
         <item name="android:colorBackground">?attr/colorBackground</item>
         <item name="android:colorEdgeEffect">@color/colorSecondary</item>
+        
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>
+        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

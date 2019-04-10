@@ -50,4 +50,10 @@ public class PlaylistsViewModel extends ViewModel {
         playlists.setValue(list);
         System.out.println("View model: album playlist deleted");
     }
+
+    public boolean addAlbum(int playlist, Album album){
+        list.get(playlist).addEntry(album);
+        playlists.setValue(list);
+        return true;
+    }
 }
