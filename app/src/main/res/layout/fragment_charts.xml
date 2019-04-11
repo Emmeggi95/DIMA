@@ -22,23 +22,30 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/genre_filter" />
+                android:text="@string/filter_title"
+                android:textAppearance="@style/HeaderTextTheme" />
 
             <Spinner
                 android:id="@+id/genre_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/textView5"
+            <View
+                android:id="@+id/divider2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/year_filter" />
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <Spinner
                 android:id="@+id/year_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
         </LinearLayout>
 

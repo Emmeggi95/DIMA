@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
@@ -57,6 +59,11 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
         adapter = new PlaylistAlbumsAdapter(this, playlist.getAlbums(), this);
 
         recyclerView.setLayoutManager(layoutManager);
+
+        // set animation for the recyclerview
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_list);
+        recyclerView.setLayoutAnimation(animation);
+
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper.Callback callback = new PlaylistItemTouchHelperCallback((ItemTouchHelperAdapter) adapter);

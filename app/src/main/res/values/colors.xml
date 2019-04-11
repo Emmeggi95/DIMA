@@ -8,6 +8,7 @@
     <color name="colorSecondaryDark">#37006a</color>
     <color name="colorSecondaryLight">#9B4DCB</color>
     <color name="colorAccent">@color/colorSecondary</color>
+    <color name="colorAccentMuted">#f3e5f5</color>
 
     <!--Background colors-->
     <color name="colorLightBackground">#ffffff</color>

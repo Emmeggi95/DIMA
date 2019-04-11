@@ -186,6 +186,7 @@
 
                 <Button
                     android:id="@+id/review_like_button"
+                    style="@style/DefaultButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/like_button_text" />
@@ -235,6 +236,7 @@
 
                 <Button
                     android:id="@+id/write_review_button"
+                    style="@style/DefaultButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -250,6 +252,7 @@
 
                 <Button
                     android:id="@+id/all_reviews_button"
+                    style="@style/DefaultButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

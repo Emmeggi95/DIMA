@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 
 import com.dima.emmeggi95.jaycaves.me.entities.HomeAlbumsAdapter;
@@ -49,6 +51,10 @@ public class HomeFragment extends Fragment {
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        // set animation for the recyclerview
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
+        recyclerView.setLayoutAnimation(animation);
 
         // load data from ViewModel
         viewModel = ViewModelProviders.of(getActivity()).get(HomeAlbumsViewModel.class);

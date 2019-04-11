@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.view.View.GONE;
 
 
 /**
@@ -106,14 +107,22 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
         //Set rating stars
-        int integerScore = (int) album.getScore();
-        int i;
-        for (i = 0; i < integerScore; i++) {
-            ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_24dp);
-        }
-        float decimalPart = (float) album.getScore() - integerScore;
-        if (decimalPart >= 0.5) {
-            ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+        if(album.getScore()==0.0){
+            ((ItemViewHolder) holder).stars.get(1).setVisibility(GONE);
+            ((ItemViewHolder) holder).stars.get(2).setVisibility(GONE);
+            ((ItemViewHolder) holder).stars.get(3).setVisibility(GONE);
+            ((ItemViewHolder) holder).stars.get(4).setVisibility(GONE);
+            ((ItemViewHolder) holder).rating.setText(context.getResources().getString(R.string.not_available));
+        } else {
+            int integerScore = (int) album.getScore();
+            int i;
+            for (i = 0; i < integerScore; i++) {
+                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+            }
+            float decimalPart = (float) album.getScore() - integerScore;
+            if (decimalPart >= 0.5) {
+                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+            }
         }
 
         //Set listener to open AlbumActivity

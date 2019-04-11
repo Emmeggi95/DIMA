@@ -162,17 +162,25 @@ public class AlbumActivity extends AppCompatActivity {
         stars.add((ImageView) findViewById(R.id.star_3));
         stars.add((ImageView) findViewById(R.id.star_4));
         stars.add((ImageView) findViewById(R.id.star_5));
-        int integerScore = (int) album.getScore();
-        int i;
-        for(i=0; i<integerScore; i++){
-            stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+        TextView ratingText = findViewById(R.id.text_rating);
+        if(album.getScore()==0.0){
+            stars.get(1).setVisibility(GONE);
+            stars.get(2).setVisibility(GONE);
+            stars.get(3).setVisibility(GONE);
+            stars.get(4).setVisibility(GONE);
+            ratingText.setText(getResources().getString(R.string.not_available));
+        } else {
+            int integerScore = (int) album.getScore();
+            int i;
+            for (i = 0; i < integerScore; i++) {
+                stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+            }
+            float decimalPart = (float) album.getScore() - integerScore;
+            if (decimalPart >= 0.5) {
+                stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+            }
+            ratingText.setText(String.format("%.2f", album.getScore()));
         }
-        float decimalPart = (float) album.getScore() - integerScore;
-        if(decimalPart >= 0.5){
-            stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
-        }
-        TextView rating = (TextView) findViewById(R.id.text_rating);
-        rating.setText(String.format("%.2f", album.getScore()));
 
         // Set featured review
         if(album.getReviews().size()>0){

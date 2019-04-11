@@ -9,15 +9,15 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="@dimen/album_cover_side"
-        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginLeft="@dimen/layout_margin"
         android:layout_marginTop="@dimen/card_margin"
         android:layout_marginRight="@dimen/card_margin"
         android:layout_marginBottom="@dimen/card_margin"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         card_view:cardBackgroundColor="@color/card_default_color"
-        card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="1dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp"
         card_view:cardUseCompatPadding="false">
 
         <!-- Content -->
@@ -31,7 +31,8 @@
                 android:id="@+id/cover_card"
                 android:layout_width="@dimen/album_cover_side"
                 android:layout_height="@dimen/album_cover_side"
-                card_view:cardCornerRadius="8dp">
+                card_view:cardCornerRadius="0dp"
+                card_view:cardElevation="0dp">
 
                 <ImageView
                     android:id="@+id/image_cover"

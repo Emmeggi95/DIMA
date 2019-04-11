@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.dima.emmeggi95.jaycaves.me.entities.FreshAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.view_models.FreshAlbumsViewModel;
@@ -37,6 +39,10 @@ public class FreshFragment extends Fragment {
         recyclerView = view.findViewById(R.id.fresh_recycler_view);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        // set animation for the recyclerview
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
+        recyclerView.setLayoutAnimation(animation);
 
         return view;
     }

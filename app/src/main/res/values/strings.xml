@@ -135,6 +135,7 @@
     <string name="artist_album_date_default">Date</string>
 
     <!--Charts Fragment-->
+    <string name="filter_title">Filters</string>
     <string name="genre_filter">Genre</string>
     <string name="year_filter">Year</string>
     <string name="votes_number_text_default">0 v.</string>
@@ -152,6 +153,7 @@
     <string name="choose_playlist">Choose a playlist</string>
 
     <!--Miscellaneous-->
+    <string name="not_available">n/a</string>
     <string name="long_text">
         "Material is the metaphor.\n"
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."

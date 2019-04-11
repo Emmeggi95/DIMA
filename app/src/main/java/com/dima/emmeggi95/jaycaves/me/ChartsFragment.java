@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -55,6 +57,10 @@ public class ChartsFragment extends Fragment {
         chartsRecyclerView = view.findViewById(R.id.charts_recycler_view);
         chartsLayoutManager = new LinearLayoutManager(getActivity());
         chartsRecyclerView.setLayoutManager(chartsLayoutManager);
+
+        // set animation for the recyclerview
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
+        chartsRecyclerView.setLayoutAnimation(animation);
 
         // Genres spinner init
         genresSpinner = view.findViewById(R.id.genre_spinner);
