@@ -281,7 +281,7 @@ public class NewAlbumFragment extends Fragment {
         String parsedGenre2= tempGenre2.substring(0,1).toUpperCase()+ tempGenre2.substring(1);
         String tempGenre3= newAlbumGenreInput1.getText().toString();
         String parsedGenre3= tempGenre3.substring(0,1).toUpperCase()+ tempGenre3.substring(1);
-        final String parsedCoverName= selectedImageUri.getLastPathSegment()+randomIdGenerator();
+        final String parsedCoverName= selectedImageUri.getLastPathSegment()+CustomRandomId.randomIdGenerator();
 
 
         // Create object Album according to the number of genres specified
@@ -289,14 +289,14 @@ public class NewAlbumFragment extends Fragment {
         if (isNotEmpty(newAlbumGenreInput2))
             if(isNotEmpty(newAlbumGenreInput3))
                 album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
-                        0.0, parsedArtistName, parsedGenre1, parsedGenre2, parsedGenre3, parsedCoverName);
+                        parsedArtistName, parsedGenre1, parsedGenre2, parsedGenre3, parsedCoverName);
             else
                 album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
-                        0.0, parsedArtistName, parsedGenre1, parsedGenre2, parsedCoverName);
+                        parsedArtistName, parsedGenre1, parsedGenre2, parsedCoverName);
 
         else
             album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
-                    0.0, parsedArtistName, parsedGenre1, parsedCoverName);
+                        parsedArtistName, parsedGenre1, parsedCoverName);
 
 
 
@@ -382,23 +382,7 @@ public class NewAlbumFragment extends Fragment {
     }
 
 
-    /**
-     * Generates a @buf digits random alphanumerical string
-     * @return random string
-     */
-    private String randomIdGenerator(){
 
-        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lower = upper.toLowerCase(Locale.ROOT);
-        String digits = "0123456789";
-        String alphanum = upper + lower + digits;
-        char[] symbols = alphanum.toCharArray();
-        char[] buf = new char[10];
-
-        for (int idx = 0; idx < buf.length; ++idx)
-            buf[idx] = symbols[new SecureRandom().nextInt(symbols.length)];
-        return new String(buf);
-    }
 
 
 

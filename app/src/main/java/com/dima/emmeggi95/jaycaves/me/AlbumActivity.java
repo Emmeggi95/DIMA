@@ -188,6 +188,17 @@ public class AlbumActivity extends AppCompatActivity {
         } else {
             hideFeaturedReview();
         }
+
+        // Write a review button
+        Button writeReviewButton = findViewById(R.id.write_review_button);
+        writeReviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
+                intent.putExtra("album", album);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -255,9 +266,7 @@ public class AlbumActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
 
     }

@@ -1,6 +1,10 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
 
 public class Review implements Serializable {
 
@@ -11,6 +15,10 @@ public class Review implements Serializable {
     private String date;
     private int likes;
 
+    public Review(){
+        // For db only
+    }
+
     public Review(String author, String title, String body, double rating, String date, int likes) {
         this.author = author;
         this.title = title;
@@ -19,6 +27,28 @@ public class Review implements Serializable {
         this.date = date;
         this.likes = likes;
     }
+
+    public static Comparator<Review> dateComparator = new Comparator<Review>() {
+
+        public int compare(Review a1, Review a2) {
+
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+            Date date1 = new Date();
+            Date date2 = new Date();
+            try {
+                date1 = formatter.parse(a1.getDate());
+            } catch (ParseException e) {
+                System.out.println("Error parsing date1");
+            }
+            try {
+                date2 = formatter.parse(a2.getDate());
+            } catch (ParseException e) {
+                System.out.println("Error parsing date2");
+            }
+            return  date2.compareTo(date1);
+
+
+        }};
 
     public String getAuthor() {
         return author;
@@ -67,4 +97,6 @@ public class Review implements Serializable {
     public void setLikes(int likes) {
         this.likes = likes;
     }
+
+
 }

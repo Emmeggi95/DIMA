@@ -19,9 +19,9 @@ public class FreshAlbumsViewModel extends ViewModel {
 
         // Temporary list of albums
         List<Album> albumList = new ArrayList<>();
-        albumList.add(new Album("Album #1", "1995", 4.17, "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #2", "1995", 4.17, "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #3", "1995", 4.17, "Artist ABC", "Rock", ""));
+        albumList.add(new Album("Album #1", "1995" , "Artist ABC", "Rock", ""));
+        albumList.add(new Album("Album #2", "1995" , "Artist ABC", "Rock", ""));
+        albumList.add(new Album("Album #3", "1995", "Artist ABC", "Rock", ""));
 
         albums.postValue(albumList);
     }

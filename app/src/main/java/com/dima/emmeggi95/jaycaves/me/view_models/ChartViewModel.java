@@ -102,7 +102,7 @@ public class ChartViewModel extends ViewModel {
                         for (DataSnapshot d : data)
                             albumsList.add(d.getValue(Album.class));
                         // notify change
-                        Collections.reverse(albumsList);
+                        Collections.sort(albumsList, Album.scoreComparator);
                         albums.postValue(albumsList);
                     }
                     @Override
@@ -123,7 +123,7 @@ public class ChartViewModel extends ViewModel {
                             if (isOfGenre(d.getValue(Album.class), genre))
                                 albumsList.add(d.getValue(Album.class));
                         // notify change
-                        Collections.reverse(albumsList);
+                        Collections.sort(albumsList, Album.scoreComparator);
                         albums.postValue(albumsList);
                     }
                     @Override
@@ -142,7 +142,7 @@ public class ChartViewModel extends ViewModel {
                             if (isOfGenre(d.getValue(Album.class), genre))
                                 albumsList.add(d.getValue(Album.class));
                         // notify change
-                        Collections.reverse(albumsList);
+                        Collections.sort(albumsList, Album.scoreComparator);
                         albums.postValue(albumsList);
                     }
                     @Override

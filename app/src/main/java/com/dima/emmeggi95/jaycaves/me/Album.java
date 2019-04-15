@@ -4,6 +4,7 @@ import com.dima.emmeggi95.jaycaves.me.entities.Review;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class Album implements Serializable {
 
     }
 
-    public Album(String title, String date, double score, String artist, String genre1, String genre2, String genre3, String cover) {
+    public Album(String title, String date, String artist, String genre1, String genre2, String genre3, String cover) {
         this.title = title;
         this.date = date;
         this.score = score;
@@ -37,29 +38,43 @@ public class Album implements Serializable {
         this.genre2 = genre2;
         this.genre3 = genre3;
         this.cover = cover;
+        score=0.0;
 
     }
 
-    public Album(String title, String date, double score, String artist, String genre1, String cover) {
+    public Album(String title, String date, String artist, String genre1, String cover) {
         this.title = title;
         this.date = date;
         this.score = score;
         this.artist = artist;
         this.genre1 = genre1;
         this.cover = cover;
+        score= 0.0;
 
     }
 
-    public Album(String title, String date, double score, String artist, String genre1, String genre2, String cover) {
+    public Album(String title, String date, String artist, String genre1, String genre2, String cover) {
         this.title = title;
         this.date = date;
-        this.score = score;
         this.artist = artist;
         this.genre1 = genre1;
         this.genre2 = genre2;
         this.cover = cover;
+        score=0.0;
 
     }
+
+    public static Comparator<Album> scoreComparator = new Comparator<Album>() {
+
+        public int compare(Album a1, Album a2) {
+
+            Double score1 = a1.getScore();
+            Double score2= a2.getScore();
+
+            return  score2.compareTo(score1);
+
+
+        }};
 
     public Album(String title){
         this.title = title;
@@ -132,6 +147,7 @@ public class Album implements Serializable {
     public List<Review> getReviews() {
         return reviews;
     }
+
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;

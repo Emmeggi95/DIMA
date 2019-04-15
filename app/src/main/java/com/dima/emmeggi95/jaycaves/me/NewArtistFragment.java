@@ -226,7 +226,7 @@ public class NewArtistFragment extends Fragment {
             String parsedGenre2= tempGenre2.substring(0,1).toUpperCase()+ tempGenre2.substring(1);
             String tempGenre3= newArtistGenreInput1.getText().toString();
             String parsedGenre3= tempGenre3.substring(0,1).toUpperCase()+ tempGenre3.substring(1);
-            final String parsedCoverName= selectedImageUri.getLastPathSegment()+randomIdGenerator();
+            final String parsedCoverName= selectedImageUri.getLastPathSegment()+CustomRandomId.randomIdGenerator();
 
 
 
@@ -317,24 +317,6 @@ public class NewArtistFragment extends Fragment {
         }
 
 
-    /**
-     * Generates a @buf digits random alphanumerical string
-     * @return
-     */
-    private String randomIdGenerator(){
-
-            String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            String lower = upper.toLowerCase(Locale.ROOT);
-            String digits = "0123456789";
-            String alphanum = upper + lower + digits;
-            char[] symbols = alphanum.toCharArray();
-            char[] buf = new char[10];
-
-            for (int idx = 0; idx < buf.length; ++idx)
-                buf[idx] = symbols[new SecureRandom().nextInt(symbols.length)];
-
-            return new String(buf);
-        }
 
 
     }

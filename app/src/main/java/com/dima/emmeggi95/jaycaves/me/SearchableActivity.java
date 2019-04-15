@@ -90,9 +90,9 @@ public class SearchableActivity extends AppCompatActivity {
 
         //Prova
         albumList = new ArrayList<>();
-        albumList.add(new Album("Album #1", "1995", 4.17, "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #2", "1995", 4.17, "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #3", "1995", 4.17, "Artist ABC", "Rock", ""));
+        albumList.add(new Album("Album #1", "1995", "Artist ABC", "Rock", ""));
+        albumList.add(new Album("Album #2", "1995", "Artist ABC", "Rock", ""));
+        albumList.add(new Album("Album #3", "1995", "Artist ABC", "Rock", ""));
         //
         artistList = new ArrayList<>();
         artistList.add(new Artist("Tizio", "1950", "...", "Rock", ""));
