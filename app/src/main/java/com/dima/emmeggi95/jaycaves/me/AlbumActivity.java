@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +44,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import android.arch.lifecycle.Observer;
 
@@ -53,14 +55,24 @@ import static android.view.View.GONE;
  */
 public class AlbumActivity extends AppCompatActivity {
 
+    // Layout elements
     Album album;
     ImageView coverView;
     ProgressBar loading;
-
     FloatingActionButton fab;
-
     PlaylistsViewModel playlistsViewModel;
+
+    // Temp variables
     List<Playlist> playlists;
+    int likes;
+    Review featuredReview;
+    String id;
+
+    // Db references
+    DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
+    DatabaseReference artistsRef = FirebaseDatabase.getInstance().getReference("artists");
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +82,10 @@ public class AlbumActivity extends AppCompatActivity {
 
         // Get album from intent extra
         album = (Album) getIntent().getSerializableExtra("album");
+        id = album.getTitle()+"@"+album.getArtist();
+
+        // Fetch related reviews
+        fetchReviews();
 
         playlistsViewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
         final Observer<List<Playlist>> observer = new Observer<List<Playlist>>() {
@@ -81,7 +97,7 @@ public class AlbumActivity extends AppCompatActivity {
         playlistsViewModel.getData().observe(this, observer);
 
         // Set floating button
-        fab = (FloatingActionButton) findViewById(R.id.album_floating_button);
+        fab = findViewById(R.id.album_floating_button);
         final Context thisActivity = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,15 +198,15 @@ public class AlbumActivity extends AppCompatActivity {
             ratingText.setText(String.format("%.2f", album.getScore()));
         }
 
-        // Set featured review
-        if(album.getReviews().size()>0){
-            showFeaturedReview();
-        } else {
+        // Init featured review section
             hideFeaturedReview();
-        }
+
 
         // Write a review button
         Button writeReviewButton = findViewById(R.id.write_review_button);
+        for (Review r: User.getReviews())
+            if (r.getTitle().equals(id))
+                writeReviewButton.setEnabled(false);
         writeReviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,29 +224,75 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     public void showFeaturedReview(){
-        TextView reviewTitle = (TextView) findViewById(R.id.review_title);
+
+        // Bind elements
+        TextView reviewHeader = (TextView) findViewById(R.id.review_title);
         TextView reviewAuthor = (TextView) findViewById(R.id.review_author);
         TextView reviewDate = (TextView) findViewById(R.id.review_date);
         TextView reviewBody = (TextView) findViewById(R.id.review_body);
         TextView reviewRating = (TextView) findViewById(R.id.review_rating_text);
-        TextView reviewLikes = findViewById(R.id.likes_number);
-        Review featuredReview = album.getReviews().get(0);
-        reviewTitle.setText(featuredReview.getTitle());
+        final TextView reviewLikes = findViewById(R.id.likes_number);
+        List<Review> reviews= album.getReviews();
+        Collections.sort(reviews, Review.likesComparator); // featured review is the one with most likes
+        featuredReview = album.getReviews().get(0);
+
+
+        // Init likes
+        likes = featuredReview.getLikes();
+        reviewsRef.orderByKey().equalTo(featuredReview.getTitle()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for (DataSnapshot d: data){
+                    likes= d.getValue(Review.class).getLikes();
+                    reviewLikes.setText(String.valueOf(featuredReview.getLikes()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
+        // Set contents
+        reviewHeader.setText(featuredReview.getHeadline());
         reviewAuthor.setText(featuredReview.getAuthor());
         reviewDate.setText(featuredReview.getDate());
         reviewBody.setText(featuredReview.getBody());
         reviewRating.setText(String.format("%.2f", featuredReview.getRating()));
         reviewLikes.setText(String.valueOf(featuredReview.getLikes()));
-        LinearLayout featuredReviewLayout = (LinearLayout) findViewById(R.id.featured_review);
+        LinearLayout featuredReviewLayout = findViewById(R.id.featured_review);
         featuredReviewLayout.setVisibility(View.VISIBLE);
-        TextView reviewNotFound = (TextView) findViewById(R.id.not_found_text);
+        TextView reviewNotFound = findViewById(R.id.not_found_text);
         reviewNotFound.setVisibility(GONE);
-        Button seeAllReviewsButton = (Button) findViewById(R.id.all_reviews_button);
+        Button seeAllReviewsButton = findViewById(R.id.all_reviews_button);
         if(album.getReviews().size()>0){
             seeAllReviewsButton.setEnabled(true);
         } else {
             seeAllReviewsButton.setEnabled(false);
         }
+
+        // Button "like" and listener
+        final Button likeButton = findViewById(R.id.review_like_button);
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                User.addLike(featuredReview.getId());
+                reviewLikes.setText(String.valueOf(featuredReview.getLikes()+1));
+                likeButton.setText("LIKED");
+                likeButton.setEnabled(false);
+
+
+            }
+        });
+
+        for(String like: User.getLikes())
+            if (like.equals(featuredReview.getId())){
+                likeButton.setText("LIKED");
+                likeButton.setEnabled(false);
+            }
+
+
 
     }
 
@@ -252,7 +314,7 @@ public class AlbumActivity extends AppCompatActivity {
     public void startArtistActivity(View view){
         final Intent intent = new Intent(this, ArtistActivity.class);
         // Retrieve information about the artist...
-        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("artists");
+        DatabaseReference reference= artistsRef;
         reference.orderByKey().equalTo(album.getArtist()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -276,5 +338,28 @@ public class AlbumActivity extends AppCompatActivity {
         fab.clearAnimation();
         fab.setVisibility(GONE);
     }
+
+    private void fetchReviews(){
+
+        reviewsRef.orderByChild("title").equalTo(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for(DataSnapshot d : data){
+                    album.getReviews().add(d.getValue(Review.class));
+                }
+                if (album.getReviews().size()>0)
+                    showFeaturedReview();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
+
+    }
+
+
+
 
 }

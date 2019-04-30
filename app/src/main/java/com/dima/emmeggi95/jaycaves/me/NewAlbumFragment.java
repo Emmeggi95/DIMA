@@ -28,11 +28,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import java.security.SecureRandom;
-import java.time.Year;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.Date;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -298,7 +298,9 @@ public class NewAlbumFragment extends Fragment {
             album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
                         parsedArtistName, parsedGenre1, parsedCoverName);
 
-
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
+        album.setCreation(formatter.format(date));
 
         // Try to perform the addition to database
         dbReference.child(parsedAlbumName+"@"+parsedArtistName).setValue(album)

@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RatingBar;
@@ -15,14 +16,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
 public class NewReviewActivity extends AppCompatActivity {
@@ -35,6 +33,9 @@ public class NewReviewActivity extends AppCompatActivity {
     private Button sendButton;
     private String albumKey;
     private int votes;
+    private AutoCompleteTextView headliner;
+    private DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
+    private DatabaseReference albumsRef = FirebaseDatabase.getInstance().getReference("albums");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,11 @@ public class NewReviewActivity extends AppCompatActivity {
         ratingBar= findViewById(R.id.new_review_ratingbar);
         essay= findViewById(R.id.new_review_text);
         sendButton= findViewById(R.id.createNewReviewButton);
+        headliner = findViewById(R.id.new_review_headline);
         votes=-1;
 
         // Keep Votes consistent
-        FirebaseDatabase.getInstance().getReference("reviews").orderByChild("title").equalTo(albumKey).addValueEventListener(new ValueEventListener() {
+        reviewsRef.orderByChild("title").equalTo(albumKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
@@ -70,7 +72,7 @@ public class NewReviewActivity extends AppCompatActivity {
         });
 
         // Keeps Score consistent
-        FirebaseDatabase.getInstance().getReference("albums").child(albumKey).child("score").addValueEventListener(new ValueEventListener() {
+        albumsRef.child(albumKey).child("score").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
@@ -110,11 +112,14 @@ public class NewReviewActivity extends AppCompatActivity {
 
 
         // need to retrieve user credentials
-        Review review = new Review("pietro@grotti", albumKey,
-                essay.getText().toString(), ratingBar.getRating(),formatter.format(date) ,0);
+        Review review = new Review("pietro@grotti", albumKey, headliner.getText().toString(), // implement authentication to complete
+                essay.getText().toString(), ratingBar.getRating(),formatter.format(date));
+
 
         if (votes != -1) {
-            FirebaseDatabase.getInstance().getReference("reviews").child(CustomRandomId.randomIdGenerator()).setValue(review)
+            String id = CustomRandomId.randomIdGenerator();
+            review.setId(id);
+            reviewsRef.child(id).setValue(review)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

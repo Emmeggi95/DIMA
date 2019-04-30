@@ -14,18 +14,21 @@ public class Review implements Serializable {
     private double rating;
     private String date;
     private int likes;
+    private String headline;
+    private String id;
 
     public Review(){
         // For db only
     }
 
-    public Review(String author, String title, String body, double rating, String date, int likes) {
+    public Review(String author, String title, String headline, String body, double rating, String date ) {
         this.author = author;
         this.title = title;
         this.body = body;
         this.rating = rating;
         this.date = date;
-        this.likes = likes;
+        this.headline = headline;
+        this.likes=0;
     }
 
     public static Comparator<Review> dateComparator = new Comparator<Review>() {
@@ -46,6 +49,18 @@ public class Review implements Serializable {
                 System.out.println("Error parsing date2");
             }
             return  date2.compareTo(date1);
+
+
+        }};
+
+    public static Comparator<Review> likesComparator = new Comparator<Review>() {
+
+        public int compare(Review a1, Review a2) {
+
+            Integer likes1= a1.getLikes();
+            Integer likes2= a2.getLikes();
+
+            return  likes2.compareTo(likes1);
 
 
         }};
@@ -99,4 +114,17 @@ public class Review implements Serializable {
     }
 
 
+    public String getHeadline() {
+        return headline; }
+
+    public void setHeadline(String headline) {
+        this.headline = headline; }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
