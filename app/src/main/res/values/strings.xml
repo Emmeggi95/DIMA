@@ -151,6 +151,7 @@
     <string name="playlist3">On the Go</string>
     <string name="added_to">added to</string>
     <string name="choose_playlist">Choose a playlist</string>
+    <string name="editing_instructions">Drag the albums to rearrange them.\nSwipe to delete them from the playlist.</string>
 
     <!--Miscellaneous-->
     <string name="not_available">n/a</string>

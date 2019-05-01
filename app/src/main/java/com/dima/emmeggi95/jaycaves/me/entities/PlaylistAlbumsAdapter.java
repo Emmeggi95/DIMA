@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,21 +27,26 @@ import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+
+import static android.view.View.GONE;
 
 public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter {
 
     Context context;
     List<Album> albums;
     OnStartDragListener onStartDragListener;
+    List<ImageView> symbols;
 
     public PlaylistAlbumsAdapter(Context context, List<Album> albums, OnStartDragListener onStartDragListener) {
         this.context = context;
         this.albums = albums;
         this.onStartDragListener = onStartDragListener;
+        this.symbols = new ArrayList<>();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder{
@@ -60,6 +67,7 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
             year = itemView.findViewById(R.id.playlist_album_year);
             cover = itemView.findViewById(R.id.playlist_album_cover);
             loading= itemView.findViewById(R.id.loading_album_playlist);
+            symbols.add((ImageView) itemView.findViewById(R.id.sort_symbol));
         }
     }
 
@@ -120,5 +128,43 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
         notifyItemMoved(fromPosition, toPosition);
         onStartDragListener.move(fromPosition, toPosition);
         return true;
+    }
+
+    public void showSortSymbol(){
+        for(ImageView s : symbols){
+            s.setScaleX(1);
+            s.setScaleY(1);
+            Animation entrance = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.order_symbol_entrance);
+            s.startAnimation(entrance);
+
+        }
+    }
+
+    public void hideSortSymbol(){
+        for(final ImageView s : symbols){
+            //s.setScaleX(0);
+            //s.setScaleY(0);
+            Animation exit = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.order_symbol_exit);
+            exit.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    s.setScaleX(0);
+                    s.setScaleY(0);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            s.startAnimation(exit);
+
+
+        }
     }
 }

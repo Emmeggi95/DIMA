@@ -9,10 +9,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.transition.Fade;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.PlaylistAlbumsAdapter;
@@ -28,10 +35,12 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
     PlaylistsViewModel viewModel;
 
     RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
+    PlaylistAlbumsAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
 
     ItemTouchHelper itemTouchHelper;
+
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,32 +78,43 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
         ItemTouchHelper.Callback callback = new PlaylistItemTouchHelperCallback((ItemTouchHelperAdapter) adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
 
-        final Button edit = findViewById(R.id.edit_playlist);
-        final Button submit = findViewById(R.id.submit_playlist);
-
-        submit.setEnabled(false);
-
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submit.setEnabled(true);
-                v.setEnabled(false);
-                itemTouchHelper.attachToRecyclerView(recyclerView);
-            }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edit.setEnabled(true);
-                v.setEnabled(false);
-                itemTouchHelper.attachToRecyclerView(null);
-            }
-        });
-
-
         // TODO
         // Aggiungere toolbar, risolvere il pulsante indietro, verificare se in AlbumActivity serve il finish
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.playlist_menu, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        MenuItem edit = menu.findItem(R.id.action_edit);
+        MenuItem submit = menu.findItem(R.id.action_submit);
+        final TextView instructions = findViewById(R.id.editing_instructions);
+        ImageView sortSymbol = findViewById(R.id.sort_symbol);
+        if(id == R.id.action_edit){
+            edit.setVisible(false);
+            submit.setVisible(true);
+
+            recyclerView.animate().translationY(instructions.getHeight());
+            instructions.setVisibility(View.VISIBLE);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+            adapter.showSortSymbol();
+            return true;
+        }
+        if(id == R.id.action_submit){
+            edit.setVisible(true);
+            submit.setVisible(false);
+            instructions.setVisibility(View.GONE);
+            itemTouchHelper.attachToRecyclerView(null);
+            adapter.hideSortSymbol();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -111,4 +131,6 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
     public void remove(int x) {
         viewModel.removeAlbum(position, x);
     }
+
+
 }

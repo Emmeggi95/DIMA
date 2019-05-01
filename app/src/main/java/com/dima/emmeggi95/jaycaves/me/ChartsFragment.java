@@ -58,9 +58,7 @@ public class ChartsFragment extends Fragment {
         chartsLayoutManager = new LinearLayoutManager(getActivity());
         chartsRecyclerView.setLayoutManager(chartsLayoutManager);
 
-        // set animation for the recyclerview
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
-        chartsRecyclerView.setLayoutAnimation(animation);
+
 
         // Genres spinner init
         genresSpinner = view.findViewById(R.id.genre_spinner);
@@ -123,6 +121,9 @@ public class ChartsFragment extends Fragment {
         final Observer observer = new Observer<List<Album>>() {
             @Override
             public void onChanged(@Nullable List<Album> chartAlbums) {
+                // set animation for the recyclerview
+                LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
+                chartsRecyclerView.setLayoutAnimation(animation);
                 chartsAdapter = new ChartAlbumsAdapter(getActivity(), chartAlbums);
                 chartsRecyclerView.setAdapter(chartsAdapter);
                 System.out.println("CHANGED LIST");
