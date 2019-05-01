@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.dima.emmeggi95.jaycaves.me.Album;
+import com.dima.emmeggi95.jaycaves.me.User;
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 
 import java.util.ArrayList;
@@ -16,23 +17,26 @@ public class PlaylistsViewModel extends ViewModel {
     private static List<Playlist> list;
 
     public PlaylistsViewModel() {
-        System.out.println("View model created");
+
         if(list==null) {
             list = new ArrayList<>();
 
-            // Database connection to download playlists...
+            System.out.println(" USER PREFERENCES:"+User.playlists.toString());
+            list= User.playlists;
+
+
 
             // Prova
-            List<Album> albumList = new ArrayList<>();
+          /*  List<Album> albumList = new ArrayList<>();
             albumList.add(new Album("Album #1", "1995", "Artist ABC", "Rock", ""));
             albumList.add(new Album("Album #2", "1995", "Artist ABC", "Rock", ""));
             albumList.add(new Album("Album #3", "1995",  "Artist ABC", "Rock", ""));
 
             list.add(new Playlist("Favorites", albumList));
             list.add(new Playlist("To Listen", new ArrayList<Album>()));
-            list.add(new Playlist("On the Go", new ArrayList<Album>()));
-
-            playlists.postValue(list);
+            list.add(new Playlist("On the Go", new ArrayList<Album>())); */
+            if (list.size()>0)
+                playlists.postValue(list);
         }
 
     }

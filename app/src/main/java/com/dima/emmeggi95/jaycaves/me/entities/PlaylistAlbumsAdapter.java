@@ -12,10 +12,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.Album;
 import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
+import com.dima.emmeggi95.jaycaves.me.CoverCache;
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.layout.ItemTouchHelperAdapter;
 import com.dima.emmeggi95.jaycaves.me.layout.OnStartDragListener;
@@ -25,6 +27,8 @@ import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter {
 
@@ -45,6 +49,7 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
         public TextView genre;
         public TextView year;
         public ImageView cover;
+        public ProgressBar loading;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,6 +59,7 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
             genre = itemView.findViewById(R.id.playlist_album_genre);
             year = itemView.findViewById(R.id.playlist_album_year);
             cover = itemView.findViewById(R.id.playlist_album_cover);
+            loading= itemView.findViewById(R.id.loading_album_playlist);
         }
     }
 
@@ -72,7 +78,10 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
         ((ItemViewHolder) holder).artist.setText(album.getArtist());
         ((ItemViewHolder) holder).genre.setText(album.getGenre1());
         ((ItemViewHolder) holder).year.setText(album.getDate());
-        // Set cover
+
+        // Fetch image from storage
+        CoverCache.retrieveCover(album.getCover(),((PlaylistAlbumsAdapter.ItemViewHolder) holder).cover, ((PlaylistAlbumsAdapter.ItemViewHolder) holder).loading,
+                context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
 
         ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener(){
             @Override

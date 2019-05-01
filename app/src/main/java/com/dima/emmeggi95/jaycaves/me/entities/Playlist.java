@@ -3,6 +3,7 @@ package com.dima.emmeggi95.jaycaves.me.entities;
 import com.dima.emmeggi95.jaycaves.me.Album;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,6 +17,11 @@ public class Playlist implements Serializable {
         this.albums = albums;
     }
 
+    public Playlist(String name){
+        this.name=name;
+        albums= new ArrayList<>();
+    }
+
     public String getName() {
         return name;
     }
@@ -27,7 +33,6 @@ public class Playlist implements Serializable {
     public void removeAlbum(int pos){
         System.out.println("Playlist object: album " + albums.get(pos).getTitle() + " removed.");
         albums.remove(pos);
-        // Database connection...
     }
 
     public void moveAlbum(int fromPosition, int toPosition){
@@ -41,11 +46,11 @@ public class Playlist implements Serializable {
                 Collections.swap(albums, i, i - 1);
             }
         }
-        // Database connection...
+
     }
 
     public void addEntry(Album album){
         albums.add(album);
-        // Database connection...
+
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -23,7 +24,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/default_cover" />
+                app:srcCompat="@drawable/default_cover"
+                />
+
+            <ProgressBar
+                android:id="@+id/loading_album_playlist"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/playlist_album_cover"
+                app:layout_constraintEnd_toEndOf="@+id/playlist_album_cover"
+                app:layout_constraintStart_toStartOf="@+id/playlist_album_cover"
+                app:layout_constraintTop_toTopOf="@+id/playlist_album_cover" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

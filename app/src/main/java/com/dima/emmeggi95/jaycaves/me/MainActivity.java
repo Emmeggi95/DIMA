@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private FirebaseAuth authentication;
-    private FirebaseAuth.AuthStateListener authStateListener;
+    protected FirebaseAuth authentication;
+    protected static FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase database;
     private DatabaseReference rtb;
     private FirebaseStorage storage;
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity
         // FOR NOW USER INIT IS DONE HERE
         User.initLikes();
         User.initReviews();
+        User.initPlaylists();
 
 
         // Initialize custom fonts
@@ -335,8 +336,6 @@ public class MainActivity extends AppCompatActivity
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
                 finish();
-            } else if (requestCode == PHOTO_PICKER && requestCode == RESULT_OK) {
-
             }
 
         }

@@ -18,10 +18,12 @@ public class User {
     public static String username = "pietro@grotti";
     public static String email;
     public static List<String> likes = new ArrayList<>();
-    public static List<Playlist> playlists;
+    public static final List<Playlist> playlists = new ArrayList<>();
     public static List<Review> reviews = new ArrayList<>();
     private static DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference("likes");
     private static DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
+    private static DatabaseReference playlistsRef = FirebaseDatabase.getInstance().getReference("playlists");
+    private static DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("albums");
 
 
 
@@ -47,8 +49,8 @@ public class User {
         return reviews;
     }
 
-    public static void setReviews(List<Review> reviews) {
-        User.reviews = reviews;
+    public static List<String> getLikes(){
+        return likes;
     }
 
 
@@ -62,7 +64,7 @@ public class User {
                 reviews.clear();
                 for (DataSnapshot d1: data)
                     reviews.add(d1.getValue(Review.class));
-                System.out.println("FETCHED REVIEWS: "+ reviews.toString());
+
             }
 
             @Override
@@ -72,9 +74,34 @@ public class User {
         });
     }
 
+    public static void initPlaylists(){
+
+
+        playlists.clear();
+
+        // INIT
+        Playlist favorites = new Playlist("favorites");
+        Playlist onthego= new Playlist("onthego");
+        Playlist tolisten = new Playlist("tolisten");
+
+
+        // GET ALBUMS FROM DATABASE
+        fetchAlbums(favorites);
+        fetchAlbums(onthego);
+        fetchAlbums(tolisten);
+
+        // ADD FULL PLAYLISTS
+        playlists.add(favorites);
+        playlists.add(onthego);
+        playlists.add(tolisten);
+
+
+    }
+
 
 
     public static void initLikes(){
+
         // check if featured review is already liked by user
 
       likesRef.child(username).addValueEventListener(new ValueEventListener() {
@@ -84,7 +111,7 @@ public class User {
               likes.clear();
               for (DataSnapshot d1: data)
                   likes.add(d1.getValue(String.class));
-              System.out.println("FETCHED LIKES: "+ likes.toString());
+
 
           }
 
@@ -93,27 +120,9 @@ public class User {
                 // DO STH
           }
       });
-        /*
-
-                reviewsRef.orderByChild("title").equalTo(album.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                        for (DataSnapshot d2: data){
-                            for (String id: revId)
-                                if (id.equals(d2.getKey()) && d2.getValue(Review.class).getAuthor().equals(featuredReview.getAuthor())){
-                                    likeButton.setText("LIKED");
-                                    likeButton.setEnabled(false);
-                                }
-
-                        }
-                    }
- */
     }
 
-    public static List<String> getLikes(){
-        return likes;
-    }
+
 
     public static void addLike(final String like){
 
@@ -143,5 +152,30 @@ public class User {
     }
 
 
+    private static void fetchAlbums(final Playlist playlist){
+        playlistsRef.child(username).child(playlist.getName()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for (DataSnapshot d1 : data){
+                    albumRef.child((String)d1.getValue()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            playlist.addEntry(dataSnapshot.getValue(Album.class));
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // ERROR
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // ERROR
+            }
+        });
+    }
 }
