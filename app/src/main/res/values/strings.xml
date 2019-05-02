@@ -124,6 +124,7 @@
     <string name="not_found_text">There is no review for this album yet!</string>
     <string name="new_review_button">Write a review</string>
     <string name="all_reviews_button">Read all reviews</string>
+    <string name="review_by_text">Review by</string>
 
     <!--Artist Page-->
     <string name="artist_name_default">Artist</string>

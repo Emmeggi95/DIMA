@@ -101,6 +101,12 @@ public class Review implements Serializable {
         return date;
     }
 
+    public String getShortDate() {
+        if(date.length()>9)
+            return date.substring(0,9);
+        return date;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }

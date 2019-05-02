@@ -158,7 +158,7 @@ public class User {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for (DataSnapshot d1 : data){
-                    albumRef.child((String)d1.getValue()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    albumRef.child(d1.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             playlist.addEntry(dataSnapshot.getValue(Album.class));

@@ -100,8 +100,8 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
             edit.setVisible(false);
             submit.setVisible(true);
 
-            recyclerView.animate().translationY(instructions.getHeight());
-            instructions.setVisibility(View.VISIBLE);
+            //recyclerView.animate().translationY(instructions.getHeight());
+            //instructions.setVisibility(View.VISIBLE);
             itemTouchHelper.attachToRecyclerView(recyclerView);
             adapter.showSortSymbol();
             return true;

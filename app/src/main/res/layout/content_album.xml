@@ -116,6 +116,42 @@
             android:layout_below="@+id/not_found_text"
             android:orientation="vertical">
 
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/review_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_by_text"
+                    android:textAppearance="@style/SecondaryTextTheme"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/review_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/review_author_default"
+                    android:textAppearance="@style/PrimaryTextTheme"
+                    app:layout_constraintStart_toEndOf="@+id/review_by"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/review_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:text="@string/review_date_default"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="@style/SecondaryTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
             <android.support.design.widget.CoordinatorLayout
                 android:id="@+id/title_and_rating"
                 android:layout_width="match_parent"
@@ -126,9 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/review_title_default"
-                    android:textColor="?attr/colorTextOnBackground"
-                    android:textSize="@dimen/review_title_font_size"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/HeaderTextTheme" />
 
                 <LinearLayout
                     android:id="@+id/review_rating"
@@ -162,23 +196,10 @@
             </android.support.design.widget.CoordinatorLayout>
 
             <TextView
-                android:id="@+id/review_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/review_author_default"
-                android:textColor="@color/colorGrayText"
-                android:textSize="@dimen/review_author_font_size" />
-
-            <TextView
-                android:id="@+id/review_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/review_date_default" />
-
-            <TextView
                 android:id="@+id/review_body"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/PrimaryTextTheme" />
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
@@ -206,7 +227,7 @@
                         android:layout_weight="1"
                         android:paddingRight="4dp"
                         android:tint="@android:color/holo_red_dark"
-                        app:srcCompat="@drawable/ic_favorite_black_24dp" />
+                        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
                     <TextView
                         android:id="@+id/likes_number"

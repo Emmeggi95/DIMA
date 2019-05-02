@@ -24,6 +24,8 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Fade;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +48,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import android.arch.lifecycle.Observer;
 
 import static android.view.View.GONE;
@@ -66,12 +69,12 @@ public class AlbumActivity extends AppCompatActivity {
     List<Playlist> playlists;
     int likes;
     Review featuredReview;
+    boolean reviewLiked;
     String id;
 
     // Db references
     DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
     DatabaseReference artistsRef = FirebaseDatabase.getInstance().getReference("artists");
-
 
 
     @Override
@@ -82,7 +85,7 @@ public class AlbumActivity extends AppCompatActivity {
 
         // Get album from intent extra
         album = (Album) getIntent().getSerializableExtra("album");
-        id = album.getTitle()+"@"+album.getArtist();
+        id = album.getTitle() + "@" + album.getArtist();
 
         // Fetch related reviews
         fetchReviews();
@@ -103,7 +106,7 @@ public class AlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(final View view) {
                 String[] playlistNames = new String[playlists.size()];
-                for(int i=0; i<playlists.size(); i++){
+                for (int i = 0; i < playlists.size(); i++) {
                     playlistNames[i] = playlists.get(i).getName();
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
@@ -129,7 +132,7 @@ public class AlbumActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 fab.animate().scaleX(0).setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime)).setListener(null);
                 onBackPressed();
             }
@@ -137,14 +140,14 @@ public class AlbumActivity extends AppCompatActivity {
         setTitle(album.getTitle());
 
         // Set Cover Image
-        loading= findViewById(R.id.loading_album);
+        loading = findViewById(R.id.loading_album);
         coverView = findViewById(R.id.cover_toolbar);
         coverView.setImageResource(R.drawable.default_cover);
 
         // Retrieve cover from cache
-        if (album.getCover()!=null && album.getCover()!="") {
-            CoverCache.retrieveCover(album.getCover(),coverView, loading,
-                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
+        if (album.getCover() != null && album.getCover() != "") {
+            CoverCache.retrieveCover(album.getCover(), coverView, loading,
+                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM, MODE_PRIVATE));
         }
 
         // Get color from artist cover and set it to the UI elements
@@ -152,7 +155,7 @@ public class AlbumActivity extends AppCompatActivity {
         Bitmap bitmap = drawable.getBitmap();
         Palette p = Palette.from(bitmap).generate();
         int color;
-        if(p.getMutedSwatch()!=null) {
+        if (p.getMutedSwatch() != null) {
             color = p.getMutedSwatch().getRgb();
         } else {
             color = R.color.colorAccent;
@@ -179,7 +182,7 @@ public class AlbumActivity extends AppCompatActivity {
         stars.add((ImageView) findViewById(R.id.star_4));
         stars.add((ImageView) findViewById(R.id.star_5));
         TextView ratingText = findViewById(R.id.text_rating);
-        if(album.getScore()==0.0){
+        if (album.getScore() == 0.0) {
             stars.get(1).setVisibility(GONE);
             stars.get(2).setVisibility(GONE);
             stars.get(3).setVisibility(GONE);
@@ -199,12 +202,12 @@ public class AlbumActivity extends AppCompatActivity {
         }
 
         // Init featured review section
-            hideFeaturedReview();
+        hideFeaturedReview();
 
 
         // Write a review button
         Button writeReviewButton = findViewById(R.id.write_review_button);
-        for (Review r: User.getReviews())
+        for (Review r : User.getReviews())
             if (r.getTitle().equals(id))
                 writeReviewButton.setEnabled(false);
         writeReviewButton.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +226,7 @@ public class AlbumActivity extends AppCompatActivity {
         hideFab();
     }
 
-    public void showFeaturedReview(){
+    public void showFeaturedReview() {
 
         // Bind elements
         TextView reviewHeader = (TextView) findViewById(R.id.review_title);
@@ -232,7 +235,7 @@ public class AlbumActivity extends AppCompatActivity {
         TextView reviewBody = (TextView) findViewById(R.id.review_body);
         TextView reviewRating = (TextView) findViewById(R.id.review_rating_text);
         final TextView reviewLikes = findViewById(R.id.likes_number);
-        List<Review> reviews= album.getReviews();
+        List<Review> reviews = album.getReviews();
         Collections.sort(reviews, Review.likesComparator); // featured review is the one with most likes
         featuredReview = album.getReviews().get(0);
 
@@ -243,20 +246,21 @@ public class AlbumActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                for (DataSnapshot d: data){
-                    likes= d.getValue(Review.class).getLikes();
+                for (DataSnapshot d : data) {
+                    likes = d.getValue(Review.class).getLikes();
                     reviewLikes.setText(String.valueOf(featuredReview.getLikes()));
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
         // Set contents
         reviewHeader.setText(featuredReview.getHeadline());
         reviewAuthor.setText(featuredReview.getAuthor());
-        reviewDate.setText(featuredReview.getDate());
+        reviewDate.setText(featuredReview.getShortDate());
         reviewBody.setText(featuredReview.getBody());
         reviewRating.setText(String.format("%.2f", featuredReview.getRating()));
         reviewLikes.setText(String.valueOf(featuredReview.getLikes()));
@@ -265,7 +269,7 @@ public class AlbumActivity extends AppCompatActivity {
         TextView reviewNotFound = findViewById(R.id.not_found_text);
         reviewNotFound.setVisibility(GONE);
         Button seeAllReviewsButton = findViewById(R.id.all_reviews_button);
-        if(album.getReviews().size()>0){
+        if (album.getReviews().size() > 0) {
             seeAllReviewsButton.setEnabled(true);
         } else {
             seeAllReviewsButton.setEnabled(false);
@@ -278,7 +282,7 @@ public class AlbumActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 User.addLike(featuredReview.getId());
-                reviewLikes.setText(String.valueOf(featuredReview.getLikes()+1));
+                reviewLikes.setText(String.valueOf(featuredReview.getLikes() + 1));
                 likeButton.setText("LIKED");
                 likeButton.setEnabled(false);
 
@@ -286,17 +290,38 @@ public class AlbumActivity extends AppCompatActivity {
             }
         });
 
-        for(String like: User.getLikes())
-            if (like.equals(featuredReview.getId())){
+        for (String like : User.getLikes()) {
+            if (like.equals(featuredReview.getId())) {
                 likeButton.setText("LIKED");
                 likeButton.setEnabled(false);
             }
+        }
 
+        // Alternative button
+        final ImageView likeSymbol = findViewById(R.id.heart);
+        likeSymbol.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(!reviewLiked){
+                    likeSymbol.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    reviewLiked = true;
+                }
+                Animation bump = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bump);
+                likeSymbol.startAnimation(bump);
+            }
+        });
 
+        reviewLiked = false;
+        for (String like : User.getLikes()) {
+            if (like.equals(featuredReview.getId())) {
+                reviewLiked = true;
+                likeSymbol.setImageResource(R.drawable.ic_favorite_black_24dp);
+            }
+        }
 
     }
 
-    public void hideFeaturedReview(){
+    public void hideFeaturedReview() {
         LinearLayout featuredReviewLayout = (LinearLayout) findViewById(R.id.featured_review);
         featuredReviewLayout.setVisibility(GONE);
         TextView reviewNotFound = (TextView) findViewById(R.id.not_found_text);
@@ -305,61 +330,61 @@ public class AlbumActivity extends AppCompatActivity {
         seeAllReviewsButton.setEnabled(false);
     }
 
-    public void startReviewsActivity(View view){
+    public void startReviewsActivity(View view) {
         Intent intent = new Intent(this, ReviewsActivity.class);
         intent.putExtra("album", album);
         startActivity(intent);
     }
 
-    public void startArtistActivity(View view){
+    public void startArtistActivity(View view) {
         final Intent intent = new Intent(this, ArtistActivity.class);
         // Retrieve information about the artist...
-        DatabaseReference reference= artistsRef;
+        DatabaseReference reference = artistsRef;
         reference.orderByKey().equalTo(album.getArtist()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Artist artist = new Artist();
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                for(DataSnapshot d : data){
-                    artist= d.getValue(Artist.class);
+                for (DataSnapshot d : data) {
+                    artist = d.getValue(Artist.class);
                 }
                 intent.putExtra("artist", artist);
                 startActivity(intent);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
     }
 
     @SuppressLint("RestrictedApi")
-    private void hideFab(){
+    private void hideFab() {
         fab.clearAnimation();
         fab.setVisibility(GONE);
     }
 
-    private void fetchReviews(){
+    private void fetchReviews() {
 
         reviewsRef.orderByChild("title").equalTo(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                for(DataSnapshot d : data){
+                for (DataSnapshot d : data) {
                     album.getReviews().add(d.getValue(Review.class));
                 }
-                if (album.getReviews().size()>0)
+                if (album.getReviews().size() > 0)
                     showFeaturedReview();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
 
     }
-
-
 
 
 }
