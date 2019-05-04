@@ -109,8 +109,8 @@ public class Review implements Serializable {
     }
 
     public String getShortDate() {
-        if(date.length()>9)
-            return date.substring(0,9);
+        if(date.length()>10)
+            return date.substring(0,10);
         return date;
     }
 
@@ -143,5 +143,13 @@ public class Review implements Serializable {
 
     public Object getCreation() {
         return creation;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

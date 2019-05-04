@@ -71,6 +71,7 @@ public class AlbumActivity extends AppCompatActivity {
     Review featuredReview;
     boolean reviewLiked;
     String id;
+    Button writeReviewButton;
 
     // Db references
     DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
@@ -210,7 +211,7 @@ public class AlbumActivity extends AppCompatActivity {
 
 
         // Write a review button
-        Button writeReviewButton = findViewById(R.id.write_review_button);
+        writeReviewButton = findViewById(R.id.write_review_button);
         for (Review r : User.getReviews())
             if (r.getTitle().equals(id))
                 writeReviewButton.setEnabled(false);
@@ -380,6 +381,9 @@ public class AlbumActivity extends AppCompatActivity {
                 }
                 if (album.getReviews().size() > 0)
                     showFeaturedReview();
+                for (Review r: album.getReviews())
+                    if (r.getAuthor().equals(User.getUsername()))
+                        writeReviewButton.setEnabled(false);
             }
 
             @Override

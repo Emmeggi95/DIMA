@@ -113,7 +113,7 @@ public class NewReviewActivity extends AppCompatActivity {
         Date date = new Date(System.currentTimeMillis());
 
 
-        // need to retrieve user credentials
+
         final Review review = new Review(User.getUsername(), albumKey, headliner.getText().toString(), // implement authentication to complete
                 essay.getText().toString(), ratingBar.getRating(),formatter.format(date));
 
