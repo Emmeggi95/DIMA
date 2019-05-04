@@ -26,6 +26,7 @@ public class AddContentActivity extends AppCompatActivity {
 
 
 
+
         setTitle(R.string.add_content_title);
 
         // setSupportActionBar(toolbar);

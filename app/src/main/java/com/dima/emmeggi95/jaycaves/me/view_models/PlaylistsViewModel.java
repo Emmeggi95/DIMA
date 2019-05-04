@@ -18,26 +18,14 @@ public class PlaylistsViewModel extends ViewModel {
 
     public PlaylistsViewModel() {
 
-        if(list==null) {
+        if(list==null){
             list = new ArrayList<>();
-
-            System.out.println(" USER PREFERENCES:"+User.playlists.toString());
             list= User.playlists;
 
-
-
-            // Prova
-          /*  List<Album> albumList = new ArrayList<>();
-            albumList.add(new Album("Album #1", "1995", "Artist ABC", "Rock", ""));
-            albumList.add(new Album("Album #2", "1995", "Artist ABC", "Rock", ""));
-            albumList.add(new Album("Album #3", "1995",  "Artist ABC", "Rock", ""));
-
-            list.add(new Playlist("Favorites", albumList));
-            list.add(new Playlist("To Listen", new ArrayList<Album>()));
-            list.add(new Playlist("On the Go", new ArrayList<Album>())); */
-            if (list.size()>0)
-                playlists.postValue(list);
         }
+            //System.out.println(" \nUSER PREFERENCES: "+User.playlists.toString()+ "\n");
+       if( list.size()>0)
+            playlists.postValue(list);
 
     }
 
@@ -46,17 +34,32 @@ public class PlaylistsViewModel extends ViewModel {
     public void moveAlbum(int playlist, int x, int y){
         list.get(playlist).moveAlbum(x,y);
         playlists.setValue(list);
-        System.out.println("View model: album playlist moved");
+        User.reorderPlaylist(list.get(playlist));
+        //System.out.println("View model: album playlist moved");
     }
 
     public void removeAlbum(int playlist, int x){
-        list.get(playlist).removeAlbum(x);
+        Playlist temp= list.get(playlist);
+        User.updatePlaylist(list.get(playlist), list.get(playlist).getAlbums().get(x), "REMOVE");
+        temp.removeAlbum(x);
+        User.reorderPlaylist(temp);
+        list.get(playlist).getAlbums().clear();
+        list.get(playlist).getAlbums().addAll(temp.getAlbums());
         playlists.setValue(list);
-        System.out.println("View model: album playlist deleted");
+
+        //System.out.println("View model: album playlist deleted");
     }
 
     public boolean addAlbum(int playlist, Album album){
-        list.get(playlist).addEntry(album);
+        Playlist temp = list.get(playlist);
+        for (Album a: temp.getAlbums())
+            if((a.getTitle().equals(album.getTitle())) && (a.getArtist().equals(album.getArtist()))) // check if album already in playlist
+                return false;
+        User.updatePlaylist(list.get(playlist), album, "ADD");
+        User.playlists.get(playlist).addEntry(album);
+        temp.addEntry(album);
+        list.get(playlist).getAlbums().clear();
+        list.get(playlist).getAlbums().addAll(temp.getAlbums());
         playlists.setValue(list);
         return true;
     }

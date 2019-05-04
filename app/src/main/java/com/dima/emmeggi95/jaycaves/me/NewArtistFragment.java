@@ -169,7 +169,7 @@ public class NewArtistFragment extends Fragment {
         int selectedYear= Integer.parseInt(editText.getText().toString());
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        return ((selectedYear<currentYear) && (selectedYear>0));
+        return ((selectedYear<=currentYear) && (selectedYear>0));
     }
 
 

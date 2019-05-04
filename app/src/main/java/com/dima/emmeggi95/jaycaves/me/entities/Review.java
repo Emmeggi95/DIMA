@@ -1,10 +1,14 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
+import com.google.firebase.database.ServerValue;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+
 
 public class Review implements Serializable {
 
@@ -16,6 +20,8 @@ public class Review implements Serializable {
     private int likes;
     private String headline;
     private String id;
+    private Object creation;
+
 
     public Review(){
         // For db only
@@ -29,6 +35,7 @@ public class Review implements Serializable {
         this.date = date;
         this.headline = headline;
         this.likes=0;
+        this.creation = ServerValue.TIMESTAMP;
     }
 
     public static Comparator<Review> dateComparator = new Comparator<Review>() {
@@ -132,5 +139,9 @@ public class Review implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Object getCreation() {
+        return creation;
     }
 }

@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
@@ -13,21 +14,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Static class to keep client-side and server-side data consistent
+ */
 public class User {
 
+    // ATTRIBUTES
     public static String username = "pietro@grotti";
     public static String email;
     public static List<String> likes = new ArrayList<>();
     public static final List<Playlist> playlists = new ArrayList<>();
     public static List<Review> reviews = new ArrayList<>();
+
+    // DB REFERENCES
     private static DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference("likes");
     private static DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
     private static DatabaseReference playlistsRef = FirebaseDatabase.getInstance().getReference("playlists");
     private static DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("albums");
 
 
-
-    // STATIC GETTERS & SETTERS
+// STATIC GETTERS & SETTERS
 
     public static String getUsername() {
         return username;
@@ -54,8 +60,15 @@ public class User {
     }
 
 
+
 // STATIC METHODS
 
+
+    // 1) FETCH CLIENT-SIDE METHODS
+
+    /**
+     *
+     */
     public static void initReviews(){
         reviewsRef.orderByChild("author").equalTo(username).addValueEventListener(new ValueEventListener() {
             @Override
@@ -74,15 +87,18 @@ public class User {
         });
     }
 
+    /**
+     *
+     */
     public static void initPlaylists(){
 
 
         playlists.clear();
 
         // INIT
-        Playlist favorites = new Playlist("favorites");
-        Playlist onthego= new Playlist("onthego");
-        Playlist tolisten = new Playlist("tolisten");
+        Playlist favorites = new Playlist("Favorites");
+        Playlist onthego= new Playlist("Onthego");
+        Playlist tolisten = new Playlist("Tolisten");
 
 
         // GET ALBUMS FROM DATABASE
@@ -92,14 +108,15 @@ public class User {
 
         // ADD FULL PLAYLISTS
         playlists.add(favorites);
-        playlists.add(onthego);
         playlists.add(tolisten);
-
+        playlists.add(onthego);
 
     }
 
 
-
+    /**
+     *
+     */
     public static void initLikes(){
 
         // check if featured review is already liked by user
@@ -123,11 +140,16 @@ public class User {
     }
 
 
+    // 2) UPDATE SERVER-SIDE METHODS
 
+    /**
+     *
+     * @param like
+     */
     public static void addLike(final String like){
 
         likes.add(like);
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("likes").child("pietro@grotti").push(); // need to insert username FirebaseAuth.getInstance().getCurrentUser().getDisplayName()
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("likes").child(username).push();
         ref.setValue(like);
 
         //Update likes on db
@@ -152,8 +174,53 @@ public class User {
     }
 
 
+    /**
+     *
+     * @param action
+     * @param album
+     */
+    public static void updatePlaylist(Playlist playlist, Album album, String action){
+
+        String id = album.getTitle()+"@"+album.getArtist();
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
+                .child(username).child(playlist.getName().toLowerCase()).child(id);
+        switch (action){
+            case "ADD": {
+                ref.child("position").setValue(playlist.getAlbums().size()+1);// Insert
+                break;
+            }
+            case "REMOVE": {
+                ref.removeValue(); // Delete
+                break;
+            }
+            default:
+                System.out.println("\n UNKNOWN ACTION FOR PLAYLIST SERVER-SIDE UPDATE \n");
+        }
+
+    }
+
+
+    public static void reorderPlaylist(Playlist playlist){
+
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
+                .child(username).child(playlist.getName().toLowerCase());
+        List<Album> newList= playlist.getAlbums();
+        int position =1;
+
+        for(Album album: newList){
+            String id = album.getTitle()+"@"+album.getArtist();
+            ref.child(id).child("position").setValue(position); // update position
+            position++;
+        }
+    }
+
+
+
+    // 3) PRIVATE METHODS
+
     private static void fetchAlbums(final Playlist playlist){
-        playlistsRef.child(username).child(playlist.getName()).addValueEventListener(new ValueEventListener() {
+
+        playlistsRef.child(username).child(playlist.getName().toLowerCase()).orderByChild("position").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();

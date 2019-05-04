@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -179,6 +180,7 @@ public class NewAlbumFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+
                 if (inputCheckOk()) {
                     newAlbumUpload();
                 }
@@ -234,7 +236,7 @@ public class NewAlbumFragment extends Fragment {
      * @return true if there is some content
      */
     private boolean isNotEmpty(EditText etText) {
-        return etText.getText().toString().trim().length()> 0;
+        return (etText.getText().toString().trim().length()> 0);
     }
 
     private boolean isGenreValid(AutoCompleteTextView textView){
@@ -252,7 +254,7 @@ public class NewAlbumFragment extends Fragment {
         int selectedYear= Integer.parseInt(editText.getText().toString());
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        return ((selectedYear<currentYear) && (selectedYear>0));
+        return ((selectedYear<=currentYear) && (selectedYear>0));
     }
 
 
@@ -298,9 +300,7 @@ public class NewAlbumFragment extends Fragment {
             album = new Album(parsedAlbumName, newAlbumReleaseDateInput.getText().toString(),
                         parsedArtistName, parsedGenre1, parsedCoverName);
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-        album.setCreation(formatter.format(date));
+
 
         // Try to perform the addition to database
         dbReference.child(parsedAlbumName+"@"+parsedArtistName).setValue(album)

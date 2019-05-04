@@ -39,26 +39,31 @@ public class HomeAlbumsViewModel extends ViewModel {
 
     private static MutableLiveData<List<Album>> albums = new MutableLiveData<>();
     private static List<Album> albumList = new ArrayList<>();
-
     private FirebaseDatabase database;
+
+
     public HomeAlbumsViewModel(){
 
         database = FirebaseDatabase.getInstance();
-        database.getReference("reviews").orderByChild("date").limitToLast(10).addValueEventListener(new ValueEventListener() {
+        database.getReference("reviews").orderByChild("creation").limitToLast(10).addValueEventListener(new ValueEventListener() {
 
            @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 albumList.clear();
-                for(DataSnapshot d : data){
-                   database.getReference("albums").orderByKey().equalTo(d.getValue(Review.class).getTitle()).addValueEventListener(new ValueEventListener() {
+                List<Review> reviews = new ArrayList<>();
+                for (DataSnapshot d : data)
+                    reviews.add(d.getValue(Review.class));
+                Collections.sort(reviews, Review.dateComparator);
+
+                for(Review r: reviews){
+                   database.getReference("albums").orderByKey().equalTo(r.getTitle()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                             for(DataSnapshot d : data){
                                 albumList.add(d.getValue(Album.class));
                             }
-                            Collections.reverse(albumList);
                             albums.postValue(albumList);
                         }
 

@@ -99,6 +99,7 @@ public class AlbumActivity extends AppCompatActivity {
         };
         playlistsViewModel.getData().observe(this, observer);
 
+
         // Set floating button
         fab = findViewById(R.id.album_floating_button);
         final Context thisActivity = this;
@@ -114,9 +115,12 @@ public class AlbumActivity extends AppCompatActivity {
                 builder.setItems(playlistNames, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        playlistsViewModel.addAlbum(which, album);
-                        Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                        if(playlistsViewModel.addAlbum(which, album))
+                            Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + playlists.get(which).getName(), Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
+                        else
+                            Snackbar.make(view, album.getTitle() + " is already in "+ playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
                     }
                 });
                 builder.show();

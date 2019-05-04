@@ -1,6 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
+import com.google.firebase.database.ServerValue;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -8,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ public class Album implements Serializable {
     private String genre2;
     private String genre3;
     private String cover;
-    private String creation;
+    private Object creation;
 
     private List<Review> reviews = new ArrayList<>();
 
@@ -41,7 +43,9 @@ public class Album implements Serializable {
         this.genre2 = genre2;
         this.genre3 = genre3;
         this.cover = cover;
-        score=0.0;
+        this.score=0.0;
+        this.creation= ServerValue.TIMESTAMP;
+
 
     }
 
@@ -51,7 +55,9 @@ public class Album implements Serializable {
         this.artist = artist;
         this.genre1 = genre1;
         this.cover = cover;
-        score= 0.0;
+        this.score= 0.0;
+        this.creation = ServerValue.TIMESTAMP;
+
 
     }
 
@@ -62,7 +68,9 @@ public class Album implements Serializable {
         this.genre1 = genre1;
         this.genre2 = genre2;
         this.cover = cover;
-        score=0.0;
+        this.score=0.0;
+        this.creation= ServerValue.TIMESTAMP;
+
 
     }
 
@@ -78,27 +86,7 @@ public class Album implements Serializable {
 
         }};
 
-    public static Comparator<Album> dateComparator = new Comparator<Album>() {
 
-        public int compare(Album a1, Album a2) {
-
-            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-            Date date1 = new Date();
-            Date date2 = new Date();
-            try {
-                date1 = formatter.parse(a1.getCreation());
-            } catch (ParseException e) {
-                System.out.println("Error parsing date1");
-            }
-            try {
-                date2 = formatter.parse(a2.getCreation());
-            } catch (ParseException e) {
-                System.out.println("Error parsing date2");
-            }
-            return  date2.compareTo(date1);
-
-
-        }};
 
 
     public Album(String title){
@@ -161,9 +149,7 @@ public class Album implements Serializable {
         this.genre2 = genre2;
     }
 
-    public void setGenre3(String genre3) {
-        this.genre3 = genre3;
-    }
+    public void setGenre3(String genre3) { this.genre3 = genre3; }
 
     public void setCover(String cover) {
         this.cover = cover;
@@ -173,16 +159,18 @@ public class Album implements Serializable {
         return reviews;
     }
 
-
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
 
-    public String getCreation() {
+    public Object getCreation(){
         return creation;
     }
 
-    public void setCreation(String creation) {
-        this.creation = creation;
+    @Override
+    public String toString() {
+        return "{" + title +
+                ", by " + artist +
+                '}';
     }
 }

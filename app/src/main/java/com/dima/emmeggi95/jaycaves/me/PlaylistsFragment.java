@@ -71,12 +71,7 @@ public class PlaylistsFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-                System.out.println("PlaylistFragment: playlists retrieved from ViewModel");
-                for(Playlist p : playlists){
-                    for(Album a : p.getAlbums()){
-                        System.out.println("Playlist " + p.getName() + ": album " + a.getTitle());
-                    }
-                }
+
             }
         };
 

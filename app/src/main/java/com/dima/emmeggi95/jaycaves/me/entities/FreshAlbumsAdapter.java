@@ -1,18 +1,25 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.Album;
+import com.dima.emmeggi95.jaycaves.me.AlbumActivity;
+import com.dima.emmeggi95.jaycaves.me.CoverCache;
 import com.dima.emmeggi95.jaycaves.me.R;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FreshAlbumsAdapter extends RecyclerView.Adapter {
 
@@ -27,6 +34,8 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView title, artist, rating;
         ImageView cover;
+        public ProgressBar loading;
+        CardView card;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -35,6 +44,8 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
             artist = itemView.findViewById(R.id.fresh_artist_text);
             rating = itemView.findViewById(R.id.fresh_rating_text);
             cover = itemView.findViewById(R.id.fresh_cover);
+            loading = itemView.findViewById(R.id.fresh_loading_cover);
+            card= itemView.findViewById(R.id.fresh_album_card);
         }
     }
 
@@ -47,12 +58,25 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
-        Album album = albumList.get(i);
+        final Album album = albumList.get(i);
 
         ((ItemViewHolder) holder).title.setText(album.getTitle());
         ((ItemViewHolder) holder).artist.setText(album.getArtist());
         ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
-        // Set cover...
+
+        // Fetch image from storage
+        CoverCache.retrieveCover(album.getCover(),((FreshAlbumsAdapter.ItemViewHolder) holder).cover, ((FreshAlbumsAdapter.ItemViewHolder) holder).loading,
+                context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
+
+        // Set on click to album activity
+        ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AlbumActivity.class);
+                intent.putExtra("album", album);
+                context.startActivity(intent);
+            }
+        });
 
     }
 

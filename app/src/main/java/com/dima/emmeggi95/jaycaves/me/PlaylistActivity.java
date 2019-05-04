@@ -130,6 +130,7 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
     @Override
     public void remove(int x) {
         viewModel.removeAlbum(position, x);
+
     }
 
 

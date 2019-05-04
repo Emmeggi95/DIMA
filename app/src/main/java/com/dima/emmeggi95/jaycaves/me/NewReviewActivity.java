@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -41,7 +42,8 @@ public class NewReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_review);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         album = (Album) getIntent().getExtras().get("album");
         albumKey = album.getTitle()+"@"+album.getArtist();
@@ -112,7 +114,7 @@ public class NewReviewActivity extends AppCompatActivity {
 
 
         // need to retrieve user credentials
-        Review review = new Review("pietro@grotti", albumKey, headliner.getText().toString(), // implement authentication to complete
+        final Review review = new Review(User.getUsername(), albumKey, headliner.getText().toString(), // implement authentication to complete
                 essay.getText().toString(), ratingBar.getRating(),formatter.format(date));
 
 
@@ -131,7 +133,9 @@ public class NewReviewActivity extends AppCompatActivity {
                             FirebaseDatabase.getInstance().getReference("albums").child(albumKey).child("score").setValue(album.getScore()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    User.getReviews().add(review);
                                     Snackbar.make(getCurrentFocus(), "Review successfully sent!", Snackbar.LENGTH_LONG).show();
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

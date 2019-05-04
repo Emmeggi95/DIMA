@@ -53,4 +53,11 @@ public class Playlist implements Serializable {
         albums.add(album);
 
     }
+
+    @Override
+    public String toString() {
+        return "Playlist: " + name +
+                ", albums=" + albums +
+                '}';
+    }
 }
