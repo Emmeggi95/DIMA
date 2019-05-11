@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity
     ChartsFragment chartsFragment;
     FreshFragment freshFragment;
     PlaylistsFragment playlistsFragment;
+
+    // Fab
+    private boolean fabIsShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +122,6 @@ public class MainActivity extends AppCompatActivity
         User.initReviews();
         User.initPlaylists();
 
-
         // Initialize custom fonts
         floydFont = Typeface.createFromAsset(getAssets(), "fonts/floyd.TTF");
         nasaFont = Typeface.createFromAsset(getAssets(), "fonts/nasalization-rg.ttf");
@@ -126,14 +130,17 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Animation bump = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bump);
+                fab.startAnimation(bump);
                 Intent intent = new Intent(view.getContext(), AddContentActivity.class);
                 startActivity(intent);
             }
         });
+        fabIsShown = true;
 
         // Set Navigation Drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -277,15 +284,19 @@ public class MainActivity extends AppCompatActivity
             if (id == R.id.nav_home) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.app_name, 2);
+                showFab();
             } else if (id == R.id.nav_charts) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.title_charts, 0);
+                hideFab();
             } else if (id == R.id.nav_fresh) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.title_fresh, 0);
+                hideFab();
             } else if (id == R.id.nav_playlists) {
                 setLoadingFragment();
                 setToolbarTitle(R.string.title_playlists, 0);
+                hideFab();
             } else if (id == R.id.nav_account) {
                 goToActivity(AccountActivity.class);
             } else if (id == R.id.nav_settings) {
@@ -306,18 +317,22 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_home:
                 setFragment(homeFragment);
                 setToolbarTitle(R.string.app_name, 2);
+                showFab();
                 break;
             case R.id.nav_charts:
                 setFragment(chartsFragment);
                 setToolbarTitle(R.string.title_charts, 0);
+                hideFab();
                 break;
             case R.id.nav_fresh:
                 setFragment(freshFragment);
                 setToolbarTitle(R.string.title_fresh, 0);
+                hideFab();
                 break;
             case R.id.nav_playlists:
                 setFragment(playlistsFragment);
                 setToolbarTitle(R.string.title_playlists, 0);
+                hideFab();
                 break;
         }
     }
@@ -340,6 +355,24 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, loadingFragment);
         ft.commit();
+    }
+
+    private void hideFab() {
+        if (fabIsShown) {
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.animate().scaleX(0).setDuration(300).setStartDelay(300);
+            fab.animate().scaleY(0).setDuration(300).setStartDelay(300);
+        }
+        fabIsShown = false;
+    }
+
+    private void showFab() {
+        if(!fabIsShown){
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.animate().scaleX(1).setDuration(300).setStartDelay(300);
+            fab.animate().scaleY(1).setDuration(300).setStartDelay(300);
+        }
+        fabIsShown = true;
     }
 
     /**

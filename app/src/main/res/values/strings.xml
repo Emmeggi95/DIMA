@@ -113,6 +113,7 @@
     <string name="home_header_title">Last Reviews</string>
     <string name="title_activity_album">AlbumActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="add_content_tooltip">Add content to Music Explorer</string>
 
     <!--Album Page-->
     <string name="artist_text_default">Artist name</string>
