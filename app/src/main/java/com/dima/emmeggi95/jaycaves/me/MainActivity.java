@@ -29,7 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     private String email;
 
     //Drawer
+    private List<Integer> navigationHistory;
+    private String NAV_HISTORY = "navHistory";
     private int clickedNavItem = 0;
     private boolean selectionChanged = false;
 
@@ -183,10 +187,16 @@ public class MainActivity extends AppCompatActivity
         // Set Navigation Drawer listener and select Home as starting fragment
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_home);
-        clickedNavItem = R.id.nav_home;
-        setFragment(homeFragment);//init
-        setToolbarTitle(R.string.app_name, 2);
+
+        // Retrieve navigation history from Instance state or init navigation history
+        if (savedInstanceState != null) {
+            navigationHistory = savedInstanceState.getIntegerArrayList(NAV_HISTORY);
+            navigateToId(navigationHistory.get(navigationHistory.size()-1));
+        } else {
+            navigationHistory = new ArrayList<>();
+            navigationHistory.add(R.id.nav_home);
+            navigateToId(R.id.nav_home);
+        }
     }
 
     @Override
@@ -223,18 +233,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Navigation Drawer methods
+     * Navigation methods
      */
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putIntegerArrayList(NAV_HISTORY, (ArrayList<Integer>) navigationHistory);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (navigationHistory.size() > 1) {
+            navigationHistory.remove(navigationHistory.size()-1);
+            navigateToId(navigationHistory.get(navigationHistory.size()-1));
         } else {
             super.onBackPressed();
         }
     }
+
+    /**
+     * Navigation Drawer methods
+     */
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -243,9 +266,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (clickedNavItem != id) {
+
             if (id != R.id.nav_account && id != R.id.nav_settings) {
                 clickedNavItem = id;
                 selectionChanged = true;
+                navigationHistory.add(id);
             }
 
             // Set a blank fragment before loading the actual fragment to avoid lags
@@ -272,6 +297,29 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    private void navigateToId(int id) {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(id);
+        switch (id) {
+            case R.id.nav_home:
+                setFragment(homeFragment);
+                setToolbarTitle(R.string.app_name, 2);
+                break;
+            case R.id.nav_charts:
+                setFragment(chartsFragment);
+                setToolbarTitle(R.string.title_charts, 0);
+                break;
+            case R.id.nav_fresh:
+                setFragment(freshFragment);
+                setToolbarTitle(R.string.title_fresh, 0);
+                break;
+            case R.id.nav_playlists:
+                setFragment(playlistsFragment);
+                setToolbarTitle(R.string.title_playlists, 0);
+                break;
+        }
     }
 
     public void goToActivity(Class activity) {

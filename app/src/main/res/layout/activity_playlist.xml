@@ -54,12 +54,12 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/playlist_recycler_view"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:layout_conversion_absoluteHeight="190dp"
-                        tools:layout_editor_absoluteY="56dp"
+                        tools:layout_conversion_absoluteWidth="411dp"
                         tools:layout_editor_absoluteX="0dp"
-                        tools:layout_conversion_absoluteWidth="411dp">
+                        tools:layout_editor_absoluteY="56dp">
 
                     </android.support.v7.widget.RecyclerView>
 
