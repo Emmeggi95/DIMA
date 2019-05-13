@@ -19,27 +19,31 @@ public class PlaylistsViewModel extends ViewModel {
     public PlaylistsViewModel() {
 
         if(list==null){
-            list = new ArrayList<>();
+
             list= User.playlists;
+            playlists.postValue(list);
 
         }
-            //System.out.println(" \nUSER PREFERENCES: "+User.playlists.toString()+ "\n");
-       if( list.size()>0)
-            playlists.postValue(list);
+
+
 
     }
 
     public LiveData<List<Playlist>> getData() {return playlists;}
 
     public void moveAlbum(int playlist, int x, int y){
-        list.get(playlist).moveAlbum(x,y);
+        Playlist temp= new Playlist( list.get(playlist).getName(), list.get(playlist).getAlbums());
+        temp.moveAlbum(x,y);
+        User.reorderPlaylist(temp);
+        list.get(playlist).getAlbums().clear();
+        list.get(playlist).getAlbums().addAll(temp.getAlbums());
         playlists.setValue(list);
-        User.reorderPlaylist(list.get(playlist));
+
         //System.out.println("View model: album playlist moved");
     }
 
     public void removeAlbum(int playlist, int x){
-        Playlist temp= list.get(playlist);
+        Playlist temp= new Playlist( list.get(playlist).getName(), list.get(playlist).getAlbums());
         User.updatePlaylist(list.get(playlist), list.get(playlist).getAlbums().get(x), "REMOVE");
         temp.removeAlbum(x);
         User.reorderPlaylist(temp);
@@ -51,12 +55,11 @@ public class PlaylistsViewModel extends ViewModel {
     }
 
     public boolean addAlbum(int playlist, Album album){
-        Playlist temp = list.get(playlist);
+        Playlist temp= new Playlist( list.get(playlist).getName(), list.get(playlist).getAlbums());
         for (Album a: temp.getAlbums())
             if((a.getTitle().equals(album.getTitle())) && (a.getArtist().equals(album.getArtist()))) // check if album already in playlist
                 return false;
         User.updatePlaylist(list.get(playlist), album, "ADD");
-        User.playlists.get(playlist).addEntry(album);
         temp.addEntry(album);
         list.get(playlist).getAlbums().clear();
         list.get(playlist).getAlbums().addAll(temp.getAlbums());

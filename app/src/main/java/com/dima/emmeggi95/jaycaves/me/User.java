@@ -1,16 +1,25 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-import android.provider.CalendarContract;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +30,10 @@ public class User {
 
     // ATTRIBUTES
     public static String username = "pietro@grotti";
-    public static String email;
+    public static String email = "pietro@grotti";
+    public static String cover_photo_id;
+    public static Bitmap cover_image;
+    public static File localFile;
     public static List<String> likes = new ArrayList<>();
     public static final List<Playlist> playlists = new ArrayList<>();
     public static List<Review> reviews = new ArrayList<>();
@@ -31,6 +43,8 @@ public class User {
     private static DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
     private static DatabaseReference playlistsRef = FirebaseDatabase.getInstance().getReference("playlists");
     private static DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("albums");
+    private static DatabaseReference preferenceRef = FirebaseDatabase.getInstance().getReference("preferences");
+    private static StorageReference storageReference = FirebaseStorage.getInstance().getReference("User_covers");
 
 
 // STATIC GETTERS & SETTERS
@@ -70,7 +84,7 @@ public class User {
      *
      */
     public static void initReviews(){
-        reviewsRef.orderByChild("author").equalTo(username).addValueEventListener(new ValueEventListener() {
+        reviewsRef.orderByChild("author").equalTo(email).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
@@ -137,6 +151,53 @@ public class User {
                 // DO STH
           }
       });
+    }
+
+    public static void initPreferences(final ImageView cover) {
+
+        preferenceRef.orderByKey().equalTo(email).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                    for (DataSnapshot d : data) {
+                        System.out.println("KEY: " + d.getKey() + " "+ "VALUE: " + d.getValue().toString());
+                        UserPreference preference= d.getValue(UserPreference.class);
+                        cover_photo_id = preference.getCoverphoto();
+                        username=preference.getUsername();
+
+                    }
+
+                        if (cover_photo_id != null) {
+                            try {
+                                localFile = File.createTempFile("images", "jpeg");
+                                storageReference.child(cover_photo_id).getFile(localFile) // SET COVER
+                                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                cover_image= BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                                                cover.setImageBitmap(cover_image);
+
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        System.out.println("\nFAILED TO DOWNLOAD COVER\n");
+                                    }
+                                });
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
+            });
     }
 
 

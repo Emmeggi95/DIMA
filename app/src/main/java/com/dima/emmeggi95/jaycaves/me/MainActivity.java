@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     public static final int PHOTO_PICKER = 2;
     private String username;
     private String email;
+    private ImageView custom_image;
 
     //Drawer
     private List<Integer> navigationHistory;
@@ -110,6 +112,13 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+
+        // Set Navigation Drawer listener and select Home as starting fragment
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        custom_image= navigationView.getHeaderView(0).findViewById(R.id.nav_header_image);
+
+
         // Fragments init
         loadingFragment = new LoadingFragment();
         homeFragment = new HomeFragment();
@@ -118,9 +127,11 @@ public class MainActivity extends AppCompatActivity
         playlistsFragment = new PlaylistsFragment();
 
         // FOR NOW USER INIT IS DONE HERE
+        User.initPreferences(custom_image);
         User.initLikes();
         User.initReviews();
         User.initPlaylists();
+
 
         // Initialize custom fonts
         floydFont = Typeface.createFromAsset(getAssets(), "fonts/floyd.TTF");
@@ -191,9 +202,7 @@ public class MainActivity extends AppCompatActivity
 
         });
 
-        // Set Navigation Drawer listener and select Home as starting fragment
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
 
         // Retrieve navigation history from Instance state or init navigation history
         if (savedInstanceState != null) {

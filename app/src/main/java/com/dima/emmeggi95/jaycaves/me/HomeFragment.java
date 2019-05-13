@@ -3,6 +3,7 @@ package com.dima.emmeggi95.jaycaves.me;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -71,6 +72,7 @@ public class HomeFragment extends Fragment {
 
         return  view;
     }
+
 
 }
 

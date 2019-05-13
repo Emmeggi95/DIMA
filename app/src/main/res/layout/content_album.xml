@@ -204,13 +204,26 @@
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/review_like_button"
                     style="@style/DefaultButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/like_button_text" />
+
+                <Button
+                    android:id="@+id/review_edit_button"
+                    style="@style/DefaultButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Edit"
+                    android:visibility="gone"/>
+
+    </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/likes"
@@ -237,6 +250,7 @@
                         android:layout_weight="1"
                         android:text="0" />
                 </LinearLayout>
+
 
             </android.support.design.widget.CoordinatorLayout>
         </LinearLayout>

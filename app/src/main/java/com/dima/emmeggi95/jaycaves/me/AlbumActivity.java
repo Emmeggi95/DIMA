@@ -1,6 +1,5 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -9,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,8 +19,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,21 +31,15 @@ import android.widget.TextView;
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import android.arch.lifecycle.Observer;
 
 import static android.view.View.GONE;
 
@@ -72,6 +62,7 @@ public class AlbumActivity extends AppCompatActivity {
     boolean reviewLiked;
     String id;
     Button writeReviewButton;
+
 
     // Db references
     DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
@@ -240,9 +231,24 @@ public class AlbumActivity extends AppCompatActivity {
         TextView reviewBody = (TextView) findViewById(R.id.review_body);
         TextView reviewRating = (TextView) findViewById(R.id.review_rating_text);
         final TextView reviewLikes = findViewById(R.id.likes_number);
+        Button edit = findViewById(R.id.review_edit_button);
         List<Review> reviews = album.getReviews();
         Collections.sort(reviews, Review.likesComparator); // featured review is the one with most likes
         featuredReview = album.getReviews().get(0);
+        if (featuredReview.getAuthor().equals(User.getUsername())) {
+            edit.setVisibility(View.VISIBLE);
+
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
+                    intent.putExtra("review", featuredReview);
+                    intent.putExtra("album", album);
+                    startActivity(intent);
+                }
+            });
+        }
+
 
 
         // Init likes
@@ -393,6 +399,8 @@ public class AlbumActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
 }

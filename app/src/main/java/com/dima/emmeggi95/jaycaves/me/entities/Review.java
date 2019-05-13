@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
+
 
 
 public class Review implements Serializable {
@@ -21,6 +22,7 @@ public class Review implements Serializable {
     private String headline;
     private String id;
     private Object creation;
+    private String shortDate;
 
 
     public Review(){
@@ -112,6 +114,10 @@ public class Review implements Serializable {
         if(date.length()>10)
             return date.substring(0,10);
         return date;
+    }
+
+    public void setShortDate(String date){
+        this.shortDate= date;
     }
 
     public void setDate(String date) {
