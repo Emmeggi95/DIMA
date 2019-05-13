@@ -153,6 +153,10 @@ public class User {
       });
     }
 
+    /**
+     *
+     * @param cover
+     */
     public static void initPreferences(final ImageView cover) {
 
         preferenceRef.orderByKey().equalTo(email).addValueEventListener(new ValueEventListener() {
@@ -160,7 +164,6 @@ public class User {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                     for (DataSnapshot d : data) {
-                        System.out.println("KEY: " + d.getKey() + " "+ "VALUE: " + d.getValue().toString());
                         UserPreference preference= d.getValue(UserPreference.class);
                         cover_photo_id = preference.getCoverphoto();
                         username=preference.getUsername();

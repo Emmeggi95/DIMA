@@ -118,25 +118,33 @@ public class AccountActivity extends AppCompatActivity {
 
 
     }
-    private void submit(){
-        final String coverId= selectedImageUri.getLastPathSegment()+CustomRandomId.randomIdGenerator();
-        storageReference.child(coverId).putFile(selectedImageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Snackbar.make(getCurrentFocus(),"UPLOAD SUCCESSFULL", Snackbar.LENGTH_LONG).show();
-                        UserPreference newPref= new UserPreference(usernameText.getText().toString(), coverId);
-                        databaseReference.setValue(newPref);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getCurrentFocus(),"UPLOAD FAILED, TRY AGAIN",Snackbar.LENGTH_LONG).show();
+    private void submit() {
+        if (selectedImageUri != null) {
+            final String coverId = selectedImageUri.getLastPathSegment() + CustomRandomId.randomIdGenerator();
+            storageReference.child(coverId).putFile(selectedImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Snackbar.make(getCurrentFocus(), "Changed username and image!", Snackbar.LENGTH_LONG).show();
+                            UserPreference newPref = new UserPreference(usernameText.getText().toString(), coverId);
+                            databaseReference.setValue(newPref);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Snackbar.make(getCurrentFocus(), "UPLOAD FAILED, TRY AGAIN", Snackbar.LENGTH_LONG).show();
 
-                    }
-                });
+                        }
+                    });
+        }
+        else
+            if (!usernameText.getText().toString().equalsIgnoreCase(User.getUsername())) {
+                databaseReference.child("username").setValue(usernameText.getText().toString());
+                Snackbar.make(getCurrentFocus(), "Changed username", Snackbar.LENGTH_LONG).show();
+            }
+            else
+                Snackbar.make(getCurrentFocus(), "Nothing changed!", Snackbar.LENGTH_LONG).show();
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private String username;
     private String email;
     private ImageView custom_image;
+    private NetworkChangeReceiver networkChangeReceiver = null;
 
     //Drawer
     private List<Integer> navigationHistory;
@@ -213,6 +215,22 @@ public class MainActivity extends AppCompatActivity
             navigationHistory.add(R.id.nav_home);
             navigateToId(R.id.nav_home);
         }
+
+        // Create an IntentFilter instance.
+        IntentFilter intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
+
     }
 
     @Override
@@ -455,5 +473,16 @@ public class MainActivity extends AppCompatActivity
                 titleTextView.setTypeface(null);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // If the broadcast receiver is not null then unregister it.
+        // This action is better placed in activity onDestroy() method.
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
+    }
+
 
 }
