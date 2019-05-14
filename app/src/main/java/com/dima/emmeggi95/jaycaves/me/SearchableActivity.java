@@ -2,6 +2,7 @@ package com.dima.emmeggi95.jaycaves.me;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +42,10 @@ public class SearchableActivity extends AppCompatActivity {
     // Prova
     private List<Artist> artistList;
     private List<Album> albumList;
+
     //
+    private NetworkChangeReceiver networkChangeReceiver = null;
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,9 +153,36 @@ public class SearchableActivity extends AppCompatActivity {
         albumAdapter.notifyDataSetChanged();
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create an IntentFilter instance.
+        intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
+
     }
 }

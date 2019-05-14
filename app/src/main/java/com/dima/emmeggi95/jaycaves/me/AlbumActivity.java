@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -67,6 +68,9 @@ public class AlbumActivity extends AppCompatActivity {
     // Db references
     DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
     DatabaseReference artistsRef = FirebaseDatabase.getInstance().getReference("artists");
+
+    private NetworkChangeReceiver networkChangeReceiver = null;
+    private IntentFilter intentFilter;
 
 
     @Override
@@ -400,7 +404,36 @@ public class AlbumActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create an IntentFilter instance.
+        intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
+
+    }
 
 
 }

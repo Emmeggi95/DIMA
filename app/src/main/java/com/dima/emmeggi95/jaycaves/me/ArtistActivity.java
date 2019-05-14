@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ public class ArtistActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private NetworkChangeReceiver networkChangeReceiver = null;
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,37 @@ public class ArtistActivity extends AppCompatActivity {
                 System.out.println("DATABASE DENIED DOWNLOAD");
             }
         });
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create an IntentFilter instance.
+        intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
 
     }
 

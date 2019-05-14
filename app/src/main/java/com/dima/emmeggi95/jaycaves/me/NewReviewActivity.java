@@ -1,6 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class NewReviewActivity extends AppCompatActivity {
     private AutoCompleteTextView headliner;
     private DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");
     private DatabaseReference albumsRef = FirebaseDatabase.getInstance().getReference("albums");
+    private NetworkChangeReceiver networkChangeReceiver = null;
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +170,33 @@ public class NewReviewActivity extends AppCompatActivity {
                 Snackbar.make(getCurrentFocus(), "Please rate before submitting!", Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Create an IntentFilter instance.
+        intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
+
+    }
 
 }

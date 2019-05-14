@@ -51,7 +51,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             networkMessage = "Network is not available";
             new AlertDialog.Builder(context)
                     .setTitle("No Internet")
-                    .setMessage("This app requires constant internet access. Check internet connection")
+                    .setMessage("This app requires constant internet access. Turn on your internet connection")
                     .setCancelable(false)
 
                     // Specifying a listener allows you to take an action before dismissing the dialog.
