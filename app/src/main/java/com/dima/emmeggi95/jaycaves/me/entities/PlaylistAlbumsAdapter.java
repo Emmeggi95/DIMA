@@ -109,9 +109,9 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
 
     @Override
     public void onItemDismiss(int position) {
-        albums.remove(position);
         notifyItemRemoved(position);
         onStartDragListener.remove(position);
+
     }
 
     @Override

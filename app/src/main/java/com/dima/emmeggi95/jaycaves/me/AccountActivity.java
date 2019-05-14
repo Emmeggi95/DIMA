@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,6 +67,8 @@ public class AccountActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.account_username_input);
         if(User.getUsername()!=null)
             usernameText.setText(User.getEmail());// default value
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // avoid keyboard opening at activity start
 
         submit= findViewById(R.id.account_submit_button);
         logout= findViewById(R.id.logout_button);

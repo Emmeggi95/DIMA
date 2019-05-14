@@ -41,10 +41,12 @@ public class ChartsFragment extends Fragment {
 
     List<String> years;
     List<String> genres;
+    List<Album> albums;
 
 
     String selectedGenre;
     String selectedYear;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,6 +117,7 @@ public class ChartsFragment extends Fragment {
         });
 
         // Init ChartViewModel
+        albums= new ArrayList<>();
         chartViewModel = ViewModelProviders.of(getActivity(),
                 new ChartViewModelFactory(selectedYear,selectedGenre)).get(ChartViewModel.class);
 
@@ -126,7 +129,6 @@ public class ChartsFragment extends Fragment {
                 chartsRecyclerView.setLayoutAnimation(animation);
                 chartsAdapter = new ChartAlbumsAdapter(getActivity(), chartAlbums);
                 chartsRecyclerView.setAdapter(chartsAdapter);
-                System.out.println("CHANGED LIST");
             }
         };
 

@@ -243,14 +243,14 @@ public class User {
      * @param action
      * @param album
      */
-    public static void updatePlaylist(Playlist playlist, Album album, String action){
+    public static void updatePlaylist(final Playlist playlist, final Album album, String action){
 
         String id = album.getTitle()+"@"+album.getArtist();
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
                 .child(username).child(playlist.getName().toLowerCase()).child(id);
         switch (action){
             case "ADD": {
-                ref.child("position").setValue(playlist.getAlbums().size()+1);// Insert
+                ref.child("position").setValue(playlist.getAlbums().size());// Insert
                 break;
             }
             case "REMOVE": {
@@ -284,11 +284,12 @@ public class User {
 
     private static void fetchAlbums(final Playlist playlist){
 
-        playlistsRef.child(username).child(playlist.getName().toLowerCase()).orderByChild("position").addValueEventListener(new ValueEventListener() {
+        playlistsRef.child(username).child(playlist.getName().toLowerCase()).orderByChild("position").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for (DataSnapshot d1 : data){
+                    //playlist.getAlbums().clear();
                     albumRef.child(d1.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

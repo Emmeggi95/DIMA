@@ -72,6 +72,7 @@ public class ChartViewModel extends ViewModel {
 
         albumsList.clear();
 
+
         if(genre.equalsIgnoreCase("All Genres")){
 
             if(year.equalsIgnoreCase("All Time")){
@@ -81,6 +82,7 @@ public class ChartViewModel extends ViewModel {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        albumsList.clear();
                         for (DataSnapshot d : data)
                             albumsList.add(d.getValue(Album.class));
                         // notify change
@@ -99,6 +101,7 @@ public class ChartViewModel extends ViewModel {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        albumsList.clear();
                         for (DataSnapshot d : data)
                             albumsList.add(d.getValue(Album.class));
                         // notify change
@@ -119,6 +122,7 @@ public class ChartViewModel extends ViewModel {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        albumsList.clear();
                         for (DataSnapshot d : data)
                             if (isOfGenre(d.getValue(Album.class), genre))
                                 albumsList.add(d.getValue(Album.class));
@@ -138,6 +142,7 @@ public class ChartViewModel extends ViewModel {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        albumsList.clear();
                         for (DataSnapshot d : data)
                             if (isOfGenre(d.getValue(Album.class), genre))
                                 albumsList.add(d.getValue(Album.class));

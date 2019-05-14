@@ -35,6 +35,7 @@ public class Playlist implements Serializable {
         albums.remove(pos);
     }
 
+
     public void moveAlbum(int fromPosition, int toPosition){
         System.out.println("Playlist object: album " + albums.get(fromPosition).getTitle() + " moved.");
         if (fromPosition < toPosition) {
@@ -49,8 +50,16 @@ public class Playlist implements Serializable {
 
     }
 
-    public void addEntry(Album album){
+    public boolean addEntry(Album album){
+
+        String idAlbum = album.getTitle()+"@"+album.getArtist();
+        for (Album a: albums){
+            String idA = a.getTitle()+"@"+a.getArtist();
+            if( idA.equalsIgnoreCase(idAlbum))
+                return false;
+        }
         albums.add(album);
+        return true;
 
     }
 

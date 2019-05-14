@@ -24,11 +24,12 @@ public class PlaylistsFragment extends Fragment {
 
     private List<Playlist> playlists;
 
-    private PlaylistsViewModel playlistsViewModel;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_playlists, container, false);
 
@@ -36,48 +37,36 @@ public class PlaylistsFragment extends Fragment {
         playlist2View = view.findViewById(R.id.playlist2);
         playlist3View = view.findViewById(R.id.playlist3);
 
-        playlists = new ArrayList<>();
+        playlists = User.playlists;
 
-        playlistsViewModel = ViewModelProviders.of(getActivity()).get(PlaylistsViewModel.class);
 
-        final Observer observer = new Observer<List<Playlist>>() {
+        playlist1View.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onChanged(@Nullable List<Playlist> newList) {
-                playlists = newList;
-                playlist1View.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        intent.putExtra("playlist", playlists.get(0));
-                        intent.putExtra("position", 0);
-                        startActivity(intent);
-                    }
-                });
-                playlist2View.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        intent.putExtra("playlist", playlists.get(1));
-                        intent.putExtra("position", 1);
-                        startActivity(intent);
-                    }
-                });
-                playlist3View.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        intent.putExtra("playlist", playlists.get(2));
-                        intent.putExtra("position", 2);
-                        startActivity(intent);
-                    }
-                });
-
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                //intent.putExtra("playlist", playlists.get(0));
+                intent.putExtra("position", 0);
+                startActivity(intent);
             }
-        };
-
-        playlistsViewModel.getData().observe(this, observer);
-
-
+        });
+        playlist2View.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                //intent.putExtra("playlist", playlists.get(1));
+                intent.putExtra("position", 1);
+                startActivity(intent);
+            }
+        });
+        playlist3View.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+               // intent.putExtra("playlist", playlists.get(2));
+                intent.putExtra("position", 2);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

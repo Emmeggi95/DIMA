@@ -13,6 +13,9 @@ import java.util.List;
 
 public class PlaylistsViewModel extends ViewModel {
 
+  // TO DO: REMOVE THIS CLASS IT IS NOW COMPLETELY USELESS
+
+
     private static MutableLiveData<List<Playlist>> playlists = new MutableLiveData<>();
     private static List<Playlist> list;
 

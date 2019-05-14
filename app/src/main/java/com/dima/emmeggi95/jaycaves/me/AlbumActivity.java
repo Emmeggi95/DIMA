@@ -57,7 +57,7 @@ public class AlbumActivity extends AppCompatActivity {
     PlaylistsViewModel playlistsViewModel;
 
     // Temp variables
-    List<Playlist> playlists;
+    //List<Playlist> playlists;
     int likes;
     Review featuredReview;
     boolean reviewLiked;
@@ -86,14 +86,15 @@ public class AlbumActivity extends AppCompatActivity {
         // Fetch related reviews
         fetchReviews();
 
-        playlistsViewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
+     /*   playlistsViewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
         final Observer<List<Playlist>> observer = new Observer<List<Playlist>>() {
             @Override
             public void onChanged(@Nullable List<Playlist> data) {
                 playlists = data;
             }
         };
-        playlistsViewModel.getData().observe(this, observer);
+        playlistsViewModel.getData().observe(this, observer); */
+
 
 
         // Set floating button
@@ -102,21 +103,25 @@ public class AlbumActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                String[] playlistNames = new String[playlists.size()];
-                for (int i = 0; i < playlists.size(); i++) {
-                    playlistNames[i] = playlists.get(i).getName();
+                String[] playlistNames = new String[User.playlists.size()];
+                for (int i = 0; i < User.playlists.size(); i++) {
+                    playlistNames[i] = User.playlists.get(i).getName();
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
                 builder.setTitle(getResources().getString(R.string.choose_playlist));
                 builder.setItems(playlistNames, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(playlistsViewModel.addAlbum(which, album))
-                            Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + playlists.get(which).getName(), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                        else
-                            Snackbar.make(view, album.getTitle() + " is already in "+ playlists.get(which).getName(), Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
+
+                            if(User.playlists.get(which).addEntry(album)){
+                                 User.updatePlaylist(User.playlists.get(which), album, "ADD");
+                                 Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + User.playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                                             .setAction("Action", null).show();
+                            }
+                            else{
+                                 Snackbar.make(view, album.getTitle() + " is already in "+ User.playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                                         .setAction("Action", null).show();
+                            }
                     }
                 });
                 builder.show();

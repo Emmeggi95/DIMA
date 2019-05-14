@@ -33,7 +33,7 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
 
     Playlist playlist;
     int position;
-    PlaylistsViewModel viewModel;
+
 
     RecyclerView recyclerView;
     PlaylistAlbumsAdapter adapter;
@@ -61,9 +61,10 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
             }
         });
 
-        playlist = (Playlist) getIntent().getSerializableExtra("playlist");
+        //playlist = (Playlist) getIntent().getSerializableExtra("playlist");
         position = getIntent().getIntExtra("position", 0);
-        viewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
+        playlist = User.playlists.get(position);
+       // viewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
 
         setTitle(playlist.getName());
 
@@ -128,12 +129,15 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
 
     @Override
     public void move(int x, int y) {
-        viewModel.moveAlbum(position, x, y);
+        System.out.println("AFTER MOVE from: "+ x + " to: "+ y + "; " +playlist.toString());
+        User.reorderPlaylist(playlist);
     }
 
     @Override
     public void remove(int x) {
-        viewModel.removeAlbum(position, x);
+        User.updatePlaylist(playlist, playlist.getAlbums().get(x), "REMOVE");
+        playlist.removeAlbum(x);
+        User.reorderPlaylist(playlist);
 
     }
 
