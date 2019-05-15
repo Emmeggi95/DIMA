@@ -17,8 +17,11 @@ import android.widget.ImageView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,7 +37,8 @@ public class AccountActivity extends AppCompatActivity {
     private Button submit;
     private Button logout;
     private Uri selectedImageUri;
-    private DatabaseReference databaseReference;
+    private DatabaseReference prefReference;
+    private DatabaseReference reviewReference;
     private StorageReference storageReference;
     private File localFile;
 
@@ -66,14 +70,15 @@ public class AccountActivity extends AppCompatActivity {
 
         usernameText = findViewById(R.id.account_username_input);
         if(User.getUsername()!=null)
-            usernameText.setText(User.getEmail());// default value
+            usernameText.setText(User.getUsername());// default value
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // avoid keyboard opening at activity start
 
         submit= findViewById(R.id.account_submit_button);
         logout= findViewById(R.id.logout_button);
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("preferences").child(User.getEmail());
+        prefReference = FirebaseDatabase.getInstance().getReference("preferences").child(User.getEmail());
+        reviewReference= FirebaseDatabase.getInstance().getReference("reviews");
         storageReference= FirebaseStorage.getInstance().getReference().child("User_covers");
 
 
@@ -134,7 +139,13 @@ public class AccountActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Snackbar.make(getCurrentFocus(), "Changed username and image!", Snackbar.LENGTH_LONG).show();
                             UserPreference newPref = new UserPreference(usernameText.getText().toString(), coverId);
-                            databaseReference.setValue(newPref);
+                            prefReference.setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    User.setUsername(usernameText.getText().toString());
+                                    updateReviewsWithNewUsername();
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -147,11 +158,36 @@ public class AccountActivity extends AppCompatActivity {
         }
         else
             if (!usernameText.getText().toString().equalsIgnoreCase(User.getUsername())) {
-                databaseReference.child("username").setValue(usernameText.getText().toString());
+                prefReference.child("username").setValue(usernameText.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        User.setUsername(usernameText.getText().toString());
+                        updateReviewsWithNewUsername();
+                    }
+                });
                 Snackbar.make(getCurrentFocus(), "Changed username", Snackbar.LENGTH_LONG).show();
             }
             else
                 Snackbar.make(getCurrentFocus(), "Nothing changed!", Snackbar.LENGTH_LONG).show();
+    }
+
+
+    private void updateReviewsWithNewUsername(){
+        reviewReference.orderByChild("userEmail").equalTo(User.email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for (DataSnapshot d: data){
+                    System.out.println("REVIEW: " + d.getKey());
+                    reviewReference.child(d.getKey()).child("author").setValue(User.username);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

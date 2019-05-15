@@ -23,13 +23,14 @@ public class Review implements Serializable {
     private String id;
     private Object creation;
     private String shortDate;
+    private String userEmail;
 
 
     public Review(){
         // For db only
     }
 
-    public Review(String author, String title, String headline, String body, double rating, String date ) {
+    public Review(String author, String title, String headline, String body, double rating, String date, String userEmail) {
         this.author = author;
         this.title = title;
         this.body = body;
@@ -38,6 +39,7 @@ public class Review implements Serializable {
         this.headline = headline;
         this.likes=0;
         this.creation = ServerValue.TIMESTAMP;
+        this.userEmail= userEmail;
     }
 
     public static Comparator<Review> dateComparator = new Comparator<Review>() {
@@ -145,6 +147,14 @@ public class Review implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public Object getCreation() {

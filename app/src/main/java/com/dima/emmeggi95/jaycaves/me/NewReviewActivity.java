@@ -97,7 +97,7 @@ public class NewReviewActivity extends AppCompatActivity {
 
 
         final Review review = new Review(User.getUsername(), albumKey, headliner.getText().toString(),
-                essay.getText().toString(), ratingBar.getRating(),formatter.format(date));
+                essay.getText().toString(), ratingBar.getRating(),formatter.format(date), User.getEmail());
 
 
             String id;

@@ -391,6 +391,7 @@ public class AlbumActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                album.getReviews().clear();
                 for (DataSnapshot d : data) {
                     album.getReviews().add(d.getValue(Review.class));
                 }

@@ -84,7 +84,7 @@ public class User {
      *
      */
     public static void initReviews(){
-        reviewsRef.orderByChild("author").equalTo(email).addValueEventListener(new ValueEventListener() {
+        reviewsRef.orderByChild("userEmail").equalTo(email).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
