@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.dima.emmeggi95.jaycaves.me.entities.ReviewsAdapter;
 
 public class ReviewsActivity extends AppCompatActivity {

@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -41,6 +45,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import android.arch.lifecycle.Observer;
+import android.widget.Toast;
 
 import static android.view.View.GONE;
 
@@ -71,6 +78,8 @@ public class AlbumActivity extends AppCompatActivity {
 
     private NetworkChangeReceiver networkChangeReceiver = null;
     private IntentFilter intentFilter;
+
+    private boolean reviewWritten;
 
 
     @Override
@@ -221,6 +230,59 @@ public class AlbumActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
                 intent.putExtra("album", album);
                 startActivity(intent);
+            }
+        });
+
+        // Bottom navigation
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.album_bottom_nav);
+        final BottomNavigationView bottomNavigationView2 = findViewById(R.id.album_bottom_nav_2);
+        reviewWritten = false;
+        /*
+        if(album.getReviews().size()<2){
+            bottomNavigationView2.getMenu().getItem(0).setCheckable(false);
+        }
+        */
+        int i = 0;
+        while(!reviewWritten && i<User.getReviews().size()){
+            if (User.getReviews().get(i).getTitle().equals(id)){
+                reviewWritten = true;
+                bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_create_24px);
+                bottomNavigationView.getMenu().getItem(0).setTitle(R.string.edit_review);
+            }
+            i++;
+        }
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.write_review:
+                        Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
+                        intent.putExtra("album", album);
+                        if(reviewWritten){
+                            intent.putExtra("review", featuredReview);
+                        }
+                        startActivity(intent);
+                        return true;
+                }
+                return false;
+            }
+        });
+        bottomNavigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.read_reviews:
+                        if(!bottomNavigationView2.getMenu().getItem(0).isCheckable()){
+                            Toast toast2 = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_no_review_available), Toast.LENGTH_LONG);
+                            toast2.show();
+                        } else {
+                            Intent intent2 = new Intent(getApplicationContext(), ReviewsActivity.class);
+                            intent2.putExtra("album", album);
+                            startActivity(intent2);
+                        }
+                        return true;
+                }
+                return false;
             }
         });
     }

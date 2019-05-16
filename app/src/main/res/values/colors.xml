@@ -31,4 +31,8 @@
     <color name="card_default_color">#ffffff</color>
     <color name="card_text_color">#000000</color>
     <color name="star_color">#f57f17</color>
+
+    <!--Gradient colors-->
+    <color name="start_color">#ffccbc</color>
+    <color name="end_color">#c8e6c9</color>
 </resources>

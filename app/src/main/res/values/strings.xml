@@ -124,8 +124,17 @@
     <string name="like_button_text">Like</string>
     <string name="not_found_text">There is no review for this album yet!</string>
     <string name="new_review_button">Write a review</string>
+    <string name="edit_review">Edit review</string>
     <string name="all_reviews_button">Read all reviews</string>
     <string name="review_by_text">Review by</string>
+    <string name="message_cant_write_review">You already wrote a review for this album.</string>
+    <string name="message_no_review_available">There is no other review for this album.</string>
+
+    <!-- Reviews -->
+    <string name="review_default_likes">0 likes</string>
+    <string name="likes">likes</string>
+    <string name="like">like</string>
+    <string name="liked">liked</string>
 
     <!--Artist Page-->
     <string name="artist_name_default">Artist</string>

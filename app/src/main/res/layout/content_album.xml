@@ -116,42 +116,6 @@
             android:layout_below="@+id/not_found_text"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/review_by"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/review_by_text"
-                    android:textAppearance="@style/SecondaryTextTheme"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/review_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@string/review_author_default"
-                    android:textAppearance="@style/PrimaryTextTheme"
-                    app:layout_constraintStart_toEndOf="@+id/review_by"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/review_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:text="@string/review_date_default"
-                    android:textAlignment="textEnd"
-                    android:textAppearance="@style/SecondaryTextTheme"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </android.support.constraint.ConstraintLayout>
-
             <android.support.design.widget.CoordinatorLayout
                 android:id="@+id/title_and_rating"
                 android:layout_width="match_parent"
@@ -201,6 +165,42 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/PrimaryTextTheme" />
 
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/review_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_by_text"
+                    android:textAppearance="@style/SecondaryTextTheme"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/review_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_author_default"
+                    android:textAppearance="@style/PrimaryTextTheme"
+                    app:layout_constraintStart_toEndOf="@+id/review_by"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/review_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:text="@string/review_date_default"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="@style/SecondaryTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -212,7 +212,8 @@
                     style="@style/DefaultButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/like_button_text" />
+                    android:text="@string/like_button_text"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/review_edit_button"
@@ -260,7 +261,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/featured_review"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/write_review_container"
@@ -275,7 +277,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/new_review_button" />
+                    android:text="@string/new_review_button"
+                    android:visibility="visible" />
             </LinearLayout>
 
             <LinearLayout

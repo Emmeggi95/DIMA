@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,18 +27,30 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private Context context;
     private List<Review> reviews;
+    private int max;
+    private int startColor;
+    private int endColor;
+    private int deltaColor;
 
     public ReviewsAdapter(Context context, List<Review> reviews) {
         this.context = context;
         this.reviews = reviews;
+        this.max = 0;
+        for(Review r : reviews){
+            if(r.getLikes()>max)
+                max = r.getLikes();
+        }
+        startColor = context.getResources().getColor(R.color.star_color);
+        endColor = context.getResources().getColor(R.color.end_color);
+        deltaColor = endColor - startColor;
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView title, author, date, body, likes;
-        CardView arrow;
-        ImageView arrowImage;
+        TextView title, author, date, body, likes, like_liked;
+        CardView card;
+        ImageView arrowImage, like;
         LinearLayout bodyContainer;
-        Button like;
+        View header;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -44,11 +58,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             this.author = (TextView) view.findViewById(R.id.card_review_author);
             this.date = (TextView) view.findViewById(R.id.card_review_date);
             this.body = (TextView) view.findViewById(R.id.card_review_body);
-            this.likes = (TextView) view.findViewById(R.id.card_review_likes_number);
-            this.arrow = (CardView) view.findViewById(R.id.card_arrow);
+            this.likes = (TextView) view.findViewById(R.id.card_review_likes);
             this.arrowImage = (ImageView) view.findViewById(R.id.card_review_arrow);
             this.bodyContainer = (LinearLayout) view.findViewById(R.id.card_review_body_container);
-            this.like = view.findViewById(R.id.card_review_like_button);
+            this.like = view.findViewById(R.id.card_review_heart);
+            this.like_liked = view.findViewById(R.id.card_review_like_message);
+            this.header = view.findViewById(R.id.info);
+            this.card = view.findViewById(R.id.review_card);
         }
     }
 
@@ -63,12 +79,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final Review review = reviews.get(position);
 
-
+        ((ItemViewHolder) holder).card.setCardBackgroundColor(calculateGradient(review.getLikes()));
         ((ItemViewHolder) holder).title.setText(review.getHeadline());
         ((ItemViewHolder) holder).author.setText(review.getAuthor());
-        ((ItemViewHolder) holder).date.setText(review.getDate());
+        ((ItemViewHolder) holder).date.setText(review.getShortDate());
         ((ItemViewHolder) holder).body.setText(review.getBody());
-        ((ItemViewHolder) holder).likes.setText(String.valueOf(review.getLikes()));
+        ((ItemViewHolder) holder).likes.setText(String.valueOf(review.getLikes()) + " " + context.getResources().getString(R.string.likes));
 
         // Hide body and set click listener
         final LinearLayout bodyContainer = ((ItemViewHolder) holder).bodyContainer;
@@ -77,33 +93,39 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         for (String like : User.getLikes())
             if (review.getId().equals(like)){
-                ((ItemViewHolder) holder).like.setText("LIKED");
-                ((ItemViewHolder) holder).like.setEnabled(false);
+                ((ItemViewHolder) holder).like.setImageResource(R.drawable.ic_favorite_black_24dp);
+                ((ItemViewHolder) holder).like_liked.setText(context.getResources().getString(R.string.liked));
 
             }
 
 
 
-        ((ItemViewHolder) holder).arrow.setOnClickListener(new CardView.OnClickListener() {
+        ((ItemViewHolder) holder).header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(bodyContainer.getVisibility()==View.VISIBLE){
                     bodyContainer.setVisibility(View.GONE);
-                    arrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    Animation rotate = AnimationUtils.loadAnimation(context, R.anim.rotate180clockwise);
+                    arrow.startAnimation(rotate);
+                    arrow.setRotation(180);
                 } else {
                     bodyContainer.setVisibility(View.VISIBLE);
-                    arrow.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                    Animation rotate = AnimationUtils.loadAnimation(context, R.anim.rotate180anticlockwise);
+                    arrow.startAnimation(rotate);
+                    arrow.setRotation(0);
                 }
             }
         });
 
+            final ImageView heart = ((ItemViewHolder) holder).like;
+            final TextView message = ((ItemViewHolder) holder).like_liked;
         ((ItemViewHolder) holder).like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-              final Button like_b = v.findViewById(R.id.card_review_like_button);
-               like_b.setEnabled(false);
-                like_b.setText("LIKED");
-                ((TextView) v.findViewById(R.id.card_review_likes_number)).setText(String.valueOf(review.getLikes()+1));
+                heart.setImageResource(R.drawable.ic_favorite_black_24dp);
+                Animation bump = AnimationUtils.loadAnimation(context, R.anim.bump);
+                heart.startAnimation(bump);
+                message.setText(context.getResources().getString(R.string.liked));
                 User.addLike(review.getId());
 
 
@@ -114,5 +136,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         return reviews.size();
+    }
+
+    private int calculateGradient(int likes){
+        return startColor + deltaColor * (likes/max);
     }
 }
