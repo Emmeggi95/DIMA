@@ -186,6 +186,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/review_author_default"
                     android:textAppearance="@style/PrimaryTextTheme"
+                    android:textStyle="italic"
                     app:layout_constraintStart_toEndOf="@+id/review_by"
                     app:layout_constraintTop_toTopOf="parent" />
 

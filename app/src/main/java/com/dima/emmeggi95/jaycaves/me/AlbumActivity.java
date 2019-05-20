@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
+import com.dima.emmeggi95.jaycaves.me.entities.UserReference;
 import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -305,7 +306,13 @@ public class AlbumActivity extends AppCompatActivity {
         Button edit = findViewById(R.id.review_edit_button);
         List<Review> reviews = album.getReviews();
         Collections.sort(reviews, Review.likesComparator); // featured review is the one with most likes
-        featuredReview = album.getReviews().get(0);
+        if(getIntent().hasExtra("review")){
+            System.out.println("FOUND REVIEW IN INTENT");
+            featuredReview = (Review) getIntent().getExtras().get("review");
+        } else if (album.getReviews().size()>0){
+            System.out.println("NO REVIEW IN INTENT, FETCHING FROM ALBUM");
+            featuredReview = album.getReviews().get(0);
+        }
         if (featuredReview.getAuthor().equals(User.getUsername())) {
             edit.setVisibility(View.VISIBLE);
 
@@ -342,6 +349,16 @@ public class AlbumActivity extends AppCompatActivity {
         // Set contents
         reviewHeader.setText(featuredReview.getHeadline());
         reviewAuthor.setText(featuredReview.getAuthor());
+        reviewAuthor.setOnClickListener(new TextView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
+                // TODO
+                // Download user information
+                intent.putExtra("user", new UserReference(featuredReview.getAuthor(), featuredReview.getUserEmail()));
+                startActivity(intent);
+            }
+        });
         reviewDate.setText(featuredReview.getShortDate());
         reviewBody.setText(featuredReview.getBody());
         reviewRating.setText(String.format("%.2f", featuredReview.getRating()));
@@ -457,7 +474,7 @@ public class AlbumActivity extends AppCompatActivity {
                 for (DataSnapshot d : data) {
                     album.getReviews().add(d.getValue(Review.class));
                 }
-                if (album.getReviews().size() > 0)
+                if (album.getReviews().size() > 0 || getIntent().hasExtra("review"))
                     showFeaturedReview();
                 for (Review r: album.getReviews())
                     if (r.getAuthor().equals(User.getUsername()))

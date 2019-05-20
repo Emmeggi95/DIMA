@@ -70,6 +70,18 @@ public class HomeFragment extends Fragment {
 
         viewModel.getData().observe(this, observer);
 
+        // TEMP: NEW ACTIVITY BUTTON
+        Button newActivtyButton = view.findViewById(R.id.revenant_button);
+        if(newActivtyButton!=null) {
+            newActivtyButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), UserActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
         return  view;
     }
 

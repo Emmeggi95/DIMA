@@ -1,6 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.User;
+import com.dima.emmeggi95.jaycaves.me.UserActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -82,6 +84,16 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ((ItemViewHolder) holder).card.setCardBackgroundColor(calculateGradient(review.getLikes()));
         ((ItemViewHolder) holder).title.setText(review.getHeadline());
         ((ItemViewHolder) holder).author.setText(review.getAuthor());
+        ((ItemViewHolder) holder).author.setOnClickListener(new TextView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserActivity.class);
+                // TODO
+                // Download user information
+                intent.putExtra("user", new UserReference(review.getAuthor(), review.getUserEmail()));
+                context.startActivity(intent);
+            }
+        });
         ((ItemViewHolder) holder).date.setText(review.getShortDate());
         ((ItemViewHolder) holder).body.setText(review.getBody());
         ((ItemViewHolder) holder).likes.setText(String.valueOf(review.getLikes()) + " " + context.getResources().getString(R.string.likes));
@@ -139,6 +151,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private int calculateGradient(int likes){
+        if(max==0) return endColor;
         return startColor + deltaColor * (likes/max);
     }
 }
