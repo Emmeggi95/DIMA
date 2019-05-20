@@ -23,4 +23,17 @@ public class CustomRandomId {
             return new String(buf);
 
     }
+
+    /**
+     *
+     */
+    public static String randomNumberGenerator(int lenght){
+        String digits = "0123456789";
+        char[] values = digits.toCharArray();
+        char[] buf= new char[lenght];
+        for (int idx = 0; idx < buf.length; ++idx)
+            buf[idx] = values[new SecureRandom().nextInt(values.length)];
+        return new String(buf);
+
+    }
 }

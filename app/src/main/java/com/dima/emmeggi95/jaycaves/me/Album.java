@@ -4,12 +4,8 @@ import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.google.firebase.database.ServerValue;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,6 +23,7 @@ public class Album implements Serializable {
     private String genre3;
     private String cover;
     private Object creation;
+    private Object reviewed;
 
     private List<Review> reviews = new ArrayList<>();
 
@@ -166,6 +163,11 @@ public class Album implements Serializable {
     public Object getCreation(){
         return creation;
     }
+
+    public Object getReviewed() {
+        return reviewed;
+    }
+
 
     @Override
     public String toString() {

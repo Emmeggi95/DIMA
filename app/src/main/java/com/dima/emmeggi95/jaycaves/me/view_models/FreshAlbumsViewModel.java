@@ -24,7 +24,7 @@ public class FreshAlbumsViewModel extends ViewModel {
 
 
         albumList = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference("albums").orderByChild("date").limitToLast(10).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("albums").orderByChild("creation").limitToLast(10).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 albumList.clear();

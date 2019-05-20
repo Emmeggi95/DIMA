@@ -45,7 +45,26 @@ public class HomeAlbumsViewModel extends ViewModel {
     public HomeAlbumsViewModel(){
 
         database = FirebaseDatabase.getInstance();
-        database.getReference("reviews").orderByChild("creation").limitToLast(10).addValueEventListener(new ValueEventListener() {
+        database.getReference("albums").orderByChild("reviewed").limitToLast(10).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                albumList.clear();
+                for (DataSnapshot d: data)
+                    albumList.add(d.getValue(Album.class));
+                Collections.reverse(albumList);
+                albums.postValue(albumList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+     /*   database.getReference("reviews").orderByChild("creation").limitToLast(10).addValueEventListener(new ValueEventListener() {
 
            @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -57,7 +76,7 @@ public class HomeAlbumsViewModel extends ViewModel {
                 Collections.sort(reviews, Review.dateComparator);
 
                 for(Review r: reviews){
-                   database.getReference("albums").orderByKey().equalTo(r.getTitle()).addValueEventListener(new ValueEventListener() {
+                   database.getReference("albums").orderByKey().equalTo(r.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Iterable<DataSnapshot> data = dataSnapshot.getChildren();
@@ -83,7 +102,7 @@ public class HomeAlbumsViewModel extends ViewModel {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                     System.out.println("DATABASE DENIED DOWNLOAD");
             }
-        });
+        }); */
 
 
 

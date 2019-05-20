@@ -26,11 +26,16 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -45,14 +50,13 @@ public class MainActivity extends AppCompatActivity
     protected FirebaseAuth authentication;
     protected static FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase database;
-    private DatabaseReference rtb;
+    private DatabaseReference adminReference;
+    private DatabaseReference prefReference;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     public static final String ANONYMOUS = "anonymous";
     public static final int SIGN_IN = 123;
     public static final int PHOTO_PICKER = 2;
-    private String username;
-    private String email;
     private ImageView custom_image;
     private NetworkChangeReceiver networkChangeReceiver = null;
     private IntentFilter intentFilter;
@@ -83,10 +87,9 @@ public class MainActivity extends AppCompatActivity
 
         authentication = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        storage = FirebaseStorage.getInstance();
+        adminReference = database.getReference("admins");
+        prefReference= database.getReference("preferences");
 
-        rtb = database.getReference().child("admins");
-        storageReference = storage.getReference();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -96,14 +99,15 @@ public class MainActivity extends AppCompatActivity
                     //user signed in
                     onSignInInitialize(user);
 
+
                 } else {
                     //user signed out
                     onSignOutCleanUp();
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
-                                    //.setIsSmartLockEnabled(false)
-                                    //.setLogo(R.drawable.my_great_logo)
+                                    .setIsSmartLockEnabled(false)
+                                    .setLogo(R.mipmap.music_explorer_round)
                                     //.setTheme(R.style.MySuperAppTheme)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+
 
         setContentView(R.layout.activity_main);
 
@@ -130,11 +135,7 @@ public class MainActivity extends AppCompatActivity
         freshFragment = new FreshFragment();
         playlistsFragment = new PlaylistsFragment();
 
-        // FOR NOW USER INIT IS DONE HERE
-        User.initPreferences(custom_image);
-        User.initLikes();
-        User.initReviews();
-        User.initPlaylists();
+
 
 
         // Initialize custom fonts
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity
             navigateToId(R.id.nav_home);
         }
 
-
+        findViewById(R.id.drawer_layout).setVisibility(View.GONE);
 
     }
 
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        //authentication.removeAuthStateListener(authStateListener);
+        authentication.removeAuthStateListener(authStateListener);
         if(this.networkChangeReceiver!=null) {
             unregisterReceiver(this.networkChangeReceiver);
         }
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        //authentication.addAuthStateListener(authStateListener);
+        authentication.addAuthStateListener(authStateListener);
         // Create an IntentFilter instance.
         intentFilter = new IntentFilter();
 
@@ -256,47 +257,77 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
-        /*if(this.networkChangeReceiver!=null) {
-            unregisterReceiver(this.networkChangeReceiver);
-        } */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
 
+        }
     }
 
-    @Override
-    protected void onRestart(){
-        super.onRestart();
 
-        // Register the broadcast receiver with the intent filter object.
-      //  registerReceiver(networkChangeReceiver, intentFilter);
-
-    }
-
-    /**
-     * Firebase methods
-     */
+    // FIREBASE AUTH METHODS
 
     private void onSignOutCleanUp() {
-        username = ANONYMOUS;
-        //signout procedure, database detach
+        User.username = ANONYMOUS;
+        User.uid = ANONYMOUS;
+        User.email = ANONYMOUS;
+        User.reviews.clear();
+        User.playlists.clear();
+        User.likes.clear();
     }
 
-    private void onSignInInitialize(FirebaseUser user) {
-        username = user.getDisplayName();
-        user.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void onSignInInitialize(final FirebaseUser firebaseUser) {
+
+        FirebaseUserMetadata metadata= authentication.getCurrentUser().getMetadata();
+        User.setUid(firebaseUser.getUid());
+        User.setEmail(firebaseUser.getEmail());
+        String newUsername= "User "+CustomRandomId.randomNumberGenerator(4);
+        User.setUsername(newUsername);
+
+        if (metadata.getCreationTimestamp()== metadata.getLastSignInTimestamp()){
+
+            // USER JUST REGISTERED
+            User.registerUserOnRtb();
+            if(firebaseUser.getProviders().contains("password"))
+                firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // for now do nothing
+                    public void onSuccess(Void aVoid) {
+                        //Alert Dialog
                     }
                 });
-        //signin procedure, database attach
+            UserPreference newPref= new UserPreference(newUsername,
+                    "image:209839Ry8C5wbAn6");
+
+            prefReference.child(firebaseUser.getUid()).setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    User.initPreferences(custom_image);
+                }
+            });
+
+        } else {
+
+            // USER IS AN OLD ONE
+            System.out.println("OLD USER: "+firebaseUser.getProviders());
+            User.initPreferences(custom_image);
+            User.initLikes();
+            User.initReviews();
+            User.initPlaylists();
+
+
+        }
+
+        findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
+
     }
 
-    /**
-     * Navigation methods
-     */
+   // GRAPHICAL ELEMENT SETUP METHODS
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -463,19 +494,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
 
-        }
-    }
 
     /**
      * Set the toolbar title

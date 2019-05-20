@@ -69,15 +69,15 @@ public class AccountActivity extends AppCompatActivity {
             cover.setImageBitmap(User.cover_image);
 
         usernameText = findViewById(R.id.account_username_input);
-        if(User.getUsername()!=null)
-            usernameText.setText(User.getUsername());// default value
+        if(User.username!=null)
+            usernameText.setText(User.username);// default value
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // avoid keyboard opening at activity start
 
         submit= findViewById(R.id.account_submit_button);
         logout= findViewById(R.id.logout_button);
 
-        prefReference = FirebaseDatabase.getInstance().getReference("preferences").child(User.getEmail());
+        prefReference = FirebaseDatabase.getInstance().getReference("preferences").child(User.uid);
         reviewReference= FirebaseDatabase.getInstance().getReference("reviews");
         storageReference= FirebaseStorage.getInstance().getReference().child("User_covers");
 
@@ -157,7 +157,7 @@ public class AccountActivity extends AppCompatActivity {
                     });
         }
         else
-            if (!usernameText.getText().toString().equalsIgnoreCase(User.getUsername())) {
+            if (!usernameText.getText().toString().equalsIgnoreCase(User.username)) {
                 prefReference.child("username").setValue(usernameText.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

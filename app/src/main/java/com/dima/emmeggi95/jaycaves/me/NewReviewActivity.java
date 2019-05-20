@@ -96,8 +96,8 @@ public class NewReviewActivity extends AppCompatActivity {
 
 
 
-        final Review review = new Review(User.getUsername(), albumKey, headliner.getText().toString(),
-                essay.getText().toString(), ratingBar.getRating(),formatter.format(date), User.getEmail());
+        final Review review = new Review(User.username, albumKey, headliner.getText().toString(),
+                essay.getText().toString(), ratingBar.getRating(),formatter.format(date), User.email);
 
 
             String id;
@@ -126,9 +126,9 @@ public class NewReviewActivity extends AppCompatActivity {
                                 FirebaseDatabase.getInstance().getReference("albums").child(albumKey).child("score").setValue(sum/count).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        User.getReviews().add(review);
+                                        User.reviews.add(review);
                                         Snackbar.make(getCurrentFocus(), "Review successfully sent!", Snackbar.LENGTH_LONG).show();
-
+                                        albumsRef.child(albumKey).child("reviewed").setValue(review.getCreation());
 
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -137,6 +137,7 @@ public class NewReviewActivity extends AppCompatActivity {
                                         Snackbar.make(getCurrentFocus(), "Oops, try again!", Snackbar.LENGTH_LONG).show();
                                     }
                                 });
+
 
 
                             }

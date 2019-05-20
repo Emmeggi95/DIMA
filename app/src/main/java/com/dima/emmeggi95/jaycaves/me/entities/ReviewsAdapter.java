@@ -103,7 +103,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         bodyContainer.setVisibility(View.GONE);
         final ImageView arrow = ((ItemViewHolder) holder).arrowImage;
 
-        for (String like : User.getLikes())
+        for (String like : User.likes)
             if (review.getId().equals(like)){
                 ((ItemViewHolder) holder).like.setImageResource(R.drawable.ic_favorite_black_24dp);
                 ((ItemViewHolder) holder).like_liked.setText(context.getResources().getString(R.string.liked));

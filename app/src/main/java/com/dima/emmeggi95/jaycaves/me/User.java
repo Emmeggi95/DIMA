@@ -29,8 +29,9 @@ import java.util.List;
 public class User {
 
     // ATTRIBUTES
-    public static String username = "pietro@grotti";
-    public static String email = "pietro@grotti";
+    public static String username; // ="pietro@grotti";
+    public static String email; // = "pietro@grotti";
+    public static String uid;
     public static String cover_photo_id;
     public static Bitmap cover_image;
     public static File localFile;
@@ -47,31 +48,21 @@ public class User {
     private static StorageReference storageReference = FirebaseStorage.getInstance().getReference("User_covers");
 
 
-// STATIC GETTERS & SETTERS
+// STATIC SETTERS
 
-    public static String getUsername() {
-        return username;
-    }
 
     public static void setUsername(String username) {
         User.username = username;
-    }
-
-    public static String getEmail() {
-        return email;
     }
 
     public static void setEmail(String email) {
         User.email = email;
     }
 
-    public static List<Review> getReviews() {
-        return reviews;
+    public static void setUid(String uid){
+        User.uid= uid;
     }
 
-    public static List<String> getLikes(){
-        return likes;
-    }
 
 
 
@@ -135,7 +126,7 @@ public class User {
 
         // check if featured review is already liked by user
 
-      likesRef.child(username).addValueEventListener(new ValueEventListener() {
+      likesRef.child(uid).addValueEventListener(new ValueEventListener() {
           @Override
           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
               Iterable<DataSnapshot> data = dataSnapshot.getChildren();
@@ -159,7 +150,7 @@ public class User {
      */
     public static void initPreferences(final ImageView cover) {
 
-        preferenceRef.orderByKey().equalTo(email).addValueEventListener(new ValueEventListener() {
+        preferenceRef.orderByKey().equalTo(uid).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Iterable<DataSnapshot> data = dataSnapshot.getChildren();
@@ -206,14 +197,19 @@ public class User {
 
     // 2) UPDATE SERVER-SIDE METHODS
 
+    public static void registerUserOnRtb(){
+        
+
+    }
+
     /**
      *
-     * @param like
+     * @param like id of liked review
      */
     public static void addLike(final String like){
 
         likes.add(like);
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("likes").child(username).push();
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference("likes").child(uid).push();
         ref.setValue(like);
 
         //Update likes on db
@@ -247,7 +243,7 @@ public class User {
 
         String id = album.getTitle()+"@"+album.getArtist();
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
-                .child(username).child(playlist.getName().toLowerCase()).child(id);
+                .child(uid).child(playlist.getName().toLowerCase()).child(id);
         switch (action){
             case "ADD": {
                 ref.child("position").setValue(playlist.getAlbums().size());// Insert
@@ -267,7 +263,7 @@ public class User {
     public static void reorderPlaylist(Playlist playlist){
 
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
-                .child(username).child(playlist.getName().toLowerCase());
+                .child(uid).child(playlist.getName().toLowerCase());
         List<Album> newList= playlist.getAlbums();
         int position =1;
 
@@ -284,7 +280,7 @@ public class User {
 
     private static void fetchAlbums(final Playlist playlist){
 
-        playlistsRef.child(username).child(playlist.getName().toLowerCase()).orderByChild("position").addListenerForSingleValueEvent(new ValueEventListener() {
+        playlistsRef.child(uid).child(playlist.getName().toLowerCase()).orderByChild("position").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();

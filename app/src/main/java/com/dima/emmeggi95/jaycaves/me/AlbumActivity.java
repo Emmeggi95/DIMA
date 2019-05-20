@@ -96,17 +96,6 @@ public class AlbumActivity extends AppCompatActivity {
         // Fetch related reviews
         fetchReviews();
 
-     /*   playlistsViewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
-        final Observer<List<Playlist>> observer = new Observer<List<Playlist>>() {
-            @Override
-            public void onChanged(@Nullable List<Playlist> data) {
-                playlists = data;
-            }
-        };
-        playlistsViewModel.getData().observe(this, observer); */
-
-
-
         // Set floating button
         fab = findViewById(R.id.album_floating_button);
         final Context thisActivity = this;
@@ -222,7 +211,7 @@ public class AlbumActivity extends AppCompatActivity {
 
         // Write a review button
         writeReviewButton = findViewById(R.id.write_review_button);
-        for (Review r : User.getReviews())
+        for (Review r : User.reviews)
             if (r.getTitle().equals(id))
                 writeReviewButton.setEnabled(false);
         writeReviewButton.setOnClickListener(new View.OnClickListener() {
@@ -244,8 +233,8 @@ public class AlbumActivity extends AppCompatActivity {
         }
         */
         int i = 0;
-        while(!reviewWritten && i<User.getReviews().size()){
-            if (User.getReviews().get(i).getTitle().equals(id)){
+        while(!reviewWritten && i<User.reviews.size()){
+            if (User.reviews.get(i).getTitle().equals(id)){
                 reviewWritten = true;
                 bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_create_24px);
                 bottomNavigationView.getMenu().getItem(0).setTitle(R.string.edit_review);
@@ -313,7 +302,7 @@ public class AlbumActivity extends AppCompatActivity {
             System.out.println("NO REVIEW IN INTENT, FETCHING FROM ALBUM");
             featuredReview = album.getReviews().get(0);
         }
-        if (featuredReview.getAuthor().equals(User.getUsername())) {
+        if (featuredReview.getAuthor().equals(User.username)) {
             edit.setVisibility(View.VISIBLE);
 
             edit.setOnClickListener(new View.OnClickListener() {
@@ -389,7 +378,7 @@ public class AlbumActivity extends AppCompatActivity {
             }
         });
 
-        for (String like : User.getLikes()) {
+        for (String like : User.likes) {
             if (like.equals(featuredReview.getId())) {
                 likeButton.setText("LIKED");
                 likeButton.setEnabled(false);
@@ -411,7 +400,7 @@ public class AlbumActivity extends AppCompatActivity {
         });
 
         reviewLiked = false;
-        for (String like : User.getLikes()) {
+        for (String like : User.likes) {
             if (like.equals(featuredReview.getId())) {
                 reviewLiked = true;
                 likeSymbol.setImageResource(R.drawable.ic_favorite_black_24dp);
@@ -477,7 +466,7 @@ public class AlbumActivity extends AppCompatActivity {
                 if (album.getReviews().size() > 0 || getIntent().hasExtra("review"))
                     showFeaturedReview();
                 for (Review r: album.getReviews())
-                    if (r.getAuthor().equals(User.getUsername()))
+                    if (r.getAuthor().equals(User.username))
                         writeReviewButton.setEnabled(false);
             }
 
