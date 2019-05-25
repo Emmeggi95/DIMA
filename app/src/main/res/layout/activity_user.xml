@@ -26,7 +26,17 @@
             android:layout_width="@dimen/album_cover_side"
             android:layout_height="@dimen/album_cover_side"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_account_circle_black_24dp" />
+            android:src="@drawable/ic_account_circle_black_24dp"
+            android:visibility="invisible"/>
+
+        <ProgressBar
+            android:id="@+id/loading_user"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_alignStart="@+id/profile_picture"
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/user_info"

@@ -3,6 +3,7 @@ package com.dima.emmeggi95.jaycaves.me;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,11 @@ import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.SearchAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.entities.SearchArtistsAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +45,9 @@ public class SearchableActivity extends AppCompatActivity {
     private TextView artistHeader;
     private TextView albumHeader;
 
-    // Prova
-    private List<Artist> artistList;
-    private List<Album> albumList;
 
-    //
+    private DatabaseReference albumReference= FirebaseDatabase.getInstance().getReference("albums");
+    private DatabaseReference artistReference= FirebaseDatabase.getInstance().getReference("artists");
     private NetworkChangeReceiver networkChangeReceiver = null;
     private IntentFilter intentFilter;
 
@@ -92,66 +96,78 @@ public class SearchableActivity extends AppCompatActivity {
         artistHeader = findViewById(R.id.artist_search_header);
         albumHeader = findViewById(R.id.album_search_header);
 
-        //Prova
-        albumList = new ArrayList<>();
-        albumList.add(new Album("Album #1", "1995", "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #2", "1995", "Artist ABC", "Rock", ""));
-        albumList.add(new Album("Album #3", "1995", "Artist ABC", "Rock", ""));
-        //
-        artistList = new ArrayList<>();
-        artistList.add(new Artist("Tizio", "1950", "...", "Rock", ""));
-        artistList.add(new Artist("Caio", "1950", "...", "Rock", ""));
-        artistList.add(new Artist("Sempronio", "1950", "...", "Rock", ""));
-        //
+
     }
 
-    private void performSearch(String query){
+    private void performSearch(final String query){
         if(!query.equals("")) {
-            // Database connection...
 
-            // Prova
+            final String parsedQuery = query.substring(0, 1).toUpperCase() + query.substring(1);
             artistResults.clear();
-            for (Artist a : artistList) {
-                if (a.getName().toLowerCase().contains(query.toLowerCase())) {
-                    artistResults.add(a);
+            artistReference.orderByChild("name").startAt(parsedQuery).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                    for (DataSnapshot d : data) {
+                        if (d.getKey().contains(parsedQuery))
+                            artistResults.add(d.getValue(Artist.class));
+                    }
+                    if (artistResults.size() > 0) {
+                        artistHeader.setVisibility(View.VISIBLE);
+                    } else {
+                        artistHeader.setVisibility(View.GONE);
+                    }
+                    artistAdapter.setItems(artistResults);
+                    artistAdapter.notifyDataSetChanged();
+
                 }
-            }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             albumResults.clear();
-            for (Album a : albumList) {
-                if (a.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                    albumResults.add(a);
+            albumReference.orderByChild("title").startAt(parsedQuery).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                    for (DataSnapshot d : data) {
+                        Album album= d.getValue(Album.class);
+                        if (album.getTitle().contains(parsedQuery))
+                            albumResults.add(album);
+                    }
+                    if (albumResults.size() > 0) {
+                        albumHeader.setVisibility(View.VISIBLE);
+
+                    } else {
+                        albumHeader.setVisibility(View.GONE);
+                    }
+                    albumAdapter.setItems(albumResults);
+                    albumAdapter.notifyDataSetChanged();
+
                 }
-            }
 
-            if (artistResults.size() > 0) {
-                artistHeader.setVisibility(View.VISIBLE);
-            } else {
-                artistHeader.setVisibility(View.GONE);
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            if (albumResults.size()>0) {
-                albumHeader.setVisibility(View.VISIBLE);
-            } else {
-                albumHeader.setVisibility(View.GONE);
-            }
+                }
+            });
 
-        } else {
-            artistHeader.setVisibility(View.GONE);
-            artistResults.clear();
-            albumHeader.setVisibility(View.GONE);
-            albumResults.clear();
+
         }
 
-        updateList();
+        // NOTHING VISIBLE AS DEFAULT OPTION
+        artistHeader.setVisibility(View.GONE);
+        artistResults.clear();
+        albumHeader.setVisibility(View.GONE);
+        albumResults.clear();
+
+
     }
 
-    private void updateList(){
-        artistAdapter.setItems(artistResults);
-        artistAdapter.notifyDataSetChanged();
-        albumAdapter.setItems(albumResults);
-        albumAdapter.notifyDataSetChanged();
-    }
+
 
 
 

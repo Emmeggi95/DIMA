@@ -10,6 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        resConfigs "en"
     }
     buildTypes {
         release {
@@ -43,10 +44,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
-    // Required only if Facebook login support is required
-    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
-    // FACEBOOK REQUIRES EXTRA STEPS, WORKIN ON IT SOON (https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#configuration)
-    // implementation 'com.facebook.android:facebook-login:4.x'
+    implementation 'com.facebook.android:facebook-login:4.41.0'
 
     implementation 'com.android.support:cardview-v7:28.0.0'//To implement a single album card
     implementation 'com.android.support:recyclerview-v7:28.0.0'

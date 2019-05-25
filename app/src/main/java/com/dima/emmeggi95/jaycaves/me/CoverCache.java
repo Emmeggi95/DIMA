@@ -27,8 +27,10 @@ public class CoverCache {
     private static final FirebaseStorage storage = FirebaseStorage.getInstance();
     private static final StorageReference storageAlbumReference = storage.getReference("Album_covers");
     private static final StorageReference storageArtistReference= storage.getReference("Artist_covers");
+    private static final StorageReference storageUserReference= storage.getReference("User_covers");
     public static final String INTERNAL_DIRECTORY_ALBUM = "Album_covers";
     public static final String INTERNAL_DIRECTORY_ARTIST= "Artist_covers";
+    public static final String INTERNAL_DIRECTORY_USERS= "User_covers";
 
     private static LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(1024 * 1024 * 10) {
         @Override
@@ -93,22 +95,39 @@ public class CoverCache {
                     });
                 }
                 else{
-                    storageArtistReference.child(id).getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            mCache.put(id, BitmapFactory.decodeFile(file.getAbsolutePath()));
-                            view.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-                            progressBar.setVisibility(View.GONE);
-                            view.setVisibility(View.VISIBLE);
+                    if (directory.getName().contains("Artist"))
+                        storageArtistReference.child(id).getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                mCache.put(id, BitmapFactory.decodeFile(file.getAbsolutePath()));
+                                view.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                                progressBar.setVisibility(View.GONE);
+                                view.setVisibility(View.VISIBLE);
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            System.out.println(e.getMessage());
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                System.out.println(e.getMessage());
 
-                        }
-                    });
+                            }
+                        });
+                    else
+                        storageUserReference.child(id).getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                mCache.put(id, BitmapFactory.decodeFile(file.getAbsolutePath()));
+                                view.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                                progressBar.setVisibility(View.GONE);
+                                view.setVisibility(View.VISIBLE);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                System.out.println(e.getMessage());
+
+                            }
+                        });
                 }
             }
 

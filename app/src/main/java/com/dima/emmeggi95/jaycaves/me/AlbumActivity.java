@@ -1,8 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -21,8 +18,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -33,9 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
-import com.dima.emmeggi95.jaycaves.me.entities.UserReference;
 import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.arch.lifecycle.Observer;
 import android.widget.Toast;
 
 import static android.view.View.GONE;
@@ -342,9 +334,8 @@ public class AlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
-                // TODO
-                // Download user information
-                intent.putExtra("user", new UserReference(featuredReview.getAuthor(), featuredReview.getUserEmail()));
+                intent.putExtra("username", featuredReview.getAuthor());
+                intent.putExtra("email", featuredReview.getUserEmail());
                 startActivity(intent);
             }
         });

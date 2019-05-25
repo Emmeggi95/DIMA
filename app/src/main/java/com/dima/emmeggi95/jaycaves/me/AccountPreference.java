@@ -1,18 +1,27 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-public class UserPreference {
+import android.graphics.Bitmap;
+
+import com.dima.emmeggi95.jaycaves.me.entities.Review;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class AccountPreference implements Serializable {
 
     private String username;
     private String coverphoto;
 
-    public UserPreference(){
+    public AccountPreference(){
 
     }
 
-    public UserPreference(String username, String coverphoto) {
+    public AccountPreference(String username, String coverphoto) {
         this.username = username;
         this.coverphoto = coverphoto;
     }
+
+
 
     public String getUsername() {
         return username;
@@ -29,4 +38,5 @@ public class UserPreference {
     public void setCoverphoto(String coverphoto) {
         this.coverphoto = coverphoto;
     }
+
 }

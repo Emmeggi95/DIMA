@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,10 +17,6 @@ import android.widget.TextView;
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.User;
 import com.dima.emmeggi95.jaycaves.me.UserActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -88,9 +83,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserActivity.class);
-                // TODO
-                // Download user information
-                intent.putExtra("user", new UserReference(review.getAuthor(), review.getUserEmail()));
+                intent.putExtra("username", review.getAuthor());
+                intent.putExtra("email", review.getUserEmail());
                 context.startActivity(intent);
             }
         });

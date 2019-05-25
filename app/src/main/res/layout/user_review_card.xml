@@ -23,7 +23,16 @@
                 android:layout_width="@dimen/playlist_cover_side"
                 android:layout_height="@dimen/playlist_cover_side"
                 android:layout_centerVertical="false"
+                android:visibility="invisible"
                 app:srcCompat="@drawable/default_cover" />
+
+            <ProgressBar
+                android:id="@+id/loading_user_review"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignStart="@+id/album_cover"
+                android:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"

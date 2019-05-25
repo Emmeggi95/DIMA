@@ -155,7 +155,7 @@ public class User {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                     for (DataSnapshot d : data) {
-                        UserPreference preference= d.getValue(UserPreference.class);
+                        AccountPreference preference= d.getValue(AccountPreference.class);
                         cover_photo_id = preference.getCoverphoto();
                         username=preference.getUsername();
 

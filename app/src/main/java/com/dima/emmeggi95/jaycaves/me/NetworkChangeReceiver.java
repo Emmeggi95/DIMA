@@ -75,7 +75,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                                 }
                             }
                     )
-                    .setIcon(android.R.drawable.ic_dialog_alert).show();
+                    .setIconAttribute(android.R.attr.alertDialogIcon).show();
 
         }
 

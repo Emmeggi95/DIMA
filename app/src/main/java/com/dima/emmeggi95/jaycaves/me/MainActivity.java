@@ -1,5 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -19,23 +22,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -89,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         adminReference = database.getReference("admins");
         prefReference= database.getReference("preferences");
+        setContentView(R.layout.activity_main);
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -111,7 +109,9 @@ public class MainActivity extends AppCompatActivity
                                     //.setTheme(R.style.MySuperAppTheme)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.EmailBuilder().build()))
+                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.FacebookBuilder().build()))
+                                    .setTheme(R.style.AuthTheme)
                                     .build(),
                             SIGN_IN);
                 }
@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -301,9 +300,7 @@ public class MainActivity extends AppCompatActivity
                         //Alert Dialog
                     }
                 });
-            UserPreference newPref= new UserPreference(newUsername,
-                    "image:209839Ry8C5wbAn6");
-
+            AccountPreference newPref= new AccountPreference(newUsername, "image:209839Ry8C5wbAn6");
             prefReference.child(firebaseUser.getUid()).setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -313,8 +310,34 @@ public class MainActivity extends AppCompatActivity
 
         } else {
 
+            if(firebaseUser.getProviders().contains("password") && !firebaseUser.isEmailVerified()){
+                findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
+                new AlertDialog.Builder(this)
+                        .setTitle("Verify your email address")
+                        .setMessage("We sent you an email when you first registered. Please confirm your email and restart the app")
+                        .setCancelable(false)
+                        .setIconAttribute(android.R.attr.alertDialogIcon)
+                        .setPositiveButton("Send it again!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                firebaseUser.sendEmailVerification();
+                                Snackbar.make(getCurrentFocus(), "Confermation mail resent!", Snackbar.LENGTH_LONG).show();
+                                finish();
+
+                            }
+                        })
+                        .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
+
+                finish();
+            }
+
             // USER IS AN OLD ONE
-            System.out.println("OLD USER: "+firebaseUser.getProviders());
             User.initPreferences(custom_image);
             User.initLikes();
             User.initReviews();
@@ -324,6 +347,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
+
 
     }
 

@@ -84,4 +84,15 @@
         <item name="android:textColor">@color/colorTextOnDarkBackground</item>
     </style>
 
+    <style name="AuthTheme" parent="FirebaseUI">
+        <!-- Required for sign-in flow styling -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+
+    </style>
+
 </resources>
