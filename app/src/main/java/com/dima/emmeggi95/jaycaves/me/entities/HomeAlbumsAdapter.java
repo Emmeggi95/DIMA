@@ -67,7 +67,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             stars.add((ImageView) view.findViewById(R.id.star_2));
             stars.add((ImageView) view.findViewById(R.id.star_3));
             stars.add((ImageView) view.findViewById(R.id.star_4));
-            stars.add((ImageView) view.findViewById(R.id.star_5));
+            stars.add((ImageView) view.findViewById(R.id.star));
             card = (CardView) view.findViewById(R.id.card);
             loading= (ProgressBar) view.findViewById(R.id.loading_cover);
 

@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -24,7 +25,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -170,32 +170,10 @@ public class AlbumActivity extends AppCompatActivity {
         TextView yearText = (TextView) findViewById(R.id.year_text);
         yearText.setText(album.getDate());
 
-        // Set stars
-        List<ImageView> stars = new ArrayList<ImageView>();
-        stars.add((ImageView) findViewById(R.id.star_1));
-        stars.add((ImageView) findViewById(R.id.star_2));
-        stars.add((ImageView) findViewById(R.id.star_3));
-        stars.add((ImageView) findViewById(R.id.star_4));
-        stars.add((ImageView) findViewById(R.id.star_5));
+        // Set rating
         TextView ratingText = findViewById(R.id.text_rating);
-        if (album.getScore() == 0.0) {
-            stars.get(1).setVisibility(GONE);
-            stars.get(2).setVisibility(GONE);
-            stars.get(3).setVisibility(GONE);
-            stars.get(4).setVisibility(GONE);
-            ratingText.setText(getResources().getString(R.string.not_available));
-        } else {
-            int integerScore = (int) album.getScore();
-            int i;
-            for (i = 0; i < integerScore; i++) {
-                stars.get(i).setImageResource(R.drawable.ic_star_24dp);
-            }
-            float decimalPart = (float) album.getScore() - integerScore;
-            if (decimalPart >= 0.5) {
-                stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
-            }
-            ratingText.setText(String.format("%.2f", album.getScore()));
-        }
+        ratingText.setText(String.format("%.2f", album.getScore()));
+
 
         // Init featured review section
         hideFeaturedReview();
@@ -278,13 +256,14 @@ public class AlbumActivity extends AppCompatActivity {
     public void showFeaturedReview() {
 
         // Bind elements
+        ConstraintLayout featuredReviewLayout = findViewById(R.id.featured_review_content);
         TextView reviewHeader = (TextView) findViewById(R.id.review_title);
         TextView reviewAuthor = (TextView) findViewById(R.id.review_author);
         TextView reviewDate = (TextView) findViewById(R.id.review_date);
         TextView reviewBody = (TextView) findViewById(R.id.review_body);
-        TextView reviewRating = (TextView) findViewById(R.id.review_rating_text);
+        //TextView reviewRating = (TextView) findViewById(R.id.review_rating_text);
         final TextView reviewLikes = findViewById(R.id.likes_number);
-        Button edit = findViewById(R.id.review_edit_button);
+        //Button edit = findViewById(R.id.review_edit_button);
         List<Review> reviews = album.getReviews();
         Collections.sort(reviews, Review.likesComparator); // featured review is the one with most likes
         if(getIntent().hasExtra("review")){
@@ -294,6 +273,7 @@ public class AlbumActivity extends AppCompatActivity {
             System.out.println("NO REVIEW IN INTENT, FETCHING FROM ALBUM");
             featuredReview = album.getReviews().get(0);
         }
+        /*
         if (featuredReview.getAuthor().equals(User.username)) {
             edit.setVisibility(View.VISIBLE);
 
@@ -307,7 +287,31 @@ public class AlbumActivity extends AppCompatActivity {
                 }
             });
         }
+        */
 
+        // Set stars
+        List<ImageView> stars = new ArrayList<ImageView>();
+        stars.add((ImageView) featuredReviewLayout.findViewById(R.id.star_1));
+        stars.add((ImageView) featuredReviewLayout.findViewById(R.id.star_2));
+        stars.add((ImageView) featuredReviewLayout.findViewById(R.id.star_3));
+        stars.add((ImageView) featuredReviewLayout.findViewById(R.id.star_4));
+        stars.add((ImageView) featuredReviewLayout.findViewById(R.id.star));
+        if (album.getScore() == 0.0) {
+            stars.get(1).setVisibility(GONE);
+            stars.get(2).setVisibility(GONE);
+            stars.get(3).setVisibility(GONE);
+            stars.get(4).setVisibility(GONE);
+        } else {
+            int integerScore = (int) album.getScore();
+            int i;
+            for (i = 0; i < integerScore; i++) {
+                stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+            }
+            float decimalPart = (float) album.getScore() - integerScore;
+            if (decimalPart >= 0.5) {
+                stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+            }
+        }
 
 
         // Init likes
@@ -340,10 +344,18 @@ public class AlbumActivity extends AppCompatActivity {
             }
         });
         reviewDate.setText(featuredReview.getShortDate());
-        reviewBody.setText(featuredReview.getBody());
-        reviewRating.setText(String.format("%.2f", featuredReview.getRating()));
-        reviewLikes.setText(String.valueOf(featuredReview.getLikes()));
-        LinearLayout featuredReviewLayout = findViewById(R.id.featured_review);
+
+        //reviewBody.setText(featuredReview.getBody()); // <--
+
+        //reviewRating.setText(String.format("%.2f", featuredReview.getRating()));
+        String likesText;
+        if(featuredReview.getLikes()==1){
+            likesText = getResources().getString(R.string.like);
+        } else {
+            likesText = getResources().getString(R.string.likes);
+        }
+        reviewLikes.setText(String.valueOf(featuredReview.getLikes()) + ' ' + likesText);
+
         featuredReviewLayout.setVisibility(View.VISIBLE);
         TextView reviewNotFound = findViewById(R.id.not_found_text);
         reviewNotFound.setVisibility(GONE);
@@ -354,6 +366,7 @@ public class AlbumActivity extends AppCompatActivity {
             seeAllReviewsButton.setEnabled(false);
         }
 
+        /*
         // Button "like" and listener
         final Button likeButton = findViewById(R.id.review_like_button);
         likeButton.setOnClickListener(new View.OnClickListener() {
@@ -375,7 +388,7 @@ public class AlbumActivity extends AppCompatActivity {
                 likeButton.setEnabled(false);
             }
         }
-
+*/
         // Alternative button
         final ImageView likeSymbol = findViewById(R.id.heart);
         likeSymbol.setOnClickListener(new View.OnClickListener(){
@@ -384,6 +397,14 @@ public class AlbumActivity extends AppCompatActivity {
                 if(!reviewLiked){
                     likeSymbol.setImageResource(R.drawable.ic_favorite_black_24dp);
                     reviewLiked = true;
+                    featuredReview.setLikes(featuredReview.getLikes()+1);
+                    String likesText;
+                    if(featuredReview.getLikes()==1){
+                        likesText = getResources().getString(R.string.like);
+                    } else {
+                        likesText = getResources().getString(R.string.likes);
+                    }
+                    reviewLikes.setText(String.valueOf(featuredReview.getLikes()) + ' ' + likesText);
                 }
                 Animation bump = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bump);
                 likeSymbol.startAnimation(bump);
@@ -401,7 +422,7 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     public void hideFeaturedReview() {
-        LinearLayout featuredReviewLayout = (LinearLayout) findViewById(R.id.featured_review);
+        ConstraintLayout featuredReviewLayout = (ConstraintLayout) findViewById(R.id.featured_review_content);
         featuredReviewLayout.setVisibility(GONE);
         TextView reviewNotFound = (TextView) findViewById(R.id.not_found_text);
         reviewNotFound.setVisibility(View.VISIBLE);

@@ -25,6 +25,7 @@
                 android:gravity="center_vertical"
                 android:text="00"
                 android:textAlignment="center"
+                android:textAppearance="@style/LittleTextTheme"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <android.support.v7.widget.CardView
@@ -52,35 +53,40 @@
                     android:visibility="visible" />
             </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:id="@+id/chart_text_layout"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/chart_title_text"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:gravity="bottom"
+                android:maxLines="1"
+                android:text="@string/title_default"
+                android:textAppearance="@style/PrimaryTextTheme"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
                 app:layout_constraintStart_toEndOf="@+id/chart_cover_card"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/chart_title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="bottom"
-                    android:maxLines="1"
-                    android:text="@string/title_default" />
-
-                <TextView
-                    android:id="@+id/chart_artist_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="@string/artist_default" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/chart_artist_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/artist_default"
+                android:textAppearance="@style/LittleTextTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/chart_cover_card"
+                app:layout_constraintTop_toBottomOf="@+id/chart_title_text"
+                app:layout_constraintVertical_bias="0.0" />
 
             <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -112,11 +118,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="4dp"
-                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/default_rating"
-                        android:textColor="@color/colorGrayText"
-                        android:textSize="@dimen/card_text_size" />
+                        android:textAppearance="@style/LittleTextTheme"
+                        android:textColor="@color/star_color" />
                 </LinearLayout>
 
                 <TextView
@@ -126,6 +131,7 @@
                     android:maxLines="1"
                     android:text="@string/votes_number_text_default"
                     android:textAlignment="center"
+                    android:textAppearance="@style/LittleTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/chart_rating_layout" />
             </LinearLayout>

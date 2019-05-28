@@ -70,14 +70,10 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginRight="8dp"
                     android:ellipsize="end"
-                    android:fontFamily="sans-serif"
                     android:maxLines="1"
                     android:text="@string/default_album_title"
-                    android:textColor="@color/card_text_color"
-                    android:textSize="@dimen/album_title_text_size"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/PrimaryTextTheme" />
 
                 <TextView
                     android:id="@+id/text_author"
@@ -87,11 +83,9 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginTop="2dp"
                     android:ellipsize="end"
-                    android:fontFamily="sans-serif"
                     android:maxLines="1"
                     android:text="@string/default_author"
-                    android:textColor="@color/colorGrayText"
-                    android:textSize="@dimen/card_text_size" />
+                    android:textAppearance="@style/LittleTextTheme" />
 
                 <TextView
                     android:id="@+id/text_genre"
@@ -101,11 +95,9 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginTop="2dp"
                     android:ellipsize="end"
-                    android:fontFamily="sans-serif"
                     android:maxLines="1"
                     android:text="@string/default_genre"
-                    android:textColor="@color/colorGrayText"
-                    android:textSize="@dimen/card_text_size" />
+                    android:textAppearance="@style/LittleTextTheme" />
 
                 <LinearLayout
                     android:id="@+id/stars_container"
@@ -148,7 +140,7 @@
                         card_view:srcCompat="@drawable/ic_star_border_24dp" />
 
                     <ImageView
-                        android:id="@+id/star_5"
+                        android:id="@+id/star"
                         android:layout_width="@dimen/star_dimension"
                         android:layout_height="@dimen/star_dimension"
                         android:layout_weight="1"
@@ -160,11 +152,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="4dp"
-                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/default_rating"
-                        android:textColor="@color/colorGrayText"
-                        android:textSize="@dimen/card_text_size" />
+                        android:textAppearance="@style/LittleTextTheme"
+                        android:textColor="@color/star_color" />
                 </LinearLayout>
 
 
