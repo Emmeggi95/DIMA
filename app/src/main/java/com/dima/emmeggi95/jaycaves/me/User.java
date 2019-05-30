@@ -3,6 +3,7 @@ package com.dima.emmeggi95.jaycaves.me;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
@@ -170,7 +171,6 @@ public class User {
                                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                                 cover_image= BitmapFactory.decodeFile(localFile.getAbsolutePath());
                                                 cover.setImageBitmap(cover_image);
-
 
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {

@@ -3,9 +3,14 @@ package com.dima.emmeggi95.jaycaves.me;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.dima.emmeggi95.jaycaves.me.entities.ReviewsAdapter;
@@ -30,8 +35,29 @@ public class ReviewsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.reviews_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(album.getTitle());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        setTitle("");
 
+        // Set album info
+        ImageView cover = findViewById(R.id.album_cover);
+        ProgressBar loading = findViewById(R.id.loading);
+        TextView title = findViewById(R.id.album_title);
+        TextView author = findViewById(R.id.album_author);
+        TextView date = findViewById(R.id.album_date);
+        if (album.getCover() != null && album.getCover() != "") {
+            CoverCache.retrieveCover(album.getCover(), cover, loading,
+                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM, MODE_PRIVATE));
+        }
+        title.setText(album.getTitle());
+        author.setText(album.getArtist());
+        date.setText(album.getDate());
+
+        // Set recycler view
         recyclerView = findViewById(R.id.reviews_recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -41,6 +67,10 @@ public class ReviewsActivity extends AppCompatActivity {
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        // set dividers
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         // Set the adapter
         adapter = new ReviewsAdapter(this, album.getReviews());

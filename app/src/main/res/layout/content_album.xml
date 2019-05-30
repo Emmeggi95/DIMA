@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:onClick="startArtistActivity"
             android:text="@string/artist_text_default"
-            android:textAppearance="@style/BigTextTheme" />
+            android:textAppearance="@style/LinkTextTheme" />
 
         <TextView
             android:id="@+id/year_text"
@@ -67,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/divider1"
             android:text="@string/not_found_text"
+            android:textAppearance="@style/SecondaryTextTheme"
             android:textSize="@dimen/review_text_font_size" />
 
         <include

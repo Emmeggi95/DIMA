@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.widget.EditText;
 
 /**
  * New content is inserted in the system through this activity. There are two main fragments: @NewAlbumFragment, where user can insert new albums, and @NewArtistFragment, where user can insert new artists

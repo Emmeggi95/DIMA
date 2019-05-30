@@ -45,6 +45,8 @@
                     android:id="@+id/album_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="TextView"
                     android:textAppearance="@style/PrimaryTextTheme" />
 
@@ -52,8 +54,10 @@
                     android:id="@+id/album_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="TextView"
-                    android:textAppearance="@style/SecondaryTextTheme" />
+                    android:textAppearance="@style/LittleTextTheme" />
 
             </LinearLayout>
 
@@ -67,8 +71,10 @@
                     android:id="@+id/review_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="TextView"
-                    android:textAppearance="@style/PrimaryTextTheme" />
+                    android:textAppearance="@style/SecondaryTextTheme" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -87,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/imageView2"
                         android:text="TextView"
-                        android:textAppearance="@style/SecondaryTextTheme"
+                        android:textAppearance="@style/LittleTextTheme"
                         android:textColor="@color/star_color" />
 
                     <TextView
@@ -97,7 +103,7 @@
                         android:layout_toRightOf="@+id/review_rating"
                         android:text="TextView"
                         android:textAlignment="textEnd"
-                        android:textAppearance="@style/SecondaryTextTheme" />
+                        android:textAppearance="@style/LittleTextTheme" />
                 </RelativeLayout>
 
             </LinearLayout>

@@ -27,7 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="@string/artist_genre_default" />
+                android:text="@string/artist_genre_default"
+                android:textAppearance="@style/LittleTextTheme" />
 
             <TextView
                 android:id="@+id/genre3_text"
@@ -42,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="@string/birthdate_default" />
+                android:text="@string/birthdate_default"
+                android:textAppearance="@style/LittleTextTheme" />
 
             <TextView
                 android:id="@+id/genre2_text"
@@ -56,7 +58,8 @@
                 android:id="@+id/artist_description_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/artist_description_default" />
+                android:text="@string/artist_description_default"
+                android:textAppearance="@style/SecondaryTextTheme" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -64,8 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin"
                 android:text="@string/album_list"
-                android:textColor="?attr/colorTextOnBackground"
-                android:textSize="@dimen/album_list_header"
+                android:textAppearance="@style/HeaderTextTheme"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -80,6 +82,55 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="true" />
         </RelativeLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/no_album_area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/message_no_album_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/message_no_album_available"
+                android:textAlignment="center"
+                android:textAppearance="@style/LittleTextTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/new_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/message_no_album_text">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:tint="@color/colorAccent"
+                    app:srcCompat="@drawable/ic_add_black_24dp" />
+
+                <TextView
+                    android:id="@+id/new_content_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/message_new_album"
+                    android:textAppearance="@style/LinkTextTheme" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

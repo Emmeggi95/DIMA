@@ -17,10 +17,11 @@ public class ViewPagerCustomAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if (position == 0)
+        if (position == 0) {
             return new NewAlbumFragment();
-        else
+        } else {
             return new NewArtistFragment();
+        }
     }
 
     @Override

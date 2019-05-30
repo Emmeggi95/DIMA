@@ -114,8 +114,8 @@ public class Review implements Serializable {
 
     public String getShortDate() {
         if(date.length()>10)
-            return date.substring(0,10);
-        return date;
+            return date.substring(0,10).replace("-", "/");
+        return date.replace("-", "/");
     }
 
     public void setShortDate(String date){

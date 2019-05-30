@@ -383,6 +383,11 @@ public class NewAlbumFragment extends Fragment {
         }
     }
 
+    public void setArtist(Artist artist){
+        newAlbumArtistInput.setText(artist.getName());
+        newAlbumGenreInput1.setText(artist.getGenre1());
+    }
+
 
 
 

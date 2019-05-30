@@ -18,6 +18,7 @@ import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.User;
 import com.dima.emmeggi95.jaycaves.me.UserActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,6 +29,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int startColor;
     private int endColor;
     private int deltaColor;
+    private List<LinearLayout> containers;
+    private List<ImageView> arrows;
 
     public ReviewsAdapter(Context context, List<Review> reviews) {
         this.context = context;
@@ -40,6 +43,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         startColor = context.getResources().getColor(R.color.star_color);
         endColor = context.getResources().getColor(R.color.end_color);
         deltaColor = endColor - startColor;
+        containers = new ArrayList<>();
+        arrows = new ArrayList<>();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -57,7 +62,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             this.body = (TextView) view.findViewById(R.id.card_review_body);
             this.likes = (TextView) view.findViewById(R.id.card_review_likes);
             this.arrowImage = (ImageView) view.findViewById(R.id.card_review_arrow);
+            arrows.add(arrowImage);
             this.bodyContainer = (LinearLayout) view.findViewById(R.id.card_review_body_container);
+            containers.add(bodyContainer);
             this.like = view.findViewById(R.id.card_review_heart);
             this.like_liked = view.findViewById(R.id.card_review_like_message);
             this.header = view.findViewById(R.id.info);
@@ -73,13 +80,14 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Review review = reviews.get(position);
+        ItemViewHolder h = (ItemViewHolder) holder; 
 
-        ((ItemViewHolder) holder).card.setCardBackgroundColor(calculateGradient(review.getLikes()));
-        ((ItemViewHolder) holder).title.setText(review.getHeadline());
-        ((ItemViewHolder) holder).author.setText(review.getAuthor());
-        ((ItemViewHolder) holder).author.setOnClickListener(new TextView.OnClickListener(){
+        h.likes.setTextColor(calculateGradient(review.getLikes()));
+        h.title.setText(review.getHeadline());
+        h.author.setText(review.getAuthor());
+        h.author.setOnClickListener(new TextView.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserActivity.class);
@@ -88,44 +96,36 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 context.startActivity(intent);
             }
         });
-        ((ItemViewHolder) holder).date.setText(review.getShortDate());
-        ((ItemViewHolder) holder).body.setText(review.getBody());
-        ((ItemViewHolder) holder).likes.setText(String.valueOf(review.getLikes()) + " " + context.getResources().getString(R.string.likes));
+        h.date.setText(review.getShortDate());
+        h.body.setText(review.getBody());
+        h.likes.setText(String.valueOf(review.getLikes()) + " " + context.getResources().getString(R.string.likes));
 
         // Hide body and set click listener
-        final LinearLayout bodyContainer = ((ItemViewHolder) holder).bodyContainer;
+        final LinearLayout bodyContainer = h.bodyContainer;
         bodyContainer.setVisibility(View.GONE);
-        final ImageView arrow = ((ItemViewHolder) holder).arrowImage;
+        final ImageView arrow = h.arrowImage;
 
         for (String like : User.likes)
             if (review.getId().equals(like)){
-                ((ItemViewHolder) holder).like.setImageResource(R.drawable.ic_favorite_black_24dp);
-                ((ItemViewHolder) holder).like_liked.setText(context.getResources().getString(R.string.liked));
+                h.like.setImageResource(R.drawable.ic_favorite_black_24dp);
+                h.like_liked.setText(context.getResources().getString(R.string.liked));
 
             }
 
-
-
-        ((ItemViewHolder) holder).header.setOnClickListener(new View.OnClickListener() {
+        h.header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(bodyContainer.getVisibility()==View.VISIBLE){
-                    bodyContainer.setVisibility(View.GONE);
-                    Animation rotate = AnimationUtils.loadAnimation(context, R.anim.rotate180clockwise);
-                    arrow.startAnimation(rotate);
-                    arrow.setRotation(180);
+                    hideContainer(bodyContainer, arrow);
                 } else {
-                    bodyContainer.setVisibility(View.VISIBLE);
-                    Animation rotate = AnimationUtils.loadAnimation(context, R.anim.rotate180anticlockwise);
-                    arrow.startAnimation(rotate);
-                    arrow.setRotation(0);
+                    setContainerShown(position);
                 }
             }
         });
 
-            final ImageView heart = ((ItemViewHolder) holder).like;
-            final TextView message = ((ItemViewHolder) holder).like_liked;
-        ((ItemViewHolder) holder).like.setOnClickListener(new View.OnClickListener() {
+            final ImageView heart = h.like;
+            final TextView message = h.like_liked;
+        h.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 heart.setImageResource(R.drawable.ic_favorite_black_24dp);
@@ -147,5 +147,33 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int calculateGradient(int likes){
         if(max==0) return endColor;
         return startColor + deltaColor * (likes/max);
+    }
+
+    private void hideContainer(LinearLayout bodyContainer, ImageView arrow){
+        if(bodyContainer.getVisibility()==View.VISIBLE){
+            bodyContainer.setVisibility(View.GONE);
+            Animation rotate = AnimationUtils.loadAnimation(context, R.anim.rotate180clockwise);
+            arrow.startAnimation(rotate);
+            arrow.setRotation(180);
+        }
+    }
+
+    private void showContainer(LinearLayout bodyContainer, ImageView arrow){
+        if(bodyContainer.getVisibility()==View.GONE){
+            bodyContainer.setVisibility(View.VISIBLE);
+            Animation rotate = AnimationUtils.loadAnimation(context, R.anim.rotate180anticlockwise);
+            arrow.startAnimation(rotate);
+            arrow.setRotation(0);
+        }
+    }
+
+    private void setContainerShown(int position){
+        for(int i = 0; i<getItemCount(); i++){
+            if(i==position){
+                showContainer(containers.get(i), arrows.get(i));
+            } else {
+                hideContainer(containers.get(i), arrows.get(i));
+            }
+        }
     }
 }

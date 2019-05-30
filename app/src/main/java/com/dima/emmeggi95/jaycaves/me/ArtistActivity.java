@@ -1,18 +1,22 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -128,14 +132,27 @@ public class ArtistActivity extends AppCompatActivity {
                     albums.add(d.getValue(Album.class));
 
                 }
-                System.out.println(albums);
+                //System.out.println(albums);
                 // Set album list
-                recyclerView = findViewById(R.id.artist_albums_recyclerview);
-                layoutManager = new GridLayoutManager(getApplicationContext(), 2);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, getResources().getDimensionPixelSize(R.dimen.layout_margin), true));
-                adapter = new ArtistAlbumsAdapter(getApplicationContext(), albums);
-                recyclerView.setAdapter(adapter);
+                if(albums.size()>0) {
+                    recyclerView = findViewById(R.id.artist_albums_recyclerview);
+                    layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, getResources().getDimensionPixelSize(R.dimen.layout_margin), true));
+                    adapter = new ArtistAlbumsAdapter(getApplicationContext(), albums);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    ConstraintLayout noAlbumArea = findViewById(R.id.no_album_area);
+                    noAlbumArea.setVisibility(View.VISIBLE);
+                    LinearLayout newAlbumArea = findViewById(R.id.new_content);
+                    newAlbumArea.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), AddContentActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override

@@ -96,42 +96,44 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final Album album = albumList.get(position);
-        ((ItemViewHolder) holder).title.setText(album.getTitle());
-        ((ItemViewHolder) holder).author.setText(album.getArtist());
-        ((ItemViewHolder) holder).genre.setText(album.getGenre1());
-        ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
+        final ItemViewHolder h = (ItemViewHolder) holder;
+        
+        h.title.setText(album.getTitle());
+        h.author.setText(album.getArtist());
+        h.genre.setText(album.getGenre1());
+        h.rating.setText(String.format("%.2f", album.getScore()));
 
        // Fetch image from storage
-        CoverCache.retrieveCover(album.getCover(),((ItemViewHolder) holder).cover, ((ItemViewHolder) holder).loading,
+        CoverCache.retrieveCover(album.getCover(),h.cover, h.loading,
                 context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
 
 
         //Set rating stars
         if(album.getScore()==0.0){
-            ((ItemViewHolder) holder).stars.get(1).setVisibility(GONE);
-            ((ItemViewHolder) holder).stars.get(2).setVisibility(GONE);
-            ((ItemViewHolder) holder).stars.get(3).setVisibility(GONE);
-            ((ItemViewHolder) holder).stars.get(4).setVisibility(GONE);
-            ((ItemViewHolder) holder).rating.setText(context.getResources().getString(R.string.not_available));
+            h.stars.get(1).setVisibility(GONE);
+            h.stars.get(2).setVisibility(GONE);
+            h.stars.get(3).setVisibility(GONE);
+            h.stars.get(4).setVisibility(GONE);
+            h.rating.setText(context.getResources().getString(R.string.not_available));
         } else {
             int integerScore = (int) album.getScore();
             int i;
             for (i = 0; i < integerScore; i++) {
-                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_24dp);
+                h.stars.get(i).setImageResource(R.drawable.ic_star_24dp);
             }
             float decimalPart = (float) album.getScore() - integerScore;
             if (decimalPart >= 0.5) {
-                ((ItemViewHolder) holder).stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
+                h.stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
             }
         }
 
         //Set listener to open AlbumActivity
-        ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
+        h.card.setOnClickListener(new CardView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", albumList.get(position));
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, ((ItemViewHolder) holder).cover, "album_cover");
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.cover, "album_cover");
                 context.startActivity(intent, options.toBundle());
             }
         });

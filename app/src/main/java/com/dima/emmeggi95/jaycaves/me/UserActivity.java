@@ -4,6 +4,7 @@ import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -103,6 +104,10 @@ public class UserActivity extends AppCompatActivity {
                    recyclerView = findViewById(R.id.user_reviews_recyclerview);
                    layoutManager = new LinearLayoutManager(getApplicationContext());
                    adapter = new UserReviewsAdapter(getApplicationContext(), reviews);
+
+                   DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
+                   recyclerView.addItemDecoration(dividerItemDecoration);
+
                    recyclerView.setLayoutManager(layoutManager);
                    recyclerView.setAdapter(adapter);
                } else {

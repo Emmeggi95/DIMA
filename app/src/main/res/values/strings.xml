@@ -145,6 +145,8 @@
     <string name="album_list">Albums</string>
     <string name="artist_album_title_default">Title</string>
     <string name="artist_album_date_default">Date</string>
+    <string name="message_no_album_available">There is no album for this artist yet!</string>
+    <string name="message_new_album">Add a new album</string>
 
     <!--Charts Fragment-->
     <string name="filter_title">Filters</string>
@@ -302,6 +304,11 @@
     <string name="search_hint">Search for album/artist…</string>
     <string name="artist_search_header">Artists</string>
     <string name="album_search_header">Albums</string>
+    <string name="search_file_key">search_file</string>
+    <string name="search_history_key">search_history</string>
+    <string name="search_history_item">Search item</string>
+    <string name="clear_history">Clear history</string>
+    <string name="no_result_found">No result found.</string>
 
     <!-- FB LOGIN -->
     <string name="facebook_application_id" translatable="false">593302704491055</string>

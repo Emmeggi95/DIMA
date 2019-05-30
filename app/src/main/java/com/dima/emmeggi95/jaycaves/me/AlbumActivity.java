@@ -1,6 +1,8 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -238,7 +240,8 @@ public class AlbumActivity extends AppCompatActivity {
                         } else {
                             Intent intent2 = new Intent(getApplicationContext(), ReviewsActivity.class);
                             intent2.putExtra("album", album);
-                            startActivity(intent2);
+                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
+                            startActivity(intent2, options.toBundle());
                         }
                         return true;
                 }
@@ -345,7 +348,7 @@ public class AlbumActivity extends AppCompatActivity {
         });
         reviewDate.setText(featuredReview.getShortDate());
 
-        //reviewBody.setText(featuredReview.getBody()); // <--
+        reviewBody.setText(featuredReview.getBody());
 
         //reviewRating.setText(String.format("%.2f", featuredReview.getRating()));
         String likesText;
@@ -366,35 +369,13 @@ public class AlbumActivity extends AppCompatActivity {
             seeAllReviewsButton.setEnabled(false);
         }
 
-        /*
-        // Button "like" and listener
-        final Button likeButton = findViewById(R.id.review_like_button);
-        likeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                User.addLike(featuredReview.getId());
-                reviewLikes.setText(String.valueOf(featuredReview.getLikes() + 1));
-                likeButton.setText("LIKED");
-                likeButton.setEnabled(false);
-
-
-            }
-        });
-
-        for (String like : User.likes) {
-            if (like.equals(featuredReview.getId())) {
-                likeButton.setText("LIKED");
-                likeButton.setEnabled(false);
-            }
-        }
-*/
-        // Alternative button
+        // Like button
         final ImageView likeSymbol = findViewById(R.id.heart);
         likeSymbol.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if(!reviewLiked){
+                    User.addLike(featuredReview.getId());
                     likeSymbol.setImageResource(R.drawable.ic_favorite_black_24dp);
                     reviewLiked = true;
                     featuredReview.setLikes(featuredReview.getLikes()+1);

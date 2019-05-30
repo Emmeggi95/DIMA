@@ -1,8 +1,10 @@
 package com.dima.emmeggi95.jaycaves.me;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,12 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.SearchAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.entities.SearchArtistsAdapter;
+import com.dima.emmeggi95.jaycaves.me.entities.SearchHistory;
+import com.dima.emmeggi95.jaycaves.me.entities.SearchHistoryAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.prefs.Preferences;
 
 public class SearchableActivity extends AppCompatActivity {
 
@@ -44,7 +52,13 @@ public class SearchableActivity extends AppCompatActivity {
 
     private TextView artistHeader;
     private TextView albumHeader;
+    private TextView noResult;
 
+    private List<String> history;
+    private RecyclerView historyRecyclerView;
+    private SearchHistoryAdapter historyAdapter;
+    private RecyclerView.LayoutManager historyLayoutManager;
+    private LinearLayout clearHistory;
 
     private DatabaseReference albumReference= FirebaseDatabase.getInstance().getReference("albums");
     private DatabaseReference artistReference= FirebaseDatabase.getInstance().getReference("artists");
@@ -79,6 +93,30 @@ public class SearchableActivity extends AppCompatActivity {
         artistAdapter = new SearchArtistsAdapter(this, artistResults);
         artistRecyclerView.setAdapter(artistAdapter);
 
+        // Search history
+        history = SearchHistory.getHistory(getApplicationContext());
+        clearHistory = findViewById(R.id.clear_history);
+
+        historyRecyclerView = findViewById(R.id.history_recycler_view);
+        historyAdapter = new SearchHistoryAdapter(this, this, history);
+        historyLayoutManager = new LinearLayoutManager(this);
+        historyRecyclerView.setLayoutManager(historyLayoutManager);
+        historyRecyclerView.setAdapter(historyAdapter);
+        if(history.size()>0){
+            clearHistory.setVisibility(View.VISIBLE);
+        }
+
+        clearHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchHistory.clearHistory(getApplicationContext());
+                history = SearchHistory.getHistory(getApplicationContext());
+                historyAdapter.setItems(history);
+                historyAdapter.notifyDataSetChanged();
+                clearHistory.setVisibility(View.GONE);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -88,19 +126,31 @@ public class SearchableActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText.equals("")){
+                    history = SearchHistory.getHistory(getApplicationContext());
+                    historyAdapter.setItems(history);
+                    historyAdapter.notifyDataSetChanged();
+                    if(history.size()>0){
+                        clearHistory.setVisibility(View.VISIBLE);
+                    }
+                }
                 performSearch(newText);
                 return true;
+
             }
         });
 
         artistHeader = findViewById(R.id.artist_search_header);
         albumHeader = findViewById(R.id.album_search_header);
-
+        noResult = findViewById(R.id.no_result_text);
 
     }
 
     private void performSearch(final String query){
         if(!query.equals("")) {
+            historyAdapter.setItems(new ArrayList<String>());
+            historyAdapter.notifyDataSetChanged();
+            clearHistory.setVisibility(View.GONE);
 
             final String parsedQuery = query.substring(0, 1).toUpperCase() + query.substring(1);
             artistResults.clear();
@@ -114,8 +164,11 @@ public class SearchableActivity extends AppCompatActivity {
                     }
                     if (artistResults.size() > 0) {
                         artistHeader.setVisibility(View.VISIBLE);
+                        checkIfResultsExist();
+
                     } else {
                         artistHeader.setVisibility(View.GONE);
+                        checkIfResultsExist();
                     }
                     artistAdapter.setItems(artistResults);
                     artistAdapter.notifyDataSetChanged();
@@ -140,9 +193,11 @@ public class SearchableActivity extends AppCompatActivity {
                     }
                     if (albumResults.size() > 0) {
                         albumHeader.setVisibility(View.VISIBLE);
+                        checkIfResultsExist();
 
                     } else {
                         albumHeader.setVisibility(View.GONE);
+                        checkIfResultsExist();
                     }
                     albumAdapter.setItems(albumResults);
                     albumAdapter.notifyDataSetChanged();
@@ -156,6 +211,8 @@ public class SearchableActivity extends AppCompatActivity {
             });
 
 
+        } else {
+            checkIfResultsExist();
         }
 
         // NOTHING VISIBLE AS DEFAULT OPTION
@@ -200,5 +257,24 @@ public class SearchableActivity extends AppCompatActivity {
         // Register the broadcast receiver with the intent filter object.
         registerReceiver(networkChangeReceiver, intentFilter);
 
+    }
+
+    public void clickOnHistoryItem(String item){
+        String query;
+        if(item.contains("(")){
+            String[] parts = item.split("[(]");
+            query = parts[0].trim();
+        } else {
+            query = item;
+        }
+        searchView.setQuery(query, true);
+    }
+
+    private void checkIfResultsExist(){
+        if(albumHeader.getVisibility()==View.GONE && artistHeader.getVisibility()==View.GONE && !searchView.getQuery().equals("")){
+            noResult.setVisibility(View.VISIBLE);
+        } else {
+            noResult.setVisibility(View.GONE);
+        }
     }
 }

@@ -53,6 +53,7 @@
                     android:maxLines="1"
                     android:text="@string/artist_album_title_default"
                     android:textAlignment="center"
+                    android:textAppearance="@style/PrimaryTextTheme"
                     android:textStyle="bold" />
 
                 <TextView
@@ -61,7 +62,8 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="@string/artist_album_date_default"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textAppearance="@style/SecondaryTextTheme" />
 
                 <LinearLayout
                     android:id="@+id/artist_album_rating"
@@ -88,7 +90,8 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/default_rating"
-                        android:textColor="@color/colorGrayText"
+                        android:textAppearance="@style/LittleTextTheme"
+                        android:textColor="@color/star_color"
                         android:textSize="@dimen/card_text_size" />
                 </LinearLayout>
             </LinearLayout>

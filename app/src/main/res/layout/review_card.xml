@@ -38,6 +38,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="false"
                 android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginRight="8dp"
                 app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
 
             <LinearLayout
@@ -60,25 +61,24 @@
 
                 <TextView
                     android:id="@+id/card_review_author"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/review_author_default"
-                    android:textAppearance="@style/PrimaryTextTheme"
-                    android:textStyle="italic" />
+                    android:textAppearance="@style/LinkTextTheme" />
 
                 <TextView
                     android:id="@+id/card_review_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/review_date_default"
-                    android:textAppearance="@style/SecondaryTextTheme" />
+                    android:textAppearance="@style/LittleTextTheme" />
 
                 <TextView
                     android:id="@+id/card_review_likes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/review_default_likes"
-                    android:textAppearance="@style/SecondaryTextTheme" />
+                    android:textAppearance="@style/LittleTextTheme" />
 
             </LinearLayout>
 
@@ -94,7 +94,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:textAppearance="@style/PrimaryTextTheme" />
+                    android:padding="@dimen/layout_margin"
+                    android:textAppearance="@style/SecondaryTextTheme" />
 
                 <LinearLayout
                     android:id="@+id/card_review_like"
@@ -121,7 +122,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:text="@string/like"
-                        android:textAppearance="@style/SecondaryTextTheme"
+                        android:textAppearance="@style/LittleTextTheme"
                         android:textColor="@android:color/holo_red_dark" />
                 </LinearLayout>
             </LinearLayout>

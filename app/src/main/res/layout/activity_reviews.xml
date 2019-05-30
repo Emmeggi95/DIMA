@@ -12,15 +12,89 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
-        android:elevation="4dp"
+        android:elevation="0dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.PopupOverlay"
         app:popupTheme="@style/AppTheme.AppBarOverlay" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reviews_toolbar">
+
+        <ImageView
+            android:id="@+id/album_cover"
+            android:layout_width="@dimen/album_cover_side"
+            android:layout_height="@dimen/album_cover_side"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:transitionName="album_cover"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/default_cover" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="@dimen/album_cover_side"
+            android:layout_height="@dimen/album_cover_side"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/album_cover"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/album_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/default_album_title"
+                android:textAppearance="@style/PrimaryTextTheme" />
+
+            <TextView
+                android:id="@+id/album_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/artist_default"
+                android:textAppearance="@style/LittleTextTheme" />
+
+            <TextView
+                android:id="@+id/album_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_default"
+                android:textAppearance="@style/LittleTextTheme" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reviews_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/reviews_toolbar" />
+        android:layout_below="@id/header_layout" />
+
+    <TextView
+        android:id="@+id/message_no_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_layout"
+        android:layout_marginTop="@dimen/layout_margin"
+        android:text="@string/message_no_review_available"
+        android:textAlignment="center"
+        android:visibility="gone" />
 
 </RelativeLayout>
