@@ -82,6 +82,12 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
+    <style name="LittleLinkTextTheme" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/secondary_text_size</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
     <!-- Collapsing toolbar text appearance-->
 
     <style name="ExpandedText" parent="android:TextAppearance">

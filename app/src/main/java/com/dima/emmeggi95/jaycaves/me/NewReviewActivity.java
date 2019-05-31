@@ -10,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -30,6 +32,8 @@ public class NewReviewActivity extends AppCompatActivity {
 
     private TextView title;
     private TextView artist;
+    private ImageView cover;
+    private ProgressBar loading;
     private Album album;
     private Review oldReview;
     private RatingBar ratingBar;
@@ -47,6 +51,17 @@ public class NewReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_review);
 
+        // Set toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar_new_review);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         album = (Album) getIntent().getExtras().get("album");
 
@@ -55,6 +70,13 @@ public class NewReviewActivity extends AppCompatActivity {
         title.setText(album.getTitle());
         artist = findViewById(R.id.new_review_artist);
         artist.setText("By " + album.getArtist());
+        cover = findViewById(R.id.cover);
+        loading = findViewById(R.id.progress_bar);
+        // Retrieve cover from cache
+        if (album.getCover() != null && album.getCover() != "") {
+            CoverCache.retrieveCover(album.getCover(), cover, loading,
+                    getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM, MODE_PRIVATE));
+        }
 
         ratingBar= findViewById(R.id.new_review_ratingbar);
         essay= findViewById(R.id.new_review_text);

@@ -5,7 +5,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.view.View;
 import android.widget.EditText;
 
 /**
@@ -27,14 +29,20 @@ public class AddContentActivity extends AppCompatActivity {
         viewPager= findViewById(R.id.pager);
         adapter= new ViewPagerCustomAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+
+        // Set toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         setTitle(R.string.add_content_title);
 
-        // setSupportActionBar(toolbar);
+        // Set tabs
         TabLayout tabLayout= findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.album));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.artist));

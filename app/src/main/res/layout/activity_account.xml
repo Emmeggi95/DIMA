@@ -6,18 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_account"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_account"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"></android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"></android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,27 +25,42 @@
             <Button
                 android:id="@+id/logout_button"
                 style="@style/DefaultButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="@string/action_logout"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/account_peronalpage_button" />
-
-
-            <ImageView
-                android:id="@+id/account_coverphoto"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:text="@string/action_logout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/go_to_user_page_container" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/account_coverphoto"
+                android:layout_width="@dimen/profile_picture_side"
+                android:layout_height="@dimen/profile_picture_side"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_account_circle_black_24dp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/default_artist" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/account_edit_image"
+                android:layout_width="@dimen/album_cover_side"
+                android:layout_height="@dimen/album_cover_side"
+                android:backgroundTint="@color/colorLightBackground"
+                android:src="@drawable/ic_file_upload_black_24dp"
+                android:tint="@color/colorLightBackground"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/account_coverphoto"
+                app:layout_constraintEnd_toEndOf="@+id/account_coverphoto"
+                app:layout_constraintStart_toStartOf="@+id/account_coverphoto"
+                app:layout_constraintTop_toTopOf="@+id/account_coverphoto" />
 
 
             <LinearLayout
@@ -58,30 +68,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="43dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6">
-
-                <TextView
-                    android:id="@+id/username_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Username:"
-                    android:textAlignment="center" />
+                app:layout_constraintTop_toBottomOf="@+id/account_coverphoto">
 
                 <EditText
                     android:id="@+id/account_username_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="16dp"
                     android:ems="10"
-                    android:inputType="text" />
+                    android:inputType="textNoSuggestions"
+                    android:textAppearance="@style/BigTextTheme"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/username_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/generic_user"
+                    android:textAppearance="@style/HeaderTextTheme" />
 
 
             </LinearLayout>
@@ -115,48 +125,61 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
                     android:ems="10"
-                    android:inputType="text"
-                    />
+                    android:inputType="text" />
 
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="Tap to change image!"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/account_coverphoto" />
-
-            <Button
-                android:id="@+id/account_submit_button"
-                style="@style/DefaultButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+            <LinearLayout
+                android:id="@+id/edit_submit_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="64dp"
-                android:text="Update"
-                app:layout_constraintBottom_toTopOf="@+id/logout_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/account_template_layout" />
+                android:orientation="horizontal"
+                android:padding="@dimen/layout_margin"
+                app:layout_constraintTop_toBottomOf="@+id/account_username_layout">
 
-            <Button
-                android:id="@+id/account_peronalpage_button"
-                style="@style/DefaultButtonStyle"
+                <ImageView
+                    android:id="@+id/edit_submit_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/colorAccent"
+                    app:srcCompat="@drawable/ic_baseline_create_24px" />
+
+                <TextView
+                    android:id="@+id/edit_submit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/icon_text_distance"
+                    android:text="@string/edit_profile"
+                    android:textAppearance="@style/LinkTextTheme" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/go_to_user_page_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Personal Page"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal"
+                android:padding="@dimen/layout_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_submit_container">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/colorAccent"
+                    app:srcCompat="@drawable/ic_person_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/icon_text_distance"
+                    android:text="@string/go_to_user_page"
+                    android:textAppearance="@style/LinkTextTheme" />
+            </LinearLayout>
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

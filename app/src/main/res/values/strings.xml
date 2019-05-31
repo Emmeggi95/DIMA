@@ -169,6 +169,40 @@
 
     <!-- User Page -->
     <string name="message_no_review_for_this_user">This user didn\'t write any review.</string>
+    
+    <!-- New content page -->
+    <string name="add_content_title">Register new content here</string>
+    <string name="new_image_icon_instructions">To upload the cover, tap the icon below! (6MB max)</string>
+    <string name="new_button_submit">Submit!</string>
+    <!-- Album -->
+    <string name="new_album_name">Title</string>
+    <string name="new_album_year">Year of release</string>
+    <string name="new_album_artist">Artist</string>
+    <string name="new_album_genre1">Genre 1</string>
+    <string name="new_album_genre2">Genre 2 (optional)</string>
+    <string name="new_album_genre3">Genre 3 (optional)</string>
+    <!--Artist-->
+    <string name="new_artist_name">Name</string>
+    <string name="new_artist_year">Year of foundation</string>
+    <string name="new_artist_story">Story (max 200 words)</string>
+    <string name="new_artist_genre1">Genre 1</string>
+    <string name="new_artist_genre2">Genre 2 (optional)</string>
+    <string name="new_artist_genre3">Genre 3 (optional)</string>
+    
+    <!-- Account Page -->
+    <string name="change_image_instructions">Tap to change profile picture</string>
+    <string name="username">Username:</string>
+    <string name="go_to_user_page">Go to your user page</string>
+    <string name="edit_profile">Edit your profile</string>
+    <string name="submit_profile">Submit</string>
+
+    <!-- New Review Page -->
+    <string name="new_review_title">Write your review!</string>
+    <string name="new_review_subtitle">Tell us what you think of:</string>
+    <string name="rating_title">Your rating:</string>
+    <string name="headline_title">Write a catchy headline:</string>
+    <string name="body_title">Now, your personal opinion:</string>
+    <string name="submit_button">Send!</string>
 
     <!--Miscellaneous-->
     <string name="not_available">n/a</string>
@@ -208,7 +242,6 @@
     <!-- Tab Names -->
     <string name="album">Album</string>
     <string name="artist">Artist</string>
-    <string name="add_content_title">Register new content here!</string>
     <string name="title_activity_artist">ArtistActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -309,6 +342,7 @@
     <string name="search_history_item">Search item</string>
     <string name="clear_history">Clear history</string>
     <string name="no_result_found">No result found.</string>
+    <string name="search_new_content">Add new content yourself!</string>
 
     <!-- FB LOGIN -->
     <string name="facebook_application_id" translatable="false">593302704491055</string>

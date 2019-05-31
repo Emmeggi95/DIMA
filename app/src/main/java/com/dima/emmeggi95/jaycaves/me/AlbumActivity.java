@@ -219,11 +219,12 @@ public class AlbumActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()){
                     case R.id.write_review:
                         Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
                         intent.putExtra("album", album);
                         if(reviewWritten){
                             intent.putExtra("review", featuredReview);
                         }
-                        startActivity(intent);
+                        startActivity(intent, options.toBundle());
                         return true;
                 }
                 return false;

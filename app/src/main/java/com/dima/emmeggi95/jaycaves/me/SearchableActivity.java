@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -53,12 +54,14 @@ public class SearchableActivity extends AppCompatActivity {
     private TextView artistHeader;
     private TextView albumHeader;
     private TextView noResult;
+    private TextView newContent;
 
     private List<String> history;
     private RecyclerView historyRecyclerView;
     private SearchHistoryAdapter historyAdapter;
     private RecyclerView.LayoutManager historyLayoutManager;
     private LinearLayout clearHistory;
+    private boolean emptySearchField;
 
     private DatabaseReference albumReference= FirebaseDatabase.getInstance().getReference("albums");
     private DatabaseReference artistReference= FirebaseDatabase.getInstance().getReference("artists");
@@ -126,14 +129,6 @@ public class SearchableActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.equals("")){
-                    history = SearchHistory.getHistory(getApplicationContext());
-                    historyAdapter.setItems(history);
-                    historyAdapter.notifyDataSetChanged();
-                    if(history.size()>0){
-                        clearHistory.setVisibility(View.VISIBLE);
-                    }
-                }
                 performSearch(newText);
                 return true;
 
@@ -143,36 +138,50 @@ public class SearchableActivity extends AppCompatActivity {
         artistHeader = findViewById(R.id.artist_search_header);
         albumHeader = findViewById(R.id.album_search_header);
         noResult = findViewById(R.id.no_result_text);
+        newContent = findViewById(R.id.new_content);
+
+        newContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddContentActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        emptySearchField = true;
 
     }
 
-    private void performSearch(final String query){
+    private synchronized void performSearch(final String query){
         if(!query.equals("")) {
+            emptySearchField = false;
             historyAdapter.setItems(new ArrayList<String>());
             historyAdapter.notifyDataSetChanged();
             clearHistory.setVisibility(View.GONE);
 
             final String parsedQuery = query.substring(0, 1).toUpperCase() + query.substring(1);
-            artistResults.clear();
+
             artistReference.orderByChild("name").startAt(parsedQuery).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                    for (DataSnapshot d : data) {
-                        if (d.getKey().contains(parsedQuery))
-                            artistResults.add(d.getValue(Artist.class));
-                    }
-                    if (artistResults.size() > 0) {
-                        artistHeader.setVisibility(View.VISIBLE);
-                        checkIfResultsExist();
+                    if(!emptySearchField) {
+                        Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        artistResults.clear();
+                        for (DataSnapshot d : data) {
+                            if (d.getKey().contains(parsedQuery))
+                                artistResults.add(d.getValue(Artist.class));
+                        }
+                        if (artistResults.size() > 0) {
+                            artistHeader.setVisibility(View.VISIBLE);
+                            checkIfResultsExist(query);
 
-                    } else {
-                        artistHeader.setVisibility(View.GONE);
-                        checkIfResultsExist();
+                        } else {
+                            artistHeader.setVisibility(View.GONE);
+                            checkIfResultsExist(query);
+                        }
+                        artistAdapter.setItems(artistResults);
+                        artistAdapter.notifyDataSetChanged();
                     }
-                    artistAdapter.setItems(artistResults);
-                    artistAdapter.notifyDataSetChanged();
-
                 }
 
                 @Override
@@ -181,27 +190,29 @@ public class SearchableActivity extends AppCompatActivity {
                 }
             });
 
-            albumResults.clear();
+
             albumReference.orderByChild("title").startAt(parsedQuery).limitToFirst(5).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                    for (DataSnapshot d : data) {
-                        Album album= d.getValue(Album.class);
-                        if (album.getTitle().contains(parsedQuery))
-                            albumResults.add(album);
-                    }
-                    if (albumResults.size() > 0) {
-                        albumHeader.setVisibility(View.VISIBLE);
-                        checkIfResultsExist();
+                    if(!emptySearchField) {
+                        Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        albumResults.clear();
+                        for (DataSnapshot d : data) {
+                            Album album = d.getValue(Album.class);
+                            if (album.getTitle().contains(parsedQuery))
+                                albumResults.add(album);
+                        }
+                        if (albumResults.size() > 0) {
+                            albumHeader.setVisibility(View.VISIBLE);
+                            checkIfResultsExist(query);
 
-                    } else {
-                        albumHeader.setVisibility(View.GONE);
-                        checkIfResultsExist();
+                        } else {
+                            albumHeader.setVisibility(View.GONE);
+                            checkIfResultsExist(query);
+                        }
+                        albumAdapter.setItems(albumResults);
+                        albumAdapter.notifyDataSetChanged();
                     }
-                    albumAdapter.setItems(albumResults);
-                    albumAdapter.notifyDataSetChanged();
-
                 }
 
                 @Override
@@ -212,7 +223,9 @@ public class SearchableActivity extends AppCompatActivity {
 
 
         } else {
-            checkIfResultsExist();
+            // Do the following if the search field is empty
+            checkIfResultsExist(query);
+
         }
 
         // NOTHING VISIBLE AS DEFAULT OPTION
@@ -270,11 +283,33 @@ public class SearchableActivity extends AppCompatActivity {
         searchView.setQuery(query, true);
     }
 
-    private void checkIfResultsExist(){
-        if(albumHeader.getVisibility()==View.GONE && artistHeader.getVisibility()==View.GONE && !searchView.getQuery().equals("")){
+    private void checkIfResultsExist(String query){
+        if(albumHeader.getVisibility()==View.GONE && artistHeader.getVisibility()==View.GONE && !query.equals("")){
             noResult.setVisibility(View.VISIBLE);
+            newContent.setVisibility(View.VISIBLE);
         } else {
             noResult.setVisibility(View.GONE);
+            newContent.setVisibility(View.GONE);
+            if(query.equals("")){
+                history = SearchHistory.getHistory(getApplicationContext());
+                historyAdapter.setItems(history);
+                historyAdapter.notifyDataSetChanged();
+                if(history.size()>0){
+                    clearHistory.setVisibility(View.VISIBLE);
+                }
+                clearSearch();
+            }
         }
     }
+
+    private void clearSearch(){
+        emptySearchField = true;
+        artistAdapter.setItems(new ArrayList<Artist>());
+        artistAdapter.notifyDataSetChanged();
+        artistHeader.setVisibility(View.GONE);
+        albumAdapter.setItems(new ArrayList<Album>());
+        albumAdapter.notifyDataSetChanged();
+        albumHeader.setVisibility(View.GONE);
+    }
+
 }
