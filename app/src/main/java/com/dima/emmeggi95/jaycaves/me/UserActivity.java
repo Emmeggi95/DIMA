@@ -25,6 +25,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Public page of users, show reviews.
+ */
 public class UserActivity extends AppCompatActivity {
 
     private String username;

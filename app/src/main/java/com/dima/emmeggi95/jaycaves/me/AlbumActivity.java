@@ -31,7 +31,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
-import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +55,6 @@ public class AlbumActivity extends AppCompatActivity {
     ImageView coverView;
     ProgressBar loading;
     FloatingActionButton fab;
-    PlaylistsViewModel playlistsViewModel;
 
     // Temp variables
     //List<Playlist> playlists;

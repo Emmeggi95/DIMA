@@ -21,6 +21,9 @@ import com.dima.emmeggi95.jaycaves.me.UserActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter to display reviews
+ */
 public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;

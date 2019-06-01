@@ -36,6 +36,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
+/**
+ * Allows search of contents
+ */
 public class SearchableActivity extends AppCompatActivity {
 
     private SearchView searchView;

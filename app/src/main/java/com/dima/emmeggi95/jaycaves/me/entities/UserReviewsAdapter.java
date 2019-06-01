@@ -28,6 +28,10 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+
+/**
+ * Adapter to reviews in User pages
+ */
 public class UserReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;

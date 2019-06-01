@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * View Model of the albums in fragment Fresh
+ */
 public class FreshAlbumsViewModel extends ViewModel {
 
     private static MutableLiveData<List<Album>> albums = new MutableLiveData<>();

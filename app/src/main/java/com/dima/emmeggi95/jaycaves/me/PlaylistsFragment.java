@@ -1,19 +1,14 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dima.emmeggi95.jaycaves.me.entities.Playlist;
-import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistsFragment extends Fragment {

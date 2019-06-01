@@ -35,6 +35,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * View Model of albums in Home fragment
+ */
 public class HomeAlbumsViewModel extends ViewModel {
 
     private static MutableLiveData<List<Album>> albums = new MutableLiveData<>();

@@ -12,6 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View Model of all known genres
+ */
 public class GenresViewModel extends ViewModel {
 
     private static MutableLiveData<List<String>> genres = new MutableLiveData<>();

@@ -3,6 +3,9 @@ package com.dima.emmeggi95.jaycaves.me;
 import java.security.SecureRandom;
 import java.util.Locale;
 
+/**
+ * Custom id generator
+ */
 public class CustomRandomId {
 
     /**

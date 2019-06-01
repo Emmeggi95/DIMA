@@ -10,7 +10,9 @@ import java.util.Comparator;
 import java.util.Date;
 
 
-
+/**
+ * POJO of an album's review
+ */
 public class Review implements Serializable {
 
     private String author;

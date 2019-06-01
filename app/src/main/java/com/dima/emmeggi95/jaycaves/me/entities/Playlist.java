@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * POJO of a playlist
+ */
 public class Playlist implements Serializable {
 
     private String name;

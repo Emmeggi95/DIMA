@@ -21,6 +21,9 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Adapter to display chart elements
+ */
 public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;

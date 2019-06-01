@@ -7,6 +7,9 @@ import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Contains username and cover photo reference of a certain user
+ */
 public class AccountPreference implements Serializable {
 
     private String username;

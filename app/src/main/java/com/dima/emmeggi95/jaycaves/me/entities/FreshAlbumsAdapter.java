@@ -21,6 +21,9 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Adapter to display albums in fresh section
+ */
 public class FreshAlbumsAdapter extends RecyclerView.Adapter {
 
     private Context context;

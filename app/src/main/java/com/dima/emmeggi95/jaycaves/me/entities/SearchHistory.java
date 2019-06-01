@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * User to save navigation flow
+ */
 public class SearchHistory {
 
     private static final int HISTORY_SIZE = 10;

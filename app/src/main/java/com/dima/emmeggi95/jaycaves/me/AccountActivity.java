@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,9 @@ import java.io.File;
 
 import static com.dima.emmeggi95.jaycaves.me.MainActivity.PHOTO_PICKER;
 
+/**
+ * Space where user can change profile pic and username
+ */
 public class AccountActivity extends AppCompatActivity {
 
     private ImageView cover;
@@ -51,7 +55,8 @@ public class AccountActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private File localFile;
     private boolean usernameTaken = false;
-    private boolean checkedUsername;
+    private boolean uncheckedUsername = false;
+    private ConstraintLayout content;
 
     private boolean editMode;
 
@@ -78,7 +83,9 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         cover= findViewById(R.id.account_coverphoto);
+        cover.setEnabled(false);
         upload = findViewById(R.id.account_edit_image);
+        content = findViewById(R.id.account_content);
         if(User.cover_image!=null)
             cover.setImageBitmap(User.cover_image);
 
@@ -88,6 +95,7 @@ public class AccountActivity extends AppCompatActivity {
             usernameInput.setText(User.username);// default value
             usernameText.setText(User.username);
         }
+        uncheckedUsername = false;
         usernameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -99,7 +107,7 @@ public class AccountActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                usernameTaken = false;
-                checkedUsername = true;
+
                 // Parse user input text
                 String tempUsername = s.toString();
                 if (s.toString().length()>0)
@@ -112,14 +120,15 @@ public class AccountActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> data= dataSnapshot.getChildren();
                         for(DataSnapshot d: data){
-                            usernameTaken = true;
+                            if (!d.getValue(AccountPreference.class).getUsername().equalsIgnoreCase(User.username))
+                                usernameTaken = true;
 
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        checkedUsername = false;
+                        uncheckedUsername = false;
                     }
                 });
 
@@ -151,6 +160,7 @@ public class AccountActivity extends AppCompatActivity {
                     usernameText.setVisibility(View.GONE);
                     upload.setVisibility(View.VISIBLE);
                     cover.setImageAlpha(10);
+                    cover.setEnabled(true);
 
                 } else {
                     editMode = false;
@@ -160,12 +170,9 @@ public class AccountActivity extends AppCompatActivity {
                     usernameText.setVisibility(View.VISIBLE);
                     upload.setVisibility(View.GONE);
                     cover.setImageAlpha(255);
-                    if (isInputOk()) {
-                        submit();
-                    }
-                    else if (usernameTaken) {
-                        Snackbar.make(cover, R.string.username_taken, Snackbar.LENGTH_LONG).show();
-                    }
+                    submit(v);
+                    cover.setEnabled(false);
+
                 }
             }
         });
@@ -205,7 +212,7 @@ public class AccountActivity extends AppCompatActivity {
 
 
     /**
-     *
+     * Handles choice of picture to be uploaded
      * @param requestCode
      * @param resultCode
      * @param data
@@ -226,14 +233,11 @@ public class AccountActivity extends AppCompatActivity {
 
     }
 
-
-    private boolean isInputOk(){
-        return checkedUsername && !usernameTaken;
-    }
-
-
-
-    private void submit() {
+    /**
+     * Uploads new pictures to storage
+     * @param v
+     */
+    private void submit(final View v) {
 
         if (selectedImageUri != null) {
             final String coverId = selectedImageUri.getLastPathSegment() + CustomRandomId.randomIdGenerator();
@@ -241,47 +245,57 @@ public class AccountActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Snackbar.make(getCurrentFocus(), R.string.changed_username_image, Snackbar.LENGTH_LONG).show();
-                            AccountPreference newPref = new AccountPreference(usernameInput.getText().toString(), coverId);
-                            prefReference.setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    User.setUsername(usernameInput.getText().toString());
-                                    updateReviewsWithNewUsername();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Snackbar.make(getCurrentFocus(), R.string.username_taken, Snackbar.LENGTH_LONG).show();
-                                }
-                            });
+                            usernameCheckNChange(v, coverId);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Snackbar.make(getCurrentFocus(), R.string.upload_failed, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(v, R.string.upload_failed, Snackbar.LENGTH_LONG).show();
 
                         }
                     });
         }
         else
-            if (!usernameInput.getText().toString().equalsIgnoreCase(User.username)) {
-                prefReference.child("username").setValue(usernameInput.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        User.setUsername(usernameInput.getText().toString());
-                        updateReviewsWithNewUsername();
-                        usernameText.setText(usernameInput.getText().toString());
-                    }
-                });
-                Snackbar.make(getCurrentFocus(), R.string.changed_username, Snackbar.LENGTH_LONG).show();
-            }
-            else
-                Snackbar.make(getCurrentFocus(), R.string.nothing_changed, Snackbar.LENGTH_LONG).show();
+            usernameCheckNChange(v, null);
     }
 
 
+    /**
+     * Checks if username in valid and then saves new preferences on realtime db
+     * @param v
+     * @param coverId
+     */
+    private void usernameCheckNChange(final View v, String coverId){
+        if(uncheckedUsername){
+            Snackbar.make(v, R.string.unchecked_username, Snackbar.LENGTH_LONG).show();
+        }
+        else if(usernameTaken){
+            Snackbar.make(v, R.string.username_taken, Snackbar.LENGTH_LONG).show();
+        }
+        else {
+            AccountPreference newPref = new AccountPreference(usernameInput.getText().toString(), (coverId != null) ? coverId : User.cover_photo_id);
+            prefReference.setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Snackbar.make(v, R.string.changed_preferences, Snackbar.LENGTH_LONG).show();
+                    User.setUsername(usernameInput.getText().toString());
+                    updateReviewsWithNewUsername();
+                    usernameText.setText(usernameInput.getText().toString());
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Snackbar.make(v, R.string.failed_username_upload, Snackbar.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+
+    /**
+     * Corrects all reviews done by user with their most recent username
+     */
     private void updateReviewsWithNewUsername(){
         reviewReference.orderByChild("userEmail").equalTo(User.email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

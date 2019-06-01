@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * View Model of a chart
+ */
 public class ChartViewModel extends ViewModel {
 
     private MutableLiveData<List<Album>> albums = new MutableLiveData<>();

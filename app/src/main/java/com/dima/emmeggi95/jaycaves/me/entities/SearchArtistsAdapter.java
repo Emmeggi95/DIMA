@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+
+/**
+ * Adapter to display artist found by search in SearchableActivity
+ */
 public class SearchArtistsAdapter extends RecyclerView.Adapter {
 
     private Context context;

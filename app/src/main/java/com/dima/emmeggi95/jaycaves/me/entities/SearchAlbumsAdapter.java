@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Adapter to display albums found by search in SearchableActivity
+ */
 public class SearchAlbumsAdapter extends RecyclerView.Adapter {
 
     private Context context;

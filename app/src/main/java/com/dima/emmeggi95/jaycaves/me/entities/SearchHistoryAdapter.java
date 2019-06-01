@@ -14,6 +14,9 @@ import com.dima.emmeggi95.jaycaves.me.SearchableActivity;
 
 import java.util.List;
 
+/**
+ * Displays query results in @SearchableActivity
+ */
 public class SearchHistoryAdapter extends RecyclerView.Adapter {
 
     private SearchableActivity activity;

@@ -14,6 +14,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View Model of all release years of albums stored in our db
+ */
 public class YearViewModel extends ViewModel {
 
     private static MutableLiveData<List<String>> albumYears = new MutableLiveData<>();

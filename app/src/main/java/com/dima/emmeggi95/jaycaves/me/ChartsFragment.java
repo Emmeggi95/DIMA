@@ -26,6 +26,9 @@ import com.dima.emmeggi95.jaycaves.me.view_models.YearViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Shows charts
+ */
 public class ChartsFragment extends Fragment {
 
     RecyclerView chartsRecyclerView;

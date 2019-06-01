@@ -4,6 +4,9 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+/**
+ * Factory pattern for ChartViewModel instances
+ */
 public class ChartViewModelFactory implements ViewModelProvider.Factory {
 
     private String year;

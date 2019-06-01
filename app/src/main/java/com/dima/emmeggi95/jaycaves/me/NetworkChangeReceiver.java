@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.internal.DialogRedirect;
 
+/**
+ * Check if there is a valid connection. If not, launches a pop-up warning
+ */
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
     ConnectivityManager connectivityManager;
@@ -41,14 +44,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         }
 
         // Display message based on whether network is available or not.
-        String networkMessage = "";
         if(networkIsAvailable)
         {
-            networkMessage = "Network is available";
-            //Toast.makeText(context, networkMessage, Toast.LENGTH_LONG).show();
+            //Network is available
+
         }else
         {
-            networkMessage = "Network is not available";
+            // Network is not available
             new AlertDialog.Builder(context)
                     .setTitle("No Internet")
                     .setMessage("This app requires constant internet access. Turn on your internet connection")
@@ -83,22 +85,6 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
 
 
-
-        /*   final ConnectivityManager connMgr = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        final android.net.NetworkInfo wifi = connMgr
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        final android.net.NetworkInfo mobile = connMgr
-                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        System.out.println("\n HELLO THERE\n");
-
-        if (!wifi.isAvailable() && !mobile.isAvailable()) {
-
-
-        } */
     }
 
 

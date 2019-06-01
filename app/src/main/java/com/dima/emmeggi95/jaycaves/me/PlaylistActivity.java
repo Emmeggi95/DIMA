@@ -1,24 +1,17 @@
 package com.dima.emmeggi95.jaycaves.me;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.IntentFilter;
-import android.support.v13.view.DragStartHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +20,6 @@ import com.dima.emmeggi95.jaycaves.me.entities.PlaylistAlbumsAdapter;
 import com.dima.emmeggi95.jaycaves.me.layout.ItemTouchHelperAdapter;
 import com.dima.emmeggi95.jaycaves.me.layout.OnStartDragListener;
 import com.dima.emmeggi95.jaycaves.me.layout.PlaylistItemTouchHelperCallback;
-import com.dima.emmeggi95.jaycaves.me.view_models.PlaylistsViewModel;
 
 public class PlaylistActivity extends AppCompatActivity implements OnStartDragListener {
 
@@ -64,7 +56,7 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
         //playlist = (Playlist) getIntent().getSerializableExtra("playlist");
         position = getIntent().getIntExtra("position", 0);
         playlist = User.playlists.get(position);
-       // viewModel = ViewModelProviders.of(this).get(PlaylistsViewModel.class);
+
 
         setTitle(playlist.getName());
 

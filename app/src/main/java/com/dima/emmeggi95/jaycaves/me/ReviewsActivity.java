@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.dima.emmeggi95.jaycaves.me.entities.Review;
 import com.dima.emmeggi95.jaycaves.me.entities.ReviewsAdapter;
 
+/**
+ * Show all reviews related to a certain album
+ */
 public class ReviewsActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
