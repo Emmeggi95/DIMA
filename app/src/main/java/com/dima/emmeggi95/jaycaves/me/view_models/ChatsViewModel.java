@@ -18,6 +18,9 @@ public class ChatsViewModel extends ViewModel {
 
     public ChatsViewModel() {
         // Get chat previews from DB
+        // temp
+        chatList.add(new ChatPreview("pietro@grotti", "Peu", "11/07/2018", 0));
+        chats.postValue(chatList);
     }
 
     public LiveData<List<ChatPreview>> getData(){
