@@ -19,7 +19,7 @@
     <string name="title_fresh">Fresh</string>
     <string name="title_playlists">Playlists</string>
     <string name="title_forum">Forum</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_social">Social</string>
 
     <!-- Strings related to Settings -->
 
@@ -169,7 +169,8 @@
 
     <!-- User Page -->
     <string name="message_no_review_for_this_user">This user didn\'t write any review.</string>
-    
+    <string name="chat_with_this_user">Start a chat with</string>
+
     <!-- New content page -->
     <string name="add_content_title">Register new content here</string>
     <string name="new_image_icon_instructions">To upload the cover, tap the icon below! (6MB max)</string>
@@ -188,7 +189,7 @@
     <string name="new_artist_genre1">Genre 1</string>
     <string name="new_artist_genre2">Genre 2 (optional)</string>
     <string name="new_artist_genre3">Genre 3 (optional)</string>
-    
+
     <!-- Account Page -->
     <string name="change_image_instructions">Tap to change profile picture</string>
     <string name="username">Username:</string>
@@ -203,6 +204,22 @@
     <string name="headline_title">Write a catchy headline:</string>
     <string name="body_title">Now, your personal opinion:</string>
     <string name="submit_button">Send!</string>
+
+    <!-- Social Page -->
+    <string name="title_notifications">Notifications</string>
+    <string name="title_chat">Chat</string>
+    <!-- Notifications -->
+    <string name="like_nofication_message">liked yor review of</string>
+    <!-- Chat -->
+    <string name="chats_file_key">chats_file</string>
+    <string name="chats_key">chats</string>
+    <string name="last_message">Last message</string>
+    <string name="unread_messages">unread messages</string>
+    <string name="send_button">Send</string>
+    <string name="chat_input_hint">Write a message...</string>
+    <string name="generic_message">Message...</string>
+    <string name="generic_time">11/07/2018 09:25</string>
+    <string name="load_more_messages">Load more messages...</string>
 
     <!--Miscellaneous-->
     <string name="not_available">n/a</string>
@@ -234,16 +251,12 @@
     <string name="genre1_error">Please insert a valid genre 1</string>
     <string name="genre2_error">Please insert a valid genre 2</string>
     <string name="genre3_error">Please insert a valid genre 3</string>
-    <string name="username_taken">Username already taken!</string>
-    <string name="upload_failed">UPLOAD FAILED, TRY AGAIN</string>
-    <string name="nothing_changed">Nothing changed!</string>
     <string name="failed_username_upload">FAILED TO CHANGE USER INFO</string>
     <string name="unchecked_username">ERROR: COULD NOT CHECK USERNAME. TRY AGAIN</string>
 
     <!-- Other Messages -->
     <string name="album_success">Album successfully created!</string>
     <string name="artist_success">Artist registered successfully</string>
-    <string name="changed_username">Changed username</string>
     <string name="changed_preferences">Account preferences updated!</string>
 
     <!-- Tab Names -->
@@ -355,11 +368,11 @@
     <string name="facebook_application_id" translatable="false">593302704491055</string>
     <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb593302704491055</string>
-
-
-
-
-
-
+    <string name="changed_username_image">Changed username and image!</string>
+    <string name="username_taken">Username already taken!</string>
+    <string name="upload_failed">UPLOAD FAILED, TRY AGAIN</string>
+    <string name="changed_username">Changed username</string>
+    <string name="nothing_changed">Nothing changed!</string>
+    <string name="title_activity_social">SocialActivity</string>
 
 </resources>

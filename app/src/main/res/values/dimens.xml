@@ -62,4 +62,12 @@
 
     <!-- Account Page -->
     <dimen name="profile_picture_side">150dp</dimen>
+
+    <!-- Social Page -->
+    <!-- Chat -->
+    <dimen name="user_icon_side">40dp</dimen>
+    <dimen name="user_icon_app_bar">32dp</dimen>
+    <dimen name="message_bubble_margin">8dp</dimen>
+    <dimen name="side_bubble_margin">48dp</dimen>
+    <dimen name="send_button_dimen">48dp</dimen>
 </resources>

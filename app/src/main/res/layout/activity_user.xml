@@ -27,15 +27,19 @@
             android:layout_height="@dimen/album_cover_side"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_account_circle_black_24dp"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <ProgressBar
             android:id="@+id/loading_user"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
             android:layout_alignStart="@+id/profile_picture"
+            android:layout_alignTop="@+id/profile_picture"
+            android:layout_alignBottom="@+id/profile_picture"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
             android:visibility="visible" />
 
         <LinearLayout
@@ -63,12 +67,35 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/chat_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_header"
+        android:orientation="horizontal"
+        android:padding="@dimen/layout_margin">
+
+        <ImageView
+            android:id="@+id/chat_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/colorAccent"
+            app:srcCompat="@drawable/ic_chat_black_24dp" />
+
+        <TextView
+            android:id="@+id/chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/icon_text_distance"
+            android:text="@string/chat_with_this_user"
+            android:textAppearance="@style/LinkTextTheme" />
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/user_reviews_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/user_header"
-        android:layout_marginTop="16dp" >
+        android:layout_below="@id/chat_container">
 
     </android.support.v7.widget.RecyclerView>
 

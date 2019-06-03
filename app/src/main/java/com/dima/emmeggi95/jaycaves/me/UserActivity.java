@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -132,11 +134,23 @@ public class UserActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
+        // Set start chat button
+        TextView startChat = findViewById(R.id.chat_message);
+        startChat.setText(getString(R.string.chat_with_this_user) + " " + username);
+        LinearLayout chatContainer = findViewById(R.id.chat_container);
+        if(!username.equals(User.username)) {
+            chatContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(UserActivity.this, ChatActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                }
+            });
+        } else {
+            chatContainer.setVisibility(View.GONE);
+        }
     }
 
     // OVERRIDE ON ACTIVITY METHODS

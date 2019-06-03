@@ -19,7 +19,8 @@
     <color name="colorTextOnSecondary">#ffffff</color>
     <color name="colorTextOnAccent">@color/colorTextOnSecondary</color>
     <color name="colorTextOnLightBackground">#000000</color>
-    <color name="colorTextOnDarkBackground">#ffffff</color>
+    <color name="colorTextOnDarkBackground">#FFFFFF</color>
+    <color name="colorTextOnDarkBackgroundSecondary">#eeeeee</color>
     <color name="colorDarkText">#000000</color>
     <color name="colorLightText">#ffffff</color>
     <color name="colorGrayText">#616161</color>

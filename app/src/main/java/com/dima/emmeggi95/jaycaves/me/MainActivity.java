@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity
 
         if (clickedNavItem != id) {
 
-            if (id != R.id.nav_account && id != R.id.nav_notifications) {
+            if (id != R.id.nav_account && id != R.id.nav_social) {
                 clickedNavItem = id;
                 selectionChanged = true;
                 navigationHistory.add(id);
@@ -409,8 +409,8 @@ public class MainActivity extends AppCompatActivity
                 hideFab();
             } else if (id == R.id.nav_account) {
                 goToActivity(AccountActivity.class);
-            } else if (id == R.id.nav_notifications) {
-                // TODO
+            } else if (id == R.id.nav_social) {
+                goToActivity(SocialActivity.class);
             }
         }
 
