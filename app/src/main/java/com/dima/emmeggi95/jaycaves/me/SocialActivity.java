@@ -15,12 +15,16 @@ public class SocialActivity extends AppCompatActivity {
     Toolbar toolbar;
     Fragment notificationsFragment;
     Fragment chatFragment;
+    BottomNavigationView navView;
+
+    private int fragmentSelected;
+    private final String SOCIAL_FRAGMENT_SELECTED = "social_fragment_selected";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_social);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // Set toolbar
@@ -38,7 +42,12 @@ public class SocialActivity extends AppCompatActivity {
         // Init fragments
         notificationsFragment = new NotificationsFragment();
         chatFragment = new ChatFragment();
-        setFragment(notificationsFragment);
+        if(savedInstanceState != null){
+            navView.setSelectedItemId(fragmentSelected);
+        } else {
+            setFragment(notificationsFragment);
+            fragmentSelected = navView.getSelectedItemId();
+        }
 
     }
 
@@ -50,9 +59,11 @@ public class SocialActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_notifications:
                     setFragment(notificationsFragment);
+                    fragmentSelected = navView.getSelectedItemId();
                     return true;
                 case R.id.navigation_chat:
                     setFragment(chatFragment);
+                    fragmentSelected = navView.getSelectedItemId();
                     return true;
             }
             return false;
@@ -65,4 +76,9 @@ public class SocialActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SOCIAL_FRAGMENT_SELECTED, fragmentSelected);
+        super.onSaveInstanceState(outState);
+    }
 }

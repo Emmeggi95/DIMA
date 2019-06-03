@@ -93,7 +93,7 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(chat.getUnreadMessages()>0){
             h.description.setText(chat.getUnreadMessages() + " unread messages");
         } else {
-            h.description.setText("Last message: " + chat.getLastMessage());
+            h.description.setText("Last message: " + chat.getLastMessageFormatted());
         }
 
         h.card.setOnClickListener(new View.OnClickListener() {

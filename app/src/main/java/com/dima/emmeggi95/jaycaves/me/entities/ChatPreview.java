@@ -1,11 +1,15 @@
 package com.dima.emmeggi95.jaycaves.me.entities;
 
-public class ChatPreview {
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    private String email, username, lastMessage;
+public class ChatPreview implements Comparable<ChatPreview> {
+
+    private String email, username;
+    private long lastMessage;
     private int unreadMessages;
 
-    public ChatPreview(String email, String username, String lastMessage, int unreadMessages) {
+    public ChatPreview(String email, String username, long lastMessage, int unreadMessages) {
         this.email = email;
         this.username = username;
         this.lastMessage = lastMessage;
@@ -16,7 +20,12 @@ public class ChatPreview {
         return email;
     }
 
-    public String getLastMessage() {
+    public String getLastMessageFormatted() {
+        SimpleDateFormat std = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return std.format(lastMessage);
+    }
+
+    public long getLastMessage() {
         return lastMessage;
     }
 
@@ -24,7 +33,7 @@ public class ChatPreview {
         return unreadMessages;
     }
 
-    public void setLastMessage(String lastMessage) {
+    public void setLastMessage(long lastMessage) {
         this.lastMessage = lastMessage;
     }
 
@@ -38,5 +47,10 @@ public class ChatPreview {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public int compareTo(ChatPreview o) {
+        return new Date(lastMessage).compareTo(new Date(o.getLastMessage()));
     }
 }
