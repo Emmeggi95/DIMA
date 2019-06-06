@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dima.emmeggi95.jaycaves.me.FreshFragment">
+    tools:context="com.dima.emmeggi95.jaycaves.me.fragments.FreshFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,11 +2,8 @@ package com.dima.emmeggi95.jaycaves.me.layout;
 
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-
-import com.dima.emmeggi95.jaycaves.me.entities.PlaylistAlbumsAdapter;
 
 public class PlaylistItemTouchHelperCallback extends ItemTouchHelper.Callback {
 

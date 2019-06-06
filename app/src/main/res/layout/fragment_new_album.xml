@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.dima.emmeggi95.jaycaves.me.NewAlbumFragment">
+    tools:context="com.dima.emmeggi95.jaycaves.me.fragments.NewAlbumFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

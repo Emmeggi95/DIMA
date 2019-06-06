@@ -4,13 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.dima.emmeggi95.jaycaves.me.entities.ChatPreview;
-import com.dima.emmeggi95.jaycaves.me.entities.Message;
+import com.dima.emmeggi95.jaycaves.me.entities.User;
+import com.dima.emmeggi95.jaycaves.me.entities.db.ChatPreview;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 public class ChatsViewModel extends ViewModel {
@@ -21,7 +19,7 @@ public class ChatsViewModel extends ViewModel {
     public ChatsViewModel() {
         // Get chat previews from DB
         // temp
-        chatList.add(new ChatPreview("pietro@grotti", "Peu", 0, 0));
+        chatList.addAll(User.chats);
         commit();
     }
 
@@ -30,24 +28,24 @@ public class ChatsViewModel extends ViewModel {
     }
 
     public void setRead(String email){
-        getChat(email).setUnreadMessages(0);
+        getChat(email).setUnreadMessages_1(0);
         commit();
     }
 
     public void setLastMessage(String email, long last){
-        getChat(email).setLastMessage(last);
+        //getChat(email).setLastMessage(last);
         sortChats();
         commit();
     }
 
-    public void addChatPreview(String email, String username, long last){
-        chatList.add(0, new ChatPreview(email, username, last, 0));
+    public void addChatPreview(ChatPreview newChat){
+        chatList.add(newChat);
         commit();
     }
 
-    private ChatPreview getChat(String email){
+    private ChatPreview getChat(String chatId){
         for(ChatPreview c : chatList){
-            if(c.getEmail().equals(email)){
+            if(c.getChatId().equals(chatId)){
                 return c;
             }
         }

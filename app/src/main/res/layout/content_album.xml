@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorBackground"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".AlbumActivity"
+    tools:context=".activities.AlbumActivity"
     tools:showIn="@layout/activity_album">
 
     <RelativeLayout

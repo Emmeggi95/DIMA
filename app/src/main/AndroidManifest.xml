@@ -12,18 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".NetworkChangeReceiver">
+        <receiver android:name=".entities.NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".NewReviewActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.NewReviewActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
@@ -35,65 +35,65 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".SearchableActivity"
+            android:name=".activities.SearchableActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ArtistActivity"
+            android:name=".activities.ArtistActivity"
             android:label="@string/title_activity_artist"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar.TranslucentStatus">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dima.emmeggi95.jaycaves.me.MainActivity" />
+                android:value="com.dima.emmeggi95.jaycaves.me.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ReviewsActivity"
-            android:parentActivityName=".AlbumActivity"
+            android:name=".activities.ReviewsActivity"
+            android:parentActivityName=".activities.AlbumActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddContentActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.AddContentActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AlbumActivity"
+            android:name=".activities.AlbumActivity"
             android:label="@string/title_activity_album"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar.TranslucentStatus" />
         <activity
-            android:name=".AccountActivity"
+            android:name=".activities.AccountActivity"
             android:label="@string/title_account"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PlaylistActivity"
+            android:name=".activities.PlaylistActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UserActivity"
+            android:name=".activities.UserActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SocialActivity"
+            android:name=".activities.SocialActivity"
             android:label="@string/title_activity_social"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ChatActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.ChatActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

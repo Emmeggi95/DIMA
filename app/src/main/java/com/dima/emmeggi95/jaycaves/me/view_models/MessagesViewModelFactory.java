@@ -6,15 +6,15 @@ import android.support.annotation.NonNull;
 
 public class MessagesViewModelFactory implements ViewModelProvider.Factory {
 
-    private String email;
+    private String chatId;
 
-    public MessagesViewModelFactory(String email) {
-        this.email = email;
+    public MessagesViewModelFactory(String chatId) {
+        this.chatId= chatId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MessagesViewModel(email);
+        return (T) new MessagesViewModel(chatId);
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.dima.emmeggi95.jaycaves.me.AddContentActivity">
+    tools:context="com.dima.emmeggi95.jaycaves.me.activities.AddContentActivity">
 
 
         <android.support.v4.widget.NestedScrollView

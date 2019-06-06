@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context="com.dima.emmeggi95.jaycaves.me.PlaylistActivity">
+            tools:context="com.dima.emmeggi95.jaycaves.me.activities.PlaylistActivity">
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
