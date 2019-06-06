@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.entities.User;
 import com.dima.emmeggi95.jaycaves.me.entities.db.ChatPreview;
 import com.dima.emmeggi95.jaycaves.me.entities.adapters.ChatPreviewsAdapter;
-import com.dima.emmeggi95.jaycaves.me.view_models.ChatsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,8 @@ public class ChatFragment extends Fragment {
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     ChatPreviewsAdapter adapter;
-
     List<ChatPreview> chats;
-    ChatsViewModel viewModel;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,25 +35,13 @@ public class ChatFragment extends Fragment {
 
         // Download chats info from DB
         // temp
-        chats = new ArrayList<>();
-        viewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
+        chats = User.chats;
 
         recyclerView = view.findViewById(R.id.chat_recycler_view);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new ChatPreviewsAdapter(getActivity(), chats);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
-
-        Observer observer = new Observer<List<ChatPreview>>() {
-            @Override
-            public void onChanged(@Nullable List<ChatPreview> chatPreviews) {
-                chats.clear();
-                chats.addAll(chatPreviews);
-                adapter.notifyDataSetChanged();
-            }
-        };
-
-        viewModel.getData().observe(this, observer);
 
         return view;
     }

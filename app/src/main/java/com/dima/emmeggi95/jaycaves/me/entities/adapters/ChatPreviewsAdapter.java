@@ -68,18 +68,21 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        final ChatPreview chat = chats.get(i);
+        ChatPreview chat = chats.get(i);
         final ItemViewHolder h = (ItemViewHolder) viewHolder;
-        final String mail;
 
         String userId = "";
-            if (chat.getUser_1().equals(User.uid))
-                userId= chat.getUser_2();
-            if (chat.getUser_2().equals(User.uid))
-                userId = chat.getUser_1();
+        if (chat.getUser_1().equals(User.uid))
+            userId= chat.getUser_2();
+        if (chat.getUser_2().equals(User.uid))
+            userId = chat.getUser_1();
 
-        // Get user name and image from DB
+        final String chatId = chat.getChatId();
+        final String lastMessage = chat.getLastMessage();
 
+        System.out.println(chat);
+
+        // Get user data from DB
         if(userId!=""){
             prefReference.orderByKey().equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -87,12 +90,14 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     Iterable<DataSnapshot> data= dataSnapshot.getChildren();
                     for(DataSnapshot d: data){
                         final AccountPreference pref = d.getValue(AccountPreference.class);
+                        h.user.setText(pref.getUsername());
                         cover_id = pref.getCoverphoto();
                         h.card.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(context, ChatActivity.class);
                                 intent.putExtra("username", pref.getUsername());
+                                intent.putExtra("chatId", chatId );
                                 context.startActivity(intent);
                             }
                         });
@@ -100,6 +105,8 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                     CoverCache.retrieveCover(cover_id, h.icon, h.loading,
                             context.getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
+
+                    h.description.setText(lastMessage);
                 }
 
                 @Override
@@ -109,11 +116,7 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
         }
 
-        if(chat.getUnreadMessages_1()>0){
-            h.description.setText(chat.getUnreadMessages_1() + " unread messages");
-        } else {
-          //  h.description.setText("Last message: " + chat.getLastMessageFormatted());
-        }
+
 
 
     }

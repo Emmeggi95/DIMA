@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
 import com.dima.emmeggi95.jaycaves.me.fragments.ChatFragment;
 import com.dima.emmeggi95.jaycaves.me.fragments.NotificationsFragment;
 
@@ -23,6 +25,12 @@ public class SocialActivity extends AppCompatActivity {
 
     private int fragmentSelected;
     private final String SOCIAL_FRAGMENT_SELECTED = "social_fragment_selected";
+
+    // Networking elements
+    private NetworkChangeReceiver networkChangeReceiver = null;
+    private IntentFilter intentFilter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,5 +92,38 @@ public class SocialActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SOCIAL_FRAGMENT_SELECTED, fragmentSelected);
         super.onSaveInstanceState(outState);
+    }
+
+
+    // OVERRIDE ON ACTIVITY METHODS
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create an IntentFilter instance.
+        intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
+
     }
 }

@@ -2,6 +2,7 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +18,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
 import com.dima.emmeggi95.jaycaves.me.entities.db.AccountPreference;
 import com.dima.emmeggi95.jaycaves.me.entities.adapters.ChatAdapter;
 import com.dima.emmeggi95.jaycaves.me.entities.CoverCache;
+import com.dima.emmeggi95.jaycaves.me.entities.db.ChatPreview;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Message;
 import com.dima.emmeggi95.jaycaves.me.entities.User;
 import com.dima.emmeggi95.jaycaves.me.view_models.MessagesViewModel;
@@ -38,25 +41,32 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String username;
-
+    // UI Elements
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ChatAdapter adapter;
-
     private MessagesViewModel viewModel;
     private List<Message> messages;
-
-    private boolean isLoading = false;
-    private final int ITEMS_TO_LOAD = 10;
-
     private ProgressBar loading;
     private ImageView cover;
     private String cover_id;
     private String chatId;
 
+    // Attributes
+    private String username;
+    private ChatPreview chat;
+    private boolean isLoading = false;
+    private final int ITEMS_TO_LOAD = 10;
+
+
+
+    // Networking elements
+    private NetworkChangeReceiver networkChangeReceiver = null;
+    private IntentFilter intentFilter;
+
     // DB
     private DatabaseReference coverReference = FirebaseDatabase.getInstance().getReference("preferences");
+    private DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference("chats");
 
 
     @Override
@@ -163,7 +173,82 @@ public class ChatActivity extends AppCompatActivity {
             });
         }
 
+
+
         recyclerView.scrollToPosition(0);
+
+    }
+
+    // OVERRIDE ON ACTIVITY METHODS
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(this.networkChangeReceiver!=null) {
+            unregisterReceiver(this.networkChangeReceiver);
+        }
+
+        // SET ALL MESSAGES AS READ
+        chatReference.orderByKey().equalTo(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for (DataSnapshot d : data) {
+                    chat = d.getValue(ChatPreview.class);
+                    if (chat.getUser_1().equalsIgnoreCase(User.uid))
+                        chat.setUnreadMessages_1(0);
+                    else
+                        chat.setUnreadMessages_2(0);
+                    chatReference.child(chat.getChatId()).setValue(chat);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create an IntentFilter instance.
+        intentFilter = new IntentFilter();
+
+        // Add network connectivity change action.
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+
+        // Set broadcast receiver priority.
+        intentFilter.setPriority(100);
+
+        // Create a network change broadcast receiver.
+        networkChangeReceiver = new NetworkChangeReceiver();
+
+        // Register the broadcast receiver with the intent filter object.
+        registerReceiver(networkChangeReceiver, intentFilter);
+
+
+        // SET ALL MESSAGES AS READ
+        chatReference.orderByKey().equalTo(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for (DataSnapshot d : data) {
+                    chat = d.getValue(ChatPreview.class);
+                    if (chat.getUser_1().equalsIgnoreCase(User.uid))
+                        chat.setUnreadMessages_1(0);
+                    else
+                        chat.setUnreadMessages_2(0);
+                    chatReference.child(chat.getChatId()).setValue(chat);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
 
     }
 }

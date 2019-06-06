@@ -179,7 +179,6 @@ public class UserActivity extends AppCompatActivity {
             chatContainer.setVisibility(View.VISIBLE);
             startChat.setText(getString(R.string.chat_with_this_user) + " " + username);
             chat = new ChatPreview(User.uid + "_" + userId, User.uid, userId,0,0);
-            User.chats.add(chat);
 
         } else {
 

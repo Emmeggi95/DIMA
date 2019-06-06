@@ -9,12 +9,13 @@ import java.util.Date;
  */
 public class ChatPreview implements Comparable<ChatPreview> {
 
-    private String chatId,user_1, user_2;
-    private Object lastMessage;
+    private String chatId, user_1, user_2;
+    private String lastMessage;
+    private Object lastAccess;
     private int unreadMessages_1;
     private int unreadMessages_2;
 
-    public ChatPreview(){
+    public ChatPreview() {
         // For db purposes
     }
 
@@ -23,25 +24,11 @@ public class ChatPreview implements Comparable<ChatPreview> {
         this.chatId = chatId;
         this.user_1 = user_1;
         this.user_2 = user_2;
-        this.lastMessage = ServerValue.TIMESTAMP;
+        this.lastMessage = "";
         this.unreadMessages_1 = unreadMessages_1;
-        this.unreadMessages_2= unreadMessages_2;
+        this.unreadMessages_2 = unreadMessages_2;
+        this.lastAccess = ServerValue.TIMESTAMP;
     }
-
-  /* public String getLastMessageFormatted() {
-        SimpleDateFormat std = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return std.format(lastMessage);
-    } */
-
-
-    public int getUnreadMessages_1() {
-        return unreadMessages_1;
-    }
-
-    public void setUnreadMessages_1(int unreadMessages_1) {
-        this.unreadMessages_1 = unreadMessages_1;
-    }
-
 
     public String getChatId() {
         return chatId;
@@ -67,16 +54,44 @@ public class ChatPreview implements Comparable<ChatPreview> {
         this.user_2 = user_2;
     }
 
-    @Override
-    public int compareTo(ChatPreview o) {
-        return new Date((long)lastMessage).compareTo(new Date((long)o.getLastMessage()));
-    }
-
-    public Object getLastMessage() {
+    public String getLastMessage() {
         return lastMessage;
     }
 
-    public void setLastMessage(Object lastMessage) {
+    public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
     }
+
+
+
+    public Object getLastAccess() {
+        return lastAccess;
+    }
+
+    public void setLastAccess(Object lastAccess) {
+        this.lastAccess = lastAccess;
+    }
+
+    public int getUnreadMessages_1() {
+        return unreadMessages_1;
+    }
+
+    public void setUnreadMessages_1(int unreadMessages_1) {
+        this.unreadMessages_1 = unreadMessages_1;
+    }
+
+    public int getUnreadMessages_2() {
+        return unreadMessages_2;
+    }
+
+    public void setUnreadMessages_2(int unreadMessages_2) {
+        this.unreadMessages_2 = unreadMessages_2;
+    }
+
+    @Override
+    public int compareTo(ChatPreview o) {
+        return (int) ((long) this.lastAccess - (long)o.lastAccess);
+    }
 }
+
+
