@@ -2,8 +2,10 @@ package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,12 +34,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class ItemViewHolder extends RecyclerView.ViewHolder{
         TextView text, time;
-        LinearLayout bubble;
+        LinearLayout bubble, layout;
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             text = itemView.findViewById(R.id.message_text);
             time = itemView.findViewById(R.id.message_time);
             bubble = itemView.findViewById(R.id.message_container);
+            layout = itemView.findViewById(R.id.message_master_layout);
         }
     }
 
@@ -76,12 +79,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((ViewGroup.MarginLayoutParams) params).leftMargin = (int) context.getResources().getDimension(R.dimen.side_bubble_margin);
                 ((ViewGroup.MarginLayoutParams) params).rightMargin = (int) context.getResources().getDimension(R.dimen.layout_margin);
                 h.bubble.setBackground(context.getDrawable(R.drawable.my_message_bubble));
+                h.layout.setGravity(Gravity.RIGHT);
                 h.text.setTextColor(context.getResources().getColor(R.color.colorTextOnDarkBackground));
                 h.time.setTextColor(context.getResources().getColor(R.color.colorTextOnDarkBackgroundSecondary));
             } else {
                 ((ViewGroup.MarginLayoutParams) params).leftMargin = (int) context.getResources().getDimension(R.dimen.layout_margin);
                 ((ViewGroup.MarginLayoutParams) params).rightMargin = (int) context.getResources().getDimension(R.dimen.side_bubble_margin);
                 h.bubble.setBackground(context.getDrawable(R.drawable.their_message_bubble));
+                h.layout.setGravity(Gravity.LEFT);
                 h.text.setTextColor(context.getResources().getColor(R.color.colorTextOnPrimary));
                 h.time.setTextColor(context.getResources().getColor(R.color.colorGrayText));
             }
