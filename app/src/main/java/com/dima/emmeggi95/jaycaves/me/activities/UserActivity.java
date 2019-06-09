@@ -2,6 +2,8 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,7 +50,6 @@ public class UserActivity extends AppCompatActivity {
     private ImageView cover;
     private TextView numberOfReviews;
     private String userId;
-    private String chatId;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private UserReviewsAdapter adapter;
@@ -195,7 +196,9 @@ public class UserActivity extends AppCompatActivity {
                 Intent intent = new Intent(UserActivity.this, ChatActivity.class);
                 intent.putExtra("username", username);
                 intent.putExtra("chatId", chat.getChatId());
+                intent.putExtra("cover", cover_id);
                 startActivity(intent);
+
             }
         });
 

@@ -25,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,6 +46,7 @@ public class User {
     public static List<ChatPreview> chats = new ArrayList<>();
     private static List<ChatPreview> mychats = new ArrayList<>();
     private static List<ChatPreview> otherchats= new ArrayList<>();
+    public static HashMap<String,ArrayList<String>> friends = new HashMap<>();
 
     // DB REFERENCES
     private static DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference("likes");
@@ -210,7 +212,29 @@ public class User {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 mychats.clear();
                 for (DataSnapshot d : data) {
-                    mychats.add(d.getValue(ChatPreview.class));
+                    ChatPreview m_chat = d.getValue(ChatPreview.class);
+                    mychats.add(m_chat);
+                    if (friends.get(m_chat.getChatId()) == null){ // not registered friend
+                        preferenceRef.orderByKey().equalTo(m_chat.getUser_2()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                                ArrayList<String> info = new ArrayList<>();
+                                for (DataSnapshot d : data) {
+                                    AccountPreference pref = d.getValue(AccountPreference.class);
+                                    info.add(pref.getUsername());
+                                    info.add(pref.getCoverphoto());
+                                    friends.put(d.getKey(), info);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                        });
+
+                    }
+
+
                 }
                 chats.clear();
                 chats.addAll(mychats);
@@ -228,7 +252,28 @@ public class User {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 otherchats.clear();
                 for (DataSnapshot d : data) {
-                    otherchats.add(d.getValue(ChatPreview.class));
+                    ChatPreview o_chat = d.getValue(ChatPreview.class);
+                    otherchats.add(o_chat);
+                    if (friends.get(o_chat.getChatId()) == null) { // not registered friend
+                        preferenceRef.orderByKey().equalTo(o_chat.getUser_1()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                                ArrayList<String> info = new ArrayList<>();
+                                for (DataSnapshot d : data) {
+                                    AccountPreference pref = d.getValue(AccountPreference.class);
+                                    info.add(pref.getUsername());
+                                    info.add(pref.getCoverphoto());
+                                    friends.put(d.getKey(), info);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+                    }
                 }
                 chats.clear();
                 chats.addAll(mychats);

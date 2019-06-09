@@ -2,6 +2,8 @@ package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -32,10 +35,6 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Context context;
     private List<ChatPreview> chats;
-
-    // DB
-    private DatabaseReference prefReference = FirebaseDatabase.getInstance().getReference("preferences");
-    String cover_id;
 
     public ChatPreviewsAdapter(Context context, List<ChatPreview> chats) {
         this.context = context;
@@ -69,7 +68,8 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         ChatPreview chat = chats.get(i);
-        final ItemViewHolder h = (ItemViewHolder) viewHolder;
+
+        System.out.println(chat);
 
         String userId = "";
         if (chat.getUser_1().equals(User.uid))
@@ -78,46 +78,28 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             userId = chat.getUser_1();
 
         final String chatId = chat.getChatId();
-        final String lastMessage = chat.getLastMessage();
+        final String username = User.friends.get(userId).get(0);
+        final String uid = userId;
 
-        System.out.println(chat);
+        ((ItemViewHolder) viewHolder).user.setText(username);
 
-        // Get user data from DB
-        if(userId!=""){
-            prefReference.orderByKey().equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Iterable<DataSnapshot> data= dataSnapshot.getChildren();
-                    for(DataSnapshot d: data){
-                        final AccountPreference pref = d.getValue(AccountPreference.class);
-                        h.user.setText(pref.getUsername());
-                        cover_id = pref.getCoverphoto();
-                        h.card.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(context, ChatActivity.class);
-                                intent.putExtra("username", pref.getUsername());
-                                intent.putExtra("chatId", chatId );
-                                context.startActivity(intent);
-                            }
-                        });
+        ((ItemViewHolder) viewHolder).card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    }
-                    CoverCache.retrieveCover(cover_id, h.icon, h.loading,
-                            context.getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
-
-                    h.description.setText(lastMessage);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("chatId", chatId );
+                intent.putExtra("cover", User.friends.get(uid).get(1));
+                context.startActivity(intent);
+            }
+        });
 
 
+        CoverCache.retrieveCover(User.friends.get(userId).get(1), ((ItemViewHolder) viewHolder).icon, ((ItemViewHolder) viewHolder).loading,
+                context.getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
 
+        ((ItemViewHolder) viewHolder).description.setText(chat.getLastMessage());
 
     }
 

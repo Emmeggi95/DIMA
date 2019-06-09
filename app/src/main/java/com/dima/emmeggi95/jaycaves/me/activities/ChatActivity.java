@@ -3,6 +3,7 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -55,9 +56,6 @@ public class ChatActivity extends AppCompatActivity {
     // Attributes
     private String username;
     private ChatPreview chat;
-    private boolean isLoading = false;
-    private final int ITEMS_TO_LOAD = 10;
-
 
 
     // Networking elements
@@ -76,6 +74,7 @@ public class ChatActivity extends AppCompatActivity {
 
         username = getIntent().getStringExtra("username");
         chatId = getIntent().getStringExtra("chatId");
+        cover_id = getIntent().getStringExtra("cover");
 
         // Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_chat);
@@ -93,24 +92,6 @@ public class ChatActivity extends AppCompatActivity {
         // Set user picture
         loading = findViewById(R.id.progressBar);
         cover = findViewById(R.id.user_image);
-        if( username!=null){
-            coverReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Iterable<DataSnapshot> data= dataSnapshot.getChildren();
-                    for(DataSnapshot d: data){
-                        cover_id = d.getValue(AccountPreference.class).getCoverphoto();
-                    }
-                    CoverCache.retrieveCover(cover_id,cover, loading,
-                            getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
 
         // Get messages
         messages = new ArrayList<>();
@@ -154,24 +135,8 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         // USER PROFILE PIC INIT
-        if( username!=null){
-            coverReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Iterable<DataSnapshot> data= dataSnapshot.getChildren();
-                    for(DataSnapshot d: data){
-                        cover_id = d.getValue(AccountPreference.class).getCoverphoto();
-                    }
-                    CoverCache.retrieveCover(cover_id,cover, loading,
-                            getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
+        CoverCache.retrieveCover(cover_id,cover, loading,
+                getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
 
 
 
@@ -238,7 +203,7 @@ public class ChatActivity extends AppCompatActivity {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for (DataSnapshot d : data) {
                     chat = d.getValue(ChatPreview.class);
-                    if (chat.getUser_1().equalsIgnoreCase(User.uid))
+                    if (chat.getUser_1().equals(User.uid))
                         chat.setUnreadMessages_1(0);
                     else
                         chat.setUnreadMessages_2(0);

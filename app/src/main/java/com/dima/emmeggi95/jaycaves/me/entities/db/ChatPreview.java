@@ -92,6 +92,15 @@ public class ChatPreview implements Comparable<ChatPreview> {
     public int compareTo(ChatPreview o) {
         return (int) ((long) this.lastAccess - (long)o.lastAccess);
     }
+
+    @Override
+    public String toString() {
+        return "ChatPreview{" +
+                "chatId='" + chatId + '\'' +
+                ", user_1='" + user_1 + '\'' +
+                ", user_2='" + user_2 + '\'' +
+                '}';
+    }
 }
 
 

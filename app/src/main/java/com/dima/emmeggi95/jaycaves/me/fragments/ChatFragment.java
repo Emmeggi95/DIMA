@@ -33,17 +33,24 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        // Download chats info from DB
-        // temp
-        chats = User.chats;
-
         recyclerView = view.findViewById(R.id.chat_recycler_view);
         linearLayoutManager = new LinearLayoutManager(getActivity());
+        chats = User.chats;
         adapter = new ChatPreviewsAdapter(getActivity(), chats);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        chats = User.chats;
+        adapter = new ChatPreviewsAdapter(getActivity(), chats);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
     }
 
 }
