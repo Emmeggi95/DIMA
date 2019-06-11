@@ -18,75 +18,97 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_spacer"
-                android:layout_width="24dp"
-                android:layout_height="@dimen/album_cover_side"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="true"
-                android:alpha="0"
-                app:cardElevation="0dp">
-
-            </android.support.v7.widget.CardView>
-
-            <ImageView
-                android:id="@+id/card_review_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/card_spacer"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="false"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginRight="8dp"
-                app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
-
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:id="@+id/info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="4dp"
-                android:layout_toLeftOf="@+id/card_spacer"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/star"
+                    android:layout_width="@dimen/star_dimension"
+                    android:layout_height="@dimen/star_dimension"
+                    android:layout_below="@+id/year_text"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_star_24dp"
+                    android:tint="@color/star_color"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_rating"
+                    app:layout_constraintEnd_toStartOf="@+id/text_rating"
+                    app:layout_constraintTop_toTopOf="@+id/text_rating" />
+
+                <TextView
+                    android:id="@+id/text_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/year_text"
+                    android:layout_marginBottom="8dp"
+                    android:layout_toRightOf="@+id/star"
+                    android:gravity="center"
+                    android:text="@string/default_rating"
+                    android:textAppearance="@style/LittleTextTheme"
+                    android:textColor="@color/star_color"
+                    app:layout_constraintBottom_toTopOf="@+id/card_review_arrow"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/card_review_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
                     android:text="@string/review_title_default"
-                    android:textAppearance="@style/HeaderTextTheme" />
+                    android:textAppearance="@style/HeaderTextTheme"
+                    app:layout_constraintBottom_toTopOf="@+id/card_review_author"
+                    app:layout_constraintStart_toStartOf="@+id/card_review_author"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/card_review_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/review_author_default"
-                    android:textAppearance="@style/LinkTextTheme" />
+                    android:textAppearance="@style/LinkTextTheme"
+                    app:layout_constraintBottom_toTopOf="@+id/card_review_date"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_review_title" />
 
                 <TextView
                     android:id="@+id/card_review_date"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/review_date_default"
-                    android:textAppearance="@style/LittleTextTheme" />
+                    android:textAppearance="@style/LittleTextTheme"
+                    app:layout_constraintBottom_toTopOf="@+id/card_review_likes"
+                    app:layout_constraintStart_toStartOf="@+id/card_review_author"
+                    app:layout_constraintTop_toBottomOf="@+id/card_review_author" />
 
                 <TextView
                     android:id="@+id/card_review_likes"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/review_default_likes"
-                    android:textAppearance="@style/LittleTextTheme" />
+                    android:textAppearance="@style/LittleTextTheme"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/card_review_date"
+                    app:layout_constraintStart_toStartOf="@+id/card_review_date"
+                    app:layout_constraintTop_toBottomOf="@+id/card_review_date" />
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/card_review_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
+
+            </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/card_review_body_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/card_spacer"
+                android:layout_below="@id/info"
                 android:orientation="vertical">
 
                 <TextView

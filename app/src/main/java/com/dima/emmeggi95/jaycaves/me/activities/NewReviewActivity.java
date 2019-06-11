@@ -102,8 +102,10 @@ public class NewReviewActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (inputCheckOk())
+                if (inputCheckOk()) {
                     registerReview();
+                    onBackPressed();
+                }
                 else
                     showMissingContentMessage();
             }

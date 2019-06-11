@@ -78,7 +78,7 @@ public class AlbumActivity extends AppCompatActivity {
     private IntentFilter intentFilter;
 
     private boolean reviewWritten;
-
+    private Review myReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,14 +175,8 @@ public class AlbumActivity extends AppCompatActivity {
         TextView yearText = (TextView) findViewById(R.id.year_text);
         yearText.setText(album.getDate());
 
-        // Set rating
-        TextView ratingText = findViewById(R.id.text_rating);
-        ratingText.setText(String.format("%.2f", album.getScore()));
-
-
         // Init featured review section
         hideFeaturedReview();
-
 
         // Write a review button
         writeReviewButton = findViewById(R.id.write_review_button);
@@ -213,6 +207,7 @@ public class AlbumActivity extends AppCompatActivity {
                 reviewWritten = true;
                 bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_create_24px);
                 bottomNavigationView.getMenu().getItem(0).setTitle(R.string.edit_review);
+                myReview = User.reviews.get(i);
             }
             i++;
         }
@@ -225,7 +220,7 @@ public class AlbumActivity extends AppCompatActivity {
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
                         intent.putExtra("album", album);
                         if(reviewWritten){
-                            intent.putExtra("review", featuredReview);
+                            intent.putExtra("review", myReview);
                         }
                         startActivity(intent, options.toBundle());
                         return true;
@@ -503,6 +498,10 @@ public class AlbumActivity extends AppCompatActivity {
 
         // Register the broadcast receiver with the intent filter object.
         registerReceiver(networkChangeReceiver, intentFilter);
+
+        // Set rating
+        TextView ratingText = findViewById(R.id.text_rating);
+        ratingText.setText(String.format("%.2f", album.getScore()));
 
     }
 

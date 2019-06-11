@@ -2,7 +2,9 @@ package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,9 +32,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context context;
     private List<Review> reviews;
     private int max;
-    private int startColor;
-    private int endColor;
-    private int deltaColor;
+    private int textStartColor;
+    private int textEndColor;
+    private int textDeltaColor;
     private List<LinearLayout> containers;
     private List<ImageView> arrows;
 
@@ -44,17 +46,17 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(r.getLikes()>max)
                 max = r.getLikes();
         }
-        startColor = context.getResources().getColor(R.color.star_color);
-        endColor = context.getResources().getColor(R.color.end_color);
-        deltaColor = endColor - startColor;
+        textStartColor = context.getResources().getColor(R.color.text_start_color);
+        textEndColor = context.getResources().getColor(R.color.text_end_color);
+        textDeltaColor = textEndColor - textStartColor;
         containers = new ArrayList<>();
         arrows = new ArrayList<>();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView title, author, date, body, likes, like_liked;
+        TextView title, author, date, body, likes, like_liked, rating;
         CardView card;
-        ImageView arrowImage, like;
+        ImageView arrowImage, like, star;
         LinearLayout bodyContainer;
         View header;
 
@@ -73,6 +75,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             this.like_liked = view.findViewById(R.id.card_review_like_message);
             this.header = view.findViewById(R.id.info);
             this.card = view.findViewById(R.id.review_card);
+            this.rating = view.findViewById(R.id.text_rating);
+            this.star = view.findViewById(R.id.star);
         }
     }
 
@@ -88,7 +92,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final Review review = reviews.get(position);
         ItemViewHolder h = (ItemViewHolder) holder; 
 
-        h.likes.setTextColor(calculateGradient(review.getLikes()));
+        h.likes.setTextColor(calculateTextGradient(review.getLikes()));
         h.title.setText(review.getHeadline());
         h.author.setText(review.getAuthor());
         h.author.setOnClickListener(new TextView.OnClickListener(){
@@ -102,6 +106,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         h.date.setText(review.getShortDate());
         h.body.setText(review.getBody());
         h.likes.setText(String.valueOf(review.getLikes()) + " " + context.getResources().getString(R.string.likes));
+        h.rating.setText(String.format("%.2f", review.getRating()));
 
         // Hide body and set click listener
         final LinearLayout bodyContainer = h.bodyContainer;
@@ -147,9 +152,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return reviews.size();
     }
 
-    private int calculateGradient(int likes){
-        if(max==0) return endColor;
-        return startColor + deltaColor * (likes/max);
+    private int calculateTextGradient(int likes){
+        if(max==0) return textEndColor;
+        return textStartColor + textDeltaColor * (likes/max);
     }
 
     private void hideContainer(LinearLayout bodyContainer, ImageView arrow){

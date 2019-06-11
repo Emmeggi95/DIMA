@@ -34,8 +34,8 @@
     <color name="star_color">#f57f17</color>
 
     <!--Gradient colors-->
-    <color name="start_color">#d84315</color>
-    <color name="end_color">#2e7d32</color>
+    <color name="text_start_color">#757575</color>
+    <color name="text_end_color">#2e7d32</color>
 
     <!-- Auth UI colors -->
     <color name="material_green_50">#E8F5E9</color>
