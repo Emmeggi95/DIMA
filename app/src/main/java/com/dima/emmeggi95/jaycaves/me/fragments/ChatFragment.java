@@ -34,6 +34,7 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         recyclerView = view.findViewById(R.id.chat_recycler_view);
+        recyclerView.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         chats = User.chats;
         adapter = new ChatPreviewsAdapter(getActivity(), chats);

@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Artist;
@@ -63,7 +64,7 @@ public class NewArtistFragment extends Fragment {
         private AutoCompleteTextView newArtistGenreInput1;
         private AutoCompleteTextView newArtistGenreInput2;
         private AutoCompleteTextView newArtistGenreInput3;
-
+        private View rootLayout;
 
 
         @Override
@@ -72,6 +73,9 @@ public class NewArtistFragment extends Fragment {
 
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_new_artist, container, false);
+            
+            rootLayout = view.getRootView();
+            
             // Storage setup
             storage = FirebaseStorage.getInstance();
             storageReference = storage.getReference().child("Artist_covers");
@@ -108,7 +112,7 @@ public class NewArtistFragment extends Fragment {
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Snackbar.make(getActivity().getCurrentFocus(), R.string.internal_error, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(rootLayout, R.string.internal_error, Snackbar.LENGTH_LONG).show();
                 }
             });
 
@@ -126,7 +130,7 @@ public class NewArtistFragment extends Fragment {
 
 
             // Button to send data about the new album
-            Button createNewAlbumButton = view.findViewById(R.id.createNewArtistButton);
+            TextView createNewAlbumButton = view.findViewById(R.id.createNewArtistButton);
             createNewAlbumButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -258,13 +262,13 @@ public class NewArtistFragment extends Fragment {
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_success, Snackbar.LENGTH_LONG).show();
+                                            Snackbar.make(rootLayout,R.string.artist_success, Snackbar.LENGTH_LONG).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_cover_error,Snackbar.LENGTH_LONG).show();
+                                            Snackbar.make(rootLayout,R.string.artist_cover_error,Snackbar.LENGTH_LONG).show();
                                             //dbReference.child(newAlbumNameInput.getText().toString()).removeValue();
                                             // HANDLE
                                         }
@@ -277,9 +281,9 @@ public class NewArtistFragment extends Fragment {
 
                             String code= e.getMessage();
                             if(code.contains("Permission denied"))
-                                Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_existing_error,Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(rootLayout,R.string.artist_existing_error,Snackbar.LENGTH_LONG).show();
                             else
-                                Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_unknown_error,Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(rootLayout,R.string.artist_unknown_error,Snackbar.LENGTH_LONG).show();
                         }
 
                     });
@@ -289,31 +293,31 @@ public class NewArtistFragment extends Fragment {
         private void missingElementMessage(){
 
             if (!isNotEmpty(newArtistNameInput)){
-                Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_name_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout,R.string.artist_name_error, Snackbar.LENGTH_LONG).show();
             }
             else if (!isNotEmpty(newArtistReleaseDateInput)){
-                Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_date_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout,R.string.artist_date_error, Snackbar.LENGTH_LONG).show();
             }
             else if (!isNotEmpty(newArtistStory)){
-                Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_story_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout,R.string.artist_story_error, Snackbar.LENGTH_LONG).show();
             }
             else if (!isNotEmpty(newArtistGenreInput1)){
-                Snackbar.make(getActivity().getCurrentFocus(),R.string.artist_genre_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout,R.string.artist_genre_error, Snackbar.LENGTH_LONG).show();
             }
             else if (!newArtistPicture.isActivated()) {
-                Snackbar.make(getActivity().getCurrentFocus(), R.string.artist_picture_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, R.string.artist_picture_error, Snackbar.LENGTH_LONG).show();
             }
             else if(!isGenreValid(newArtistGenreInput1)) {
-                Snackbar.make(getActivity().getCurrentFocus(), R.string.genre1_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, R.string.genre1_error, Snackbar.LENGTH_LONG).show();
             }
             else if(!isGenreValid(newArtistGenreInput2)) {
-                Snackbar.make(getActivity().getCurrentFocus(), R.string.genre2_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, R.string.genre2_error, Snackbar.LENGTH_LONG).show();
             }
             else if(!isGenreValid(newArtistGenreInput3)) {
-                Snackbar.make(getActivity().getCurrentFocus(), R.string.genre3_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, R.string.genre3_error, Snackbar.LENGTH_LONG).show();
             }
             else if(!isYearValid(newArtistReleaseDateInput)){
-                Snackbar.make(getActivity().getCurrentFocus(), "Please insert a valid date!", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, "Please insert a valid date!", Snackbar.LENGTH_LONG).show();
             }
         }
 

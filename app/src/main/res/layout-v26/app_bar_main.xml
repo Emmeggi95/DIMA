@@ -48,7 +48,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:tint="@color/colorTextOnAccent"
-        app:srcCompat="@drawable/ic_add_black_24dp"
-        android:tooltipText="@string/add_content_tooltip"/>
+        android:tooltipText="@string/add_content_tooltip"
+        app:rippleColor="@color/colorAccentMuted"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

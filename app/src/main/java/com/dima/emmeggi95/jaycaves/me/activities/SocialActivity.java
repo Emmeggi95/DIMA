@@ -3,8 +3,7 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -13,17 +12,17 @@ import android.view.View;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
+import com.dima.emmeggi95.jaycaves.me.entities.adapters.ViewPagerAdapter;
 import com.dima.emmeggi95.jaycaves.me.fragments.ChatFragment;
 import com.dima.emmeggi95.jaycaves.me.fragments.NotificationsFragment;
 
 public class SocialActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    Fragment notificationsFragment;
-    Fragment chatFragment;
     BottomNavigationView navView;
+    ViewPager viewPager;
+    MenuItem prevMenuItem;
 
-    private int fragmentSelected;
     private final String SOCIAL_FRAGMENT_SELECTED = "social_fragment_selected";
 
     // Networking elements
@@ -51,15 +50,37 @@ public class SocialActivity extends AppCompatActivity {
         });
         setTitle("");
 
+        // View Pager
+        viewPager = findViewById(R.id.view_pager);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new NotificationsFragment());
+        viewPagerAdapter.addFragment(new ChatFragment());
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (prevMenuItem != null)
+                    prevMenuItem.setChecked(false);
+                else
+                    navView.getMenu().getItem(0).setChecked(false);
+
+                navView.getMenu().getItem(i).setChecked(true);
+                prevMenuItem = navView.getMenu().getItem(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
         // Init fragments
-        notificationsFragment = new NotificationsFragment();
-        chatFragment = new ChatFragment();
-        if(savedInstanceState != null){
-            navView.setSelectedItemId(fragmentSelected);
-        } else {
-            setFragment(notificationsFragment);
-            fragmentSelected = navView.getSelectedItemId();
-        }
+        viewPager.setCurrentItem(0);
 
     }
 
@@ -70,30 +91,15 @@ public class SocialActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_notifications:
-                    setFragment(notificationsFragment);
-                    fragmentSelected = navView.getSelectedItemId();
+                    viewPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_chat:
-                    setFragment(chatFragment);
-                    fragmentSelected = navView.getSelectedItemId();
+                    viewPager.setCurrentItem(1);
                     return true;
             }
             return false;
         }
     };
-
-    private void setFragment(Fragment fragment){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_social, fragment);
-        ft.commit();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SOCIAL_FRAGMENT_SELECTED, fragmentSelected);
-        super.onSaveInstanceState(outState);
-    }
-
 
     // OVERRIDE ON ACTIVITY METHODS
 

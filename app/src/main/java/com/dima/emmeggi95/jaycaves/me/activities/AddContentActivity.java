@@ -1,16 +1,18 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
 import android.content.IntentFilter;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
-import com.dima.emmeggi95.jaycaves.me.entities.adapters.ViewPagerCustomAdapter;
+import com.dima.emmeggi95.jaycaves.me.entities.adapters.ViewPagerAdapter;
 import com.dima.emmeggi95.jaycaves.me.fragments.NewAlbumFragment;
 import com.dima.emmeggi95.jaycaves.me.fragments.NewArtistFragment;
 
@@ -22,7 +24,9 @@ import com.dima.emmeggi95.jaycaves.me.fragments.NewArtistFragment;
 public class AddContentActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private ViewPagerCustomAdapter adapter;
+    private ViewPagerAdapter adapter;
+    private BottomNavigationView navigationView;
+    MenuItem prevMenuItem;
     private NetworkChangeReceiver networkChangeReceiver = null;
     private IntentFilter intentFilter;
 
@@ -30,9 +34,53 @@ public class AddContentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_content);
-        viewPager= findViewById(R.id.pager);
-        adapter= new ViewPagerCustomAdapter(getSupportFragmentManager());
+
+        // ViewPager
+        viewPager = findViewById(R.id.pager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new NewAlbumFragment());
+        adapter.addFragment(new NewArtistFragment());
         viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (prevMenuItem != null)
+                    prevMenuItem.setChecked(false);
+                else
+                    navigationView.getMenu().getItem(0).setChecked(false);
+
+                navigationView.getMenu().getItem(i).setChecked(true);
+                prevMenuItem = navigationView.getMenu().getItem(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+        // Navigation view
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.navigation_add_album:
+                        viewPager.setCurrentItem(0);
+                        return true;
+                    case R.id.navigation_add_artist:
+                        viewPager.setCurrentItem(1);
+                        return true;
+                }
+                return false;
+            }
+        });
 
         // Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -45,31 +93,6 @@ public class AddContentActivity extends AppCompatActivity {
             }
         });
         setTitle(R.string.add_content_title);
-
-        // Set tabs
-        TabLayout tabLayout= findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.album));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.artist));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
 
 
     }

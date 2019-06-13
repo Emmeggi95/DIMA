@@ -265,8 +265,8 @@
     <string name="open_chat_user">Open chat with user</string>
 
     <!-- Tab Names -->
-    <string name="album">Album</string>
-    <string name="artist">Artist</string>
+    <string name="album">New album</string>
+    <string name="artist">New artist</string>
     <string name="title_activity_artist">ArtistActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

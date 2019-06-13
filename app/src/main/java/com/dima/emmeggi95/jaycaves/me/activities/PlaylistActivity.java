@@ -64,6 +64,7 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
         setTitle(playlist.getName());
 
         recyclerView= findViewById(R.id.playlist_recycler_view);
+        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         adapter = new PlaylistAlbumsAdapter(this, playlist.getAlbums(), this);
 

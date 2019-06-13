@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/default_album_title"
-        android:textAppearance="@style/H6"
+        android:textAppearance="@style/Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

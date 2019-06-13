@@ -123,7 +123,9 @@ public class SearchableActivity extends AppCompatActivity {
         searchView = findViewById(R.id.search_view);
 
         artistRecyclerView = findViewById(R.id.search_artist_recycler_view);
+        artistRecyclerView.setHasFixedSize(true);
         albumRecyclerView = findViewById(R.id.search_album_recycler_view);
+        albumRecyclerView.setHasFixedSize(true);
         artistLayoutManager = new LinearLayoutManager(this);
         albumLayoutManager = new LinearLayoutManager(this);
         artistRecyclerView.setLayoutManager(artistLayoutManager);

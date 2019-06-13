@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Album;
@@ -65,6 +66,7 @@ public class NewAlbumFragment extends Fragment {
     private AutoCompleteTextView newAlbumGenreInput1;
     private AutoCompleteTextView newAlbumGenreInput2;
     private AutoCompleteTextView newAlbumGenreInput3;
+    private View rootLayout;
 
     public NewAlbumFragment() {
         // Required empty public constructor
@@ -76,6 +78,9 @@ public class NewAlbumFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_album, container, false);
+        
+        rootLayout = view.getRootView();
+        
         // Storage setup
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference().child("Album_covers");
@@ -110,7 +115,7 @@ public class NewAlbumFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Snackbar.make(getActivity().getCurrentFocus(), R.string.internal_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rootLayout, R.string.internal_error, Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -155,7 +160,7 @@ public class NewAlbumFragment extends Fragment {
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Snackbar.make(getActivity().getCurrentFocus(),R.string.album_unknown_error, Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(rootLayout,R.string.album_unknown_error, Snackbar.LENGTH_LONG).show();
                             }
                         });
 
@@ -177,7 +182,7 @@ public class NewAlbumFragment extends Fragment {
 
 
         // Button to send data about the new album
-        Button createNewAlbumButton = view.findViewById(R.id.createNewAlbumButton);
+        TextView createNewAlbumButton = view.findViewById(R.id.createNewAlbumButton);
         createNewAlbumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -315,13 +320,13 @@ public class NewAlbumFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Snackbar.make(getActivity().getCurrentFocus(),R.string.album_success, Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(rootLayout,R.string.album_success, Snackbar.LENGTH_LONG).show();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Snackbar.make(getActivity().getCurrentFocus(),R.string.album_cover_error,Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(rootLayout,R.string.album_cover_error,Snackbar.LENGTH_LONG).show();
                                 dbReference.child(finalAlbumName).removeValue();
 
                     }
@@ -334,9 +339,9 @@ public class NewAlbumFragment extends Fragment {
 
                 String code= e.getMessage();
                 if(code.contains("Permission denied"))
-                    Snackbar.make(getActivity().getCurrentFocus(),R.string.album_existing_error,Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(rootLayout,R.string.album_existing_error,Snackbar.LENGTH_LONG).show();
                 else
-                    Snackbar.make(getActivity().getCurrentFocus(),R.string.album_unknown_error,Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(rootLayout,R.string.album_unknown_error,Snackbar.LENGTH_LONG).show();
             }
 
         });
@@ -350,38 +355,38 @@ public class NewAlbumFragment extends Fragment {
     private void missingElementMessage(){
 
         if (!isNotEmpty(newAlbumNameInput)){
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_name_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout,R.string.album_name_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumReleaseDateInput)){
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_date_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout,R.string.album_date_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumArtistInput)){
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_artist_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout,R.string.album_artist_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!isNotEmpty(newAlbumGenreInput1)){
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.genre_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout,R.string.genre_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!newAlbumPicture.isActivated()){
-            Snackbar.make(getActivity().getCurrentFocus(),R.string.album_picture_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout,R.string.album_picture_error, Snackbar.LENGTH_LONG).show();
         }
         else if (!checkedArtist){
-            Snackbar.make(getActivity().getCurrentFocus(), R.string.album_unknown_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout, R.string.album_unknown_error, Snackbar.LENGTH_LONG).show();
         }
         else if (tempArtist.isEmpty()) {
-            Snackbar.make(getActivity().getCurrentFocus(), R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout, R.string.album_noartist_error, Snackbar.LENGTH_LONG).show();
             //((AddContentActivity) getActivity()).getViewPager().setCurrentItem(1);
         }
         else if(!isGenreValid(newAlbumGenreInput1)) {
-            Snackbar.make(getActivity().getCurrentFocus(), R.string.genre1_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout, R.string.genre1_error, Snackbar.LENGTH_LONG).show();
         }
         else if(!isGenreValid(newAlbumGenreInput2)) {
-            Snackbar.make(getActivity().getCurrentFocus(), R.string.genre2_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout, R.string.genre2_error, Snackbar.LENGTH_LONG).show();
         }
         else if(!isGenreValid(newAlbumGenreInput3)) {
-            Snackbar.make(getActivity().getCurrentFocus(), R.string.genre3_error, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout, R.string.genre3_error, Snackbar.LENGTH_LONG).show();
         }
         else if(!isYearValid(newAlbumReleaseDateInput)){
-            Snackbar.make(getActivity().getCurrentFocus(), "Please insert a valid date!", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(rootLayout, "Please insert a valid date!", Snackbar.LENGTH_LONG).show();
         }
     }
 

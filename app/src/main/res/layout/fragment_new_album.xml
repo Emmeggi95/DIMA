@@ -6,6 +6,7 @@
     tools:context="com.dima.emmeggi95.jaycaves.me.fragments.NewAlbumFragment">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -146,21 +147,19 @@
             app:layout_constraintStart_toStartOf="@+id/newAlbumGenreInput3"
             app:layout_constraintTop_toBottomOf="@+id/newAlbumGenreInput3" />
 
-        <Button
+        <TextView
             android:id="@+id/createNewAlbumButton"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="128dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:lineSpacingExtra="10sp"
             android:text="@string/new_button_submit"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/H5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newAlbumUplaodMessage" />
+            app:layout_constraintTop_toBottomOf="@+id/newAlbumPicture" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -28,8 +28,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/new_review_title"
-            android:textAppearance="@style/H5"
-            android:textSize="24sp"
+            android:textAppearance="@style/H4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_new_review" />
@@ -42,7 +41,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:text="@string/new_review_subtitle"
-            android:textAppearance="@style/Body2"
+            android:textAppearance="@style/Subtitle2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_review_welcome" />
@@ -115,14 +114,10 @@
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
             android:text="@string/rating_title"
-            android:textAppearance="@style/Body2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.228"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textAppearance="@style/Subtitle2"
+            app:layout_constraintStart_toStartOf="@+id/new_review_ratingbar"
             app:layout_constraintTop_toBottomOf="@+id/cover" />
 
         <TextView
@@ -133,7 +128,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/body_title"
-            android:textAppearance="@style/Body2"
+            android:textAppearance="@style/Subtitle2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.545"
             app:layout_constraintStart_toStartOf="parent"
@@ -147,26 +142,25 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="32dp"
             android:maxLength="1000"
-            android:textAppearance="@style/Body1"
+            android:textAppearance="@style/BodyNews"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_review_middletext" />
 
-        <Button
+        <TextView
             android:id="@+id/createNewReviewButton"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="10sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/submit_button"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/H5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/new_review_text" />
+            app:layout_constraintTop_toBottomOf="@+id/new_review_text" />
 
         <TextView
             android:id="@+id/new_review_header"
@@ -176,7 +170,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/headline_title"
-            android:textAppearance="@style/Body2"
+            android:textAppearance="@style/Subtitle2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_review_ratingbar" />
@@ -189,7 +183,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="32dp"
             android:maxLength="20"
-            android:textAppearance="@style/H6"
+            android:textAppearance="@style/Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_review_header" />

@@ -61,6 +61,7 @@ public class ChartsFragment extends Fragment {
 
         // Set the recycler view
         chartsRecyclerView = view.findViewById(R.id.charts_recycler_view);
+        chartsRecyclerView.setHasFixedSize(true);
         chartsLayoutManager = new LinearLayoutManager(getActivity());
         chartsRecyclerView.setLayoutManager(chartsLayoutManager);
 

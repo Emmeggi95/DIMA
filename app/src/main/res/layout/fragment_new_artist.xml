@@ -6,6 +6,7 @@
     tools:context="com.dima.emmeggi95.jaycaves.me.fragments.NewArtistFragment">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -128,22 +129,6 @@
             app:layout_constraintStart_toStartOf="@+id/newArtistGenreInput3"
             app:layout_constraintTop_toBottomOf="@+id/newArtistGenreInput3" />
 
-        <Button
-            android:id="@+id/createNewArtistButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="128dp"
-            android:layout_marginEnd="8dp"
-            android:lineSpacingExtra="10sp"
-            android:text="@string/new_button_submit"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newArtistUplaodMessage" />
-
         <EditText
             android:id="@+id/newArtistStory"
             android:layout_width="0dp"
@@ -159,6 +144,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newArtistReleaseDateInput" />
+
+        <TextView
+            android:id="@+id/createNewArtistButton"
+            style="@style/Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/new_button_submit"
+            android:textAppearance="@style/H5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newArtistPicture" />
 
 
     </android.support.constraint.ConstraintLayout>

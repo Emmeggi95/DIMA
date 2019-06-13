@@ -39,6 +39,7 @@ public class FreshFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fresh, container, false);
 
         recyclerView = view.findViewById(R.id.fresh_recycler_view);
+        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 

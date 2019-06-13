@@ -143,6 +143,7 @@ public class UserActivity extends AppCompatActivity {
                numberOfReviews.setText(reviews.size()+ " reviews"); // set updated value
                if(reviews.size()>0) {
                    recyclerView = findViewById(R.id.user_reviews_recyclerview);
+                   recyclerView.setHasFixedSize(true);
                    layoutManager = new LinearLayoutManager(UserActivity.this);
                    adapter = new UserReviewsAdapter(UserActivity.this, reviews);
 

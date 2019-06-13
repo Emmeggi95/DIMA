@@ -70,7 +70,6 @@
 
     <LinearLayout
         android:id="@+id/chat_container"
-        style="@style/Link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/user_header"

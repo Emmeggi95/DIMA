@@ -43,7 +43,7 @@ public class NewReviewActivity extends AppCompatActivity {
     private Review oldReview;
     private RatingBar ratingBar;
     private MultiAutoCompleteTextView essay;
-    private Button sendButton;
+    private TextView sendButton;
     private String albumKey;
     private AutoCompleteTextView headliner;
     private DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("reviews");

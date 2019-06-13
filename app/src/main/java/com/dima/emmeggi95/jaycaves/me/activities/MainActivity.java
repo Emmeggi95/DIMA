@@ -167,28 +167,11 @@ public class MainActivity extends AppCompatActivity
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Animation bump = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bump);
-                bump.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        Intent intent = new Intent(MainActivity.this, AddContentActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                fab.startAnimation(bump);
-
+                Intent intent = new Intent(MainActivity.this, AddContentActivity.class);
+                startActivity(intent);
             }
         });
         fabIsShown = true;
