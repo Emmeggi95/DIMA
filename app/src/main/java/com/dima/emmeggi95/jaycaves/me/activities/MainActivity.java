@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -162,14 +164,31 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Animation bump = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bump);
+                bump.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        Intent intent = new Intent(MainActivity.this, AddContentActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
                 fab.startAnimation(bump);
-                Intent intent = new Intent(view.getContext(), AddContentActivity.class);
-                startActivity(intent);
+
             }
         });
         fabIsShown = true;
@@ -524,6 +543,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_app_bar_main, menu);
+
+        for(int i = 0; i < menu.size(); i++){
+            Drawable drawable = menu.getItem(i).getIcon();
+            if(drawable != null) {
+                drawable.mutate();
+                drawable.setColorFilter(getResources().getColor(R.color.colorGrayText), PorterDuff.Mode.SRC_ATOP);
+            }
+        }
+
         return true;
     }
 
@@ -536,17 +564,27 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+            // Get center of search icon
+
+            View searchIcon = findViewById(R.id.action_search);
+            int coordinates[] = new int[2];
+            searchIcon.getLocationOnScreen(coordinates);
+            int cx = coordinates[0];
+            int cy = coordinates[1];
             Intent intent = new Intent(this, SearchableActivity.class);
+
+
+            intent.putExtra(getString(R.string.x_axis), cx);
+            intent.putExtra(getString(R.string.y_axis), cy);
+
             //ActivityOptions options = ActivityOptions.makeCustomAnimation(this, R.anim.fade_in, R.anim.fade_out);
             startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
     /**
      * Set the toolbar title

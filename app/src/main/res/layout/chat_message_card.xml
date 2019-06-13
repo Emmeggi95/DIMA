@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/generic_message"
-                android:textAppearance="@style/SecondaryTextTheme"
+                android:textAppearance="@style/Body1"
                 android:textColor="@color/colorTextOnDarkBackground" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/generic_time"
-                android:textAppearance="@style/LittleTextTheme"
+                android:textAppearance="@style/Body2"
                 android:textColor="@color/colorTextOnDarkBackgroundSecondary" />
         </LinearLayout>
 

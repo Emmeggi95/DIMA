@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="@string/title_default"
-                    android:textAppearance="@style/PrimaryTextTheme"
+                    android:textAppearance="@style/H6"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="@string/artist_default"
-                    android:textAppearance="@style/SecondaryTextTheme"
+                    android:textAppearance="@style/Body1"
                     app:layout_constraintBottom_toBottomOf="@id/playlist_album_title" />
 
                 <LinearLayout
@@ -80,7 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/genre_default"
-                        android:textAppearance="@style/SecondaryTextTheme"
+                        android:textAppearance="@style/Body1"
                         app:layout_constraintBottom_toBottomOf="@id/playlist_album_year" />
 
                     <View
@@ -97,7 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/year_default"
-                        android:textAppearance="@style/SecondaryTextTheme"
+                        android:textAppearance="@style/Body1"
                         app:layout_constraintBottom_toBottomOf="@id/playlist_album_artist" />
 
                 </LinearLayout>

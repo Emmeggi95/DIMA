@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/default_album_title"
-        android:textAppearance="@style/BigTextTheme"
+        android:textAppearance="@style/H6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +31,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/artist_default"
-        android:textAppearance="@style/LittleTextTheme"
+        android:textAppearance="@style/Body2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

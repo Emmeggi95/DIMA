@@ -10,116 +10,113 @@
     tools:context=".activities.AlbumActivity"
     tools:showIn="@layout/activity_album">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
 
         <TextView
+            android:id="@+id/album_title_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:text="@string/title_default"
+            android:textAppearance="@style/H4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/artist_text"
+            style="@style/Link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="startArtistActivity"
             android:text="@string/artist_text_default"
-            android:textAppearance="@style/LinkTextTheme" />
+            android:textAppearance="@style/Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/album_title_text" />
 
         <TextView
             android:id="@+id/year_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/artist_text"
             android:text="@string/year_default"
-            android:textAppearance="@style/LittleTextTheme" />
+            android:textAppearance="@style/Body2"
+            app:layout_constraintBottom_toBottomOf="@+id/text_rating"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_rating" />
 
         <ImageView
             android:id="@+id/star"
-            android:layout_width="@dimen/star_dimension"
-            android:layout_height="@dimen/star_dimension"
-            android:layout_below="@+id/year_text"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:src="@drawable/ic_star_24dp"
-            android:tint="@color/star_color" />
+            android:tint="@color/star_color"
+            app:layout_constraintEnd_toStartOf="@+id/text_rating"
+            app:layout_constraintTop_toBottomOf="@+id/artist_text" />
 
         <TextView
             android:id="@+id/text_rating"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/year_text"
-            android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/star"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/default_rating"
-            android:textAppearance="@style/LittleTextTheme"
-            android:textColor="@color/star_color" />
+            android:textAppearance="@style/Body2"
+            android:textColor="@color/star_color"
+            app:layout_constraintBottom_toBottomOf="@+id/star"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/star" />
 
         <View
             android:id="@+id/divider1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/star"
-            android:layout_marginTop="@dimen/layout_margin"
-            android:layout_marginBottom="@dimen/layout_margin"
-            android:background="?android:attr/listDivider" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/listDivider"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/year_text" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_review"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:indeterminate="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/year_text" />
 
         <TextView
             android:id="@+id/not_found_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/divider1"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/not_found_text"
-            android:textAppearance="@style/SecondaryTextTheme"
-            android:textSize="@dimen/review_text_font_size" />
+            android:textAppearance="@style/Body1"
+            android:textSize="@dimen/review_text_font_size"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/divider1"
+            app:layout_constraintStart_toStartOf="@+id/divider1"
+            app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
         <include
             android:id="@+id/featured_review_content"
             layout="@layout/content_featured_review"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/divider1" />
-
-        <LinearLayout
-            android:id="@+id/reviews_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/featured_review_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:id="@+id/write_review_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/write_review_button"
-                    style="@style/DefaultButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/new_review_button"
-                    android:visibility="visible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/all_reviews_container"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/all_reviews_button"
-                    style="@style/DefaultButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="startReviewsActivity"
-                    android:text="@string/all_reviews_button" />
-            </LinearLayout>
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
 
-        </LinearLayout>
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

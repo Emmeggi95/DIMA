@@ -55,6 +55,7 @@ public class UserActivity extends AppCompatActivity {
     private UserReviewsAdapter adapter;
     private TextView startChat;
     private LinearLayout chatContainer;
+    private ProgressBar progressBar;
 
     // Networking elements
     private NetworkChangeReceiver networkChangeReceiver = null;
@@ -74,6 +75,7 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
         loading = findViewById(R.id.loading_user);
         cover = findViewById(R.id.profile_picture);
+        progressBar = findViewById(R.id.progress_bar_user);
 
         // Set toolbar
         Toolbar toolbar = findViewById(R.id.user_toolbar);
@@ -132,6 +134,7 @@ public class UserActivity extends AppCompatActivity {
        reviewReference.orderByChild("author").equalTo(username).addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               progressBar.setVisibility(View.GONE);
                reviews.clear();
                Iterable<DataSnapshot> data= dataSnapshot.getChildren();
                for(DataSnapshot d: data){
@@ -140,8 +143,8 @@ public class UserActivity extends AppCompatActivity {
                numberOfReviews.setText(reviews.size()+ " reviews"); // set updated value
                if(reviews.size()>0) {
                    recyclerView = findViewById(R.id.user_reviews_recyclerview);
-                   layoutManager = new LinearLayoutManager(getApplicationContext());
-                   adapter = new UserReviewsAdapter(getApplicationContext(), reviews);
+                   layoutManager = new LinearLayoutManager(UserActivity.this);
+                   adapter = new UserReviewsAdapter(UserActivity.this, reviews);
 
                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
                    recyclerView.addItemDecoration(dividerItemDecoration);

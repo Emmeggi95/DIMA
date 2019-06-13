@@ -1,5 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -62,22 +64,24 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
         final Album album = albumList.get(i);
+        final ItemViewHolder h = (ItemViewHolder) holder;
 
-        ((ItemViewHolder) holder).title.setText(album.getTitle());
-        ((ItemViewHolder) holder).artist.setText(album.getArtist());
-        ((ItemViewHolder) holder).rating.setText(String.format("%.2f", album.getScore()));
+        h.title.setText(album.getTitle());
+        h.artist.setText(album.getArtist());
+        h.rating.setText(String.format("%.2f", album.getScore()));
 
         // Fetch image from storage
         CoverCache.retrieveCover(album.getCover(),((FreshAlbumsAdapter.ItemViewHolder) holder).cover, ((FreshAlbumsAdapter.ItemViewHolder) holder).loading,
                 context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
 
         // Set on click to album activity
-        ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
+        h.card.setOnClickListener(new CardView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", album);
-                context.startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.cover, "album_cover");
+                context.startActivity(intent, options.toBundle());
             }
         });
 

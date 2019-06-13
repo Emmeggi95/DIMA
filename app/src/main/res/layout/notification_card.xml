@@ -36,7 +36,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="Notification"
-                android:textAppearance="@style/SecondaryTextTheme"
+                android:textAppearance="@style/Body1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/notification_date"
                 app:layout_constraintStart_toEndOf="@+id/notification_icon"

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/review_title_default"
-        android:textAppearance="@style/HeaderTextTheme"
+        android:textAppearance="@style/Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/review_date_default"
-        android:textAppearance="@style/LittleTextTheme"
+        android:textAppearance="@style/Body2"
         app:layout_constraintBottom_toTopOf="@+id/review_body"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -81,10 +81,11 @@
         android:id="@+id/review_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/layout_margin"
+        android:paddingTop="@dimen/layout_margin"
+        android:paddingBottom="@dimen/layout_margin"
         android:text="@string/long_text"
         android:textAlignment="textStart"
-        android:textAppearance="@style/SecondaryTextTheme"
+        android:textAppearance="@style/BodyNews"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stars_container" />
 
@@ -93,16 +94,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/review_by_text"
-        android:textAppearance="@style/LittleTextTheme"
+        android:textAppearance="@style/Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/review_body" />
 
     <TextView
         android:id="@+id/review_author"
+        style="@style/Link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/generic_user"
-        android:textAppearance="@style/LinkTextTheme"
+        android:textAppearance="@style/Body1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/review_by" />
 
@@ -121,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/review_default_likes"
-        android:textAppearance="@style/LittleTextTheme"
+        android:textAppearance="@style/Body2"
         app:layout_constraintBottom_toBottomOf="@+id/heart"
         app:layout_constraintEnd_toStartOf="@+id/heart"
         app:layout_constraintTop_toBottomOf="@+id/review_body" />

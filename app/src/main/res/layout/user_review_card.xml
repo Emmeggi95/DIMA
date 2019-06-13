@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,64 +9,24 @@
         android:id="@+id/user_review_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         app:cardElevation="0dp">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/album_cover"
-                android:layout_width="@dimen/playlist_cover_side"
-                android:layout_height="@dimen/playlist_cover_side"
-                android:layout_centerVertical="false"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/default_cover" />
-
-            <ProgressBar
-                android:id="@+id/loading_user_review"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignStart="@+id/album_cover"
-                android:visibility="visible" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_effect"
+            android:paddingLeft="@dimen/layout_margin"
+            android:paddingTop="@dimen/card_margin"
+            android:paddingRight="@dimen/layout_margin"
+            android:paddingBottom="@dimen/card_margin">
 
             <LinearLayout
+                android:id="@+id/review_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_margin"
-                android:layout_toRightOf="@+id/album_cover"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/album_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="TextView"
-                    android:textAppearance="@style/PrimaryTextTheme" />
-
-                <TextView
-                    android:id="@+id/album_author"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="TextView"
-                    android:textAppearance="@style/LittleTextTheme" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/album_cover"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/review_title"
@@ -73,41 +34,101 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="TextView"
-                    android:textAppearance="@style/SecondaryTextTheme" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_baseline_star_rate_18px"
-                        android:tint="@color/star_color" />
-
-                    <TextView
-                        android:id="@+id/review_rating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/imageView2"
-                        android:text="TextView"
-                        android:textAppearance="@style/LittleTextTheme"
-                        android:textColor="@color/star_color" />
-
-                    <TextView
-                        android:id="@+id/review_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/review_rating"
-                        android:text="TextView"
-                        android:textAlignment="textEnd"
-                        android:textAppearance="@style/LittleTextTheme" />
-                </RelativeLayout>
+                    android:text="@string/review_title_default"
+                    android:textAppearance="@style/Title" />
 
             </LinearLayout>
-        </RelativeLayout>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cover_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="@dimen/card_radius_little"
+                app:cardElevation="@dimen/card_elevation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/review_info">
+
+                <ImageView
+                    android:id="@+id/album_cover"
+                    android:layout_width="@dimen/playlist_cover_side"
+                    android:layout_height="@dimen/playlist_cover_side"
+                    android:transitionName="album_cover"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/default_cover" />
+
+                <ProgressBar
+                    android:id="@+id/loading_user_review"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:visibility="visible" />
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cover_card"
+                app:layout_constraintTop_toBottomOf="@+id/review_info">
+
+                <TextView
+                    android:id="@+id/album_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/default_album_title"
+                    android:textAppearance="@style/H6" />
+
+                <TextView
+                    android:id="@+id/album_author"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/artist_name_default"
+                    android:textAppearance="@style/Body2" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cover_card">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_star_rate_18px"
+                    android:tint="@color/star_color" />
+
+                <TextView
+                    android:id="@+id/review_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imageView2"
+                    android:text="@string/default_rating"
+                    android:textAppearance="@style/Body2"
+                    android:textColor="@color/star_color" />
+
+                <TextView
+                    android:id="@+id/review_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/review_rating"
+                    android:text="@string/review_date_default"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="@style/Body2" />
+            </RelativeLayout>
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 </RelativeLayout>

@@ -83,7 +83,7 @@
                     android:layout_gravity="center"
                     android:ems="10"
                     android:inputType="textNoSuggestions"
-                    android:textAppearance="@style/BigTextTheme"
+                    android:textAppearance="@style/H6"
                     android:visibility="gone" />
 
                 <TextView
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/generic_user"
-                    android:textAppearance="@style/HeaderTextTheme" />
+                    android:textAppearance="@style/H5" />
 
 
             </LinearLayout>
@@ -149,11 +149,12 @@
 
                 <TextView
                     android:id="@+id/edit_submit_text"
+                    style="@style/Link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/icon_text_distance"
                     android:text="@string/edit_profile"
-                    android:textAppearance="@style/LinkTextTheme" />
+                    android:textAppearance="@style/H6" />
             </LinearLayout>
 
             <LinearLayout
@@ -175,11 +176,12 @@
 
                 <TextView
                     android:id="@+id/textView7"
+                    style="@style/Link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/icon_text_distance"
                     android:text="@string/go_to_user_page"
-                    android:textAppearance="@style/LinkTextTheme" />
+                    android:textAppearance="@style/H6" />
             </LinearLayout>
 
         </android.support.constraint.ConstraintLayout>

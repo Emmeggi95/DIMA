@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorBackground"
             app:theme="@style/AppTheme.Toolbar"
-            app:titleTextAppearance="@style/AppTheme.Toolbar.Title">
+            app:titleTextAppearance="@style/AppTheme.Toolbar">
 
             <RelativeLayout
                 android:layout_width="match_parent"

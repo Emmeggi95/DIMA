@@ -14,7 +14,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/search_history_item"
-        android:textAppearance="@style/LittleTextTheme"
+        android:textAppearance="@style/Body2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

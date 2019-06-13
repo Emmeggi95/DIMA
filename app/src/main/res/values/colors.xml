@@ -13,15 +13,16 @@
     <!--Background colors-->
     <color name="colorLightBackground">#ffffff</color>
     <color name="colorDarkBackground">#212121</color>
+    <color name="default_background_gradient">#e0e0e0</color>
 
     <!--Text colors-->
-    <color name="colorTextOnPrimary">#000000</color>
+    <color name="colorTextOnPrimary">#212121</color>
     <color name="colorTextOnSecondary">#ffffff</color>
     <color name="colorTextOnAccent">@color/colorTextOnSecondary</color>
-    <color name="colorTextOnLightBackground">#000000</color>
+    <color name="colorTextOnLightBackground">#212121</color>
     <color name="colorTextOnDarkBackground">#FFFFFF</color>
     <color name="colorTextOnDarkBackgroundSecondary">#eeeeee</color>
-    <color name="colorDarkText">#000000</color>
+    <color name="colorDarkText">#212121</color>
     <color name="colorLightText">#ffffff</color>
     <color name="colorGrayText">#616161</color>
     <color name="colorAppBarText">#000000</color>
@@ -32,6 +33,8 @@
     <color name="card_default_color">#ffffff</color>
     <color name="card_text_color">#000000</color>
     <color name="star_color">#f57f17</color>
+    <color name="light_star_color">#ffecb3</color>
+    <color name="default_card_background">#424242</color>
 
     <!--Gradient colors-->
     <color name="text_start_color">#757575</color>

@@ -15,7 +15,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Result"
-        android:textAppearance="@style/BigTextTheme"
+        android:textAppearance="@style/H6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_title"
-                android:textAppearance="@style/HeaderTextTheme" />
+                android:textAppearance="@style/H4" />
 
             <Spinner
                 android:id="@+id/genre_spinner"

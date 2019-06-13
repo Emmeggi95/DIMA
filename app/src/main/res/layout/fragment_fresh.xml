@@ -16,9 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_margin"
             android:text="@string/fresh_header"
-            android:textColor="@color/colorTextOnLightBackground"
-            android:textSize="@dimen/header_text_size"
-            android:textStyle="bold" />
+            android:textAppearance="@style/H4" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fresh_recycler_view"

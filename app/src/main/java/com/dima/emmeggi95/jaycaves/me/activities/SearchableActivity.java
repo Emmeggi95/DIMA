@@ -1,7 +1,9 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -34,6 +38,10 @@ import java.util.List;
  * Allows search of contents
  */
 public class SearchableActivity extends AppCompatActivity {
+
+    private View rootLayout;
+    private int cx;
+    private int cy;
 
     private SearchView searchView;
     private RecyclerView artistRecyclerView;
@@ -70,12 +78,47 @@ public class SearchableActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
+        overridePendingTransition(R.anim.do_not_move, R.anim.do_not_move);
+        rootLayout = findViewById(R.id.root_layout);
+        rootLayout.setVisibility(View.INVISIBLE);
 
-        //getWindow().setEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.search_transition));
+        if(getIntent().hasExtra(getString(R.string.x_axis)) && getIntent().hasExtra(getString(R.string.y_axis))) {
+            cx = getIntent().getIntExtra(getString(R.string.x_axis), 0);
+            cy = getIntent().getIntExtra(getString(R.string.y_axis), 0);
+        } else {
+            cx = rootLayout.getWidth()/2;
+            cy = rootLayout.getHeight()/2;
+        }
+
+        ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    float finalRadius = Math.max(rootLayout.getWidth(), rootLayout.getHeight());
+
+                    // create the animator for this view (the start radius is zero)
+                    Animator circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, cx, cy, 0, finalRadius);
+                    circularReveal.setDuration(300);
+
+                    // make the view visible and start the animation
+                    rootLayout.setVisibility(View.VISIBLE);
+                    circularReveal.start();
+
+                    rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+        }
 
         Toolbar toolbar = findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         searchView = findViewById(R.id.search_view);
 
@@ -234,10 +277,6 @@ public class SearchableActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -266,6 +305,42 @@ public class SearchableActivity extends AppCompatActivity {
 
         // Register the broadcast receiver with the intent filter object.
         registerReceiver(networkChangeReceiver, intentFilter);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        float startRadius = Math.max(rootLayout.getWidth(), rootLayout.getHeight());
+
+        // create the animator for this view (the start radius is zero)
+        Animator circularHide = ViewAnimationUtils.createCircularReveal(rootLayout, cx, cy, startRadius, 0);
+        circularHide.setDuration(300);
+
+        circularHide.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                rootLayout.setVisibility(View.INVISIBLE);
+                finish();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        // start the animation
+        circularHide.start();
 
     }
 
@@ -308,5 +383,4 @@ public class SearchableActivity extends AppCompatActivity {
         albumAdapter.notifyDataSetChanged();
         albumHeader.setVisibility(View.GONE);
     }
-
 }

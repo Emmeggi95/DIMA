@@ -3,11 +3,14 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
@@ -58,7 +61,7 @@ public class ArtistActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.playlist_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        setTitle("");
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +76,12 @@ public class ArtistActivity extends AppCompatActivity {
         // Set artist attributes
         loading= findViewById(R.id.loading_artist);
         cover= findViewById(R.id.artist_cover);
-        setTitle(artist.getName());
+
+        TextView artistName = findViewById(R.id.artist_name);
         TextView birthdayText = (TextView) findViewById(R.id.birthday_text);
         TextView descriptionText = (TextView) findViewById(R.id.artist_description_text);
         TextView genre1Text = (TextView) findViewById(R.id.genre1_text);
+        artistName.setText(artist.getName());
         birthdayText.setText(artist.getBirthdate());
         descriptionText.setText(artist.getStory());
         genre1Text.setText(artist.getGenre1());
@@ -104,15 +109,20 @@ public class ArtistActivity extends AppCompatActivity {
             bitmap = drawable.getBitmap();
        // }
         Palette p = Palette.from(bitmap).generate();
-        int color;
-        if(p.getMutedSwatch()!=null) {
-            color = p.getMutedSwatch().getRgb();
-        } else {
-            color = R.color.colorAccent;
-        }
+        int color = p.getMutedColor(getResources().getColor(R.color.colorSecondaryLight));
         CollapsingToolbarLayout toolbarLayout = findViewById(R.id.artist_toolbar_layout);
-        toolbarLayout.setBackgroundColor(color);
+        toolbarLayout.setContentScrimColor(color);
         toolbarLayout.setStatusBarScrimColor(color);
+
+        //Set toolbar navigation icon color
+        if(isTopLeftDark(bitmap)){
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorTextOnDarkBackground), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorTextOnLightBackground), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        NestedScrollView container = findViewById(R.id.container);
+        container.setBackgroundColor(p.getLightMutedColor(getResources().getColor(R.color.default_background_gradient)));
 
 
         initAlbums();
@@ -196,6 +206,34 @@ public class ArtistActivity extends AppCompatActivity {
         // Register the broadcast receiver with the intent filter object.
         registerReceiver(networkChangeReceiver, intentFilter);
 
+    }
+
+    public static boolean isTopLeftDark(Bitmap bitmap){
+        boolean dark=false;
+        int height = bitmap.getHeight()/8;
+        int width = bitmap.getWidth()/8;
+
+        float darkThreshold = width*height*0.45f;
+        int darkPixels=0;
+
+        int[] pixels = new int[width*height];
+        bitmap.getPixels(pixels,0,width,0,0,width,height);
+
+        for(int pixel : pixels){
+            int color = pixel;
+            int r = Color.red(color);
+            int g = Color.green(color);
+            int b = Color.blue(color);
+            double luminance = (0.299*r+0.0f + 0.587*g+0.0f + 0.114*b+0.0f);
+            if (luminance<150) {
+                darkPixels++;
+            }
+        }
+
+        if (darkPixels >= darkThreshold) {
+            dark = true;
+        }
+        return dark;
     }
 
 }

@@ -21,6 +21,6 @@
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="@dimen/layout_margin"
             android:text="@string/load_more_messages"
-            android:textAppearance="@style/LittleLinkTextTheme" />
+            android:textAppearance="@style/Body2" />
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>

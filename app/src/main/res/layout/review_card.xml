@@ -10,7 +10,10 @@
         android:id="@+id/review_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_margin"
+        android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginTop="@dimen/card_margin"
+        android:layout_marginRight="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/card_margin"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
@@ -45,7 +48,7 @@
                     android:layout_toRightOf="@+id/star"
                     android:gravity="center"
                     android:text="@string/default_rating"
-                    android:textAppearance="@style/LittleTextTheme"
+                    android:textAppearance="@style/Body2"
                     android:textColor="@color/star_color"
                     app:layout_constraintBottom_toTopOf="@+id/card_review_arrow"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -56,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="1dp"
                     android:text="@string/review_title_default"
-                    android:textAppearance="@style/HeaderTextTheme"
+                    android:textAppearance="@style/Title"
                     app:layout_constraintBottom_toTopOf="@+id/card_review_author"
                     app:layout_constraintStart_toStartOf="@+id/card_review_author"
                     app:layout_constraintTop_toTopOf="parent"
@@ -64,10 +67,11 @@
 
                 <TextView
                     android:id="@+id/card_review_author"
+                    style="@style/Link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/review_author_default"
-                    android:textAppearance="@style/LinkTextTheme"
+                    android:textAppearance="@style/Body1"
                     app:layout_constraintBottom_toTopOf="@+id/card_review_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/card_review_title" />
@@ -77,7 +81,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/review_date_default"
-                    android:textAppearance="@style/LittleTextTheme"
+                    android:textAppearance="@style/Body2"
                     app:layout_constraintBottom_toTopOf="@+id/card_review_likes"
                     app:layout_constraintStart_toStartOf="@+id/card_review_author"
                     app:layout_constraintTop_toBottomOf="@+id/card_review_author" />
@@ -87,7 +91,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/review_default_likes"
-                    android:textAppearance="@style/LittleTextTheme"
+                    android:textAppearance="@style/Body2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/card_review_date"
                     app:layout_constraintStart_toStartOf="@+id/card_review_date"
@@ -115,9 +119,10 @@
                     android:id="@+id/card_review_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:padding="@dimen/layout_margin"
-                    android:textAppearance="@style/SecondaryTextTheme" />
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:text="@string/long_text"
+                    android:textAppearance="@style/BodyNews" />
 
                 <LinearLayout
                     android:id="@+id/card_review_like"
@@ -144,7 +149,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:text="@string/like"
-                        android:textAppearance="@style/LittleTextTheme"
+                        android:textAppearance="@style/Body2"
                         android:textColor="@android:color/holo_red_dark" />
                 </LinearLayout>
             </LinearLayout>

@@ -1,5 +1,8 @@
 package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -65,25 +68,27 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
         final Album album = albums.get(i);
+        final ItemViewHolder h = (ItemViewHolder) holder;
 
         // Set album info
-        ((ItemViewHolder) holder).rank.setText(String.valueOf(i+1));
-        ((ItemViewHolder) holder).title.setText(album.getTitle());
-        ((ItemViewHolder) holder).artist.setText(album.getArtist());
-        ((ItemViewHolder) holder).score.setText(String.format("%.2f", album.getScore()));
-        ((ItemViewHolder) holder).votes.setText("n/a");// Da implementare!
+        h.rank.setText(String.valueOf(i+1));
+        h.title.setText(album.getTitle());
+        h.artist.setText(album.getArtist());
+        h.score.setText(String.format("%.2f", album.getScore()));
+        h.votes.setText("n/a");// Da implementare!
 
         // Set cover
         CoverCache.retrieveCover(album.getCover(), ((ChartAlbumsAdapter.ItemViewHolder)holder).cover, ((ChartAlbumsAdapter.ItemViewHolder)holder).loading,
                 context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
 
         // Set on click to album activity
-        ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener() {
+        h.card.setOnClickListener(new CardView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", album);
-                context.startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.cover, "album_cover");
+                context.startActivity(intent, options.toBundle());
             }
         });
     }

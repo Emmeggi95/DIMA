@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/editing_instructions"
                         android:textAlignment="center"
-                        android:textAppearance="@style/SecondaryTextTheme"
+                        android:textAppearance="@style/Body1"
                         android:visibility="gone"
                         tools:layout_conversion_absoluteHeight="0dp"
                         tools:layout_editor_absoluteY="56dp"

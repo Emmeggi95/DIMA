@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +25,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -67,7 +71,6 @@ public class AlbumActivity extends AppCompatActivity {
     Review featuredReview;
     boolean reviewLiked;
     String id;
-    Button writeReviewButton;
 
 
     // Db references
@@ -138,7 +141,7 @@ public class AlbumActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        setTitle(album.getTitle());
+        setTitle("");
 
         // Set Cover Image
         loading = findViewById(R.id.loading_album);
@@ -155,17 +158,23 @@ public class AlbumActivity extends AppCompatActivity {
         BitmapDrawable drawable = (BitmapDrawable) coverView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
         Palette p = Palette.from(bitmap).generate();
-        int color;
-        if (p.getMutedSwatch() != null) {
-            color = p.getMutedSwatch().getRgb();
-        } else {
-            color = R.color.colorAccent;
-        }
+        int color = p.getMutedColor(getResources().getColor(R.color.colorSecondaryLight));
 
-        // Set color
+        // Set toolbar and fab color
         fab.setBackgroundTintList(ColorStateList.valueOf(color));
         toolbarLayout.setContentScrimColor(color);
         toolbarLayout.setStatusBarScrimColor(color);
+
+        // Set navigation icon color
+        if(isTopLeftDark(bitmap)){
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorTextOnDarkBackground), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorTextOnLightBackground), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        // Set title
+        TextView albumTitleText = findViewById(R.id.album_title_text);
+        albumTitleText.setText(album.getTitle());
 
         // Set artist
         TextView artistText = (TextView) findViewById(R.id.artist_text);
@@ -176,21 +185,7 @@ public class AlbumActivity extends AppCompatActivity {
         yearText.setText(album.getDate());
 
         // Init featured review section
-        hideFeaturedReview();
-
-        // Write a review button
-        writeReviewButton = findViewById(R.id.write_review_button);
-        for (Review r : User.reviews)
-            if (r.getTitle().equals(id))
-                writeReviewButton.setEnabled(false);
-        writeReviewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
-                intent.putExtra("album", album);
-                startActivity(intent);
-            }
-        });
+        //hideFeaturedReview();
 
         // Bottom navigation
         final BottomNavigationView bottomNavigationView = findViewById(R.id.album_bottom_nav);
@@ -257,8 +252,17 @@ public class AlbumActivity extends AppCompatActivity {
 
     public void showFeaturedReview() {
 
-        // Bind elements
+        // Hide progress bar and show review
+        ProgressBar progressBar = findViewById(R.id.progress_bar_review);
+        progressBar.setVisibility(GONE);
+        View divider = findViewById(R.id.divider1);
+        divider.setVisibility(View.VISIBLE);
         ConstraintLayout featuredReviewLayout = findViewById(R.id.featured_review_content);
+        featuredReviewLayout.setVisibility(View.VISIBLE);
+        TextView reviewNotFound = (TextView) findViewById(R.id.not_found_text);
+        reviewNotFound.setVisibility(GONE);
+
+        // Bind elements
         TextView reviewHeader = (TextView) findViewById(R.id.review_title);
         TextView reviewAuthor = (TextView) findViewById(R.id.review_author);
         TextView reviewDate = (TextView) findViewById(R.id.review_date);
@@ -275,21 +279,6 @@ public class AlbumActivity extends AppCompatActivity {
             System.out.println("NO REVIEW IN INTENT, FETCHING FROM ALBUM");
             featuredReview = album.getReviews().get(0);
         }
-        /*
-        if (featuredReview.getAuthor().equals(User.username)) {
-            edit.setVisibility(View.VISIBLE);
-
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
-                    intent.putExtra("review", featuredReview);
-                    intent.putExtra("album", album);
-                    startActivity(intent);
-                }
-            });
-        }
-        */
 
         // Set stars
         List<ImageView> stars = new ArrayList<ImageView>();
@@ -314,7 +303,6 @@ public class AlbumActivity extends AppCompatActivity {
                 stars.get(i).setImageResource(R.drawable.ic_star_half_24dp);
             }
         }
-
 
         // Init likes
         likes = featuredReview.getLikes();
@@ -358,16 +346,6 @@ public class AlbumActivity extends AppCompatActivity {
         }
         reviewLikes.setText(String.valueOf(featuredReview.getLikes()) + ' ' + likesText);
 
-        featuredReviewLayout.setVisibility(View.VISIBLE);
-        TextView reviewNotFound = findViewById(R.id.not_found_text);
-        reviewNotFound.setVisibility(GONE);
-        Button seeAllReviewsButton = findViewById(R.id.all_reviews_button);
-        if (album.getReviews().size() > 0) {
-            seeAllReviewsButton.setEnabled(true);
-        } else {
-            seeAllReviewsButton.setEnabled(false);
-        }
-
         // Like button
         final ImageView likeSymbol = findViewById(R.id.heart);
         likeSymbol.setOnClickListener(new View.OnClickListener(){
@@ -402,12 +380,15 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     public void hideFeaturedReview() {
+        // Hide progress bar and show message
+        ProgressBar progressBar = findViewById(R.id.progress_bar_review);
+        progressBar.setVisibility(GONE);
+        View divider = findViewById(R.id.divider1);
+        divider.setVisibility(View.VISIBLE);
         ConstraintLayout featuredReviewLayout = (ConstraintLayout) findViewById(R.id.featured_review_content);
         featuredReviewLayout.setVisibility(GONE);
         TextView reviewNotFound = (TextView) findViewById(R.id.not_found_text);
         reviewNotFound.setVisibility(View.VISIBLE);
-        Button seeAllReviewsButton = (Button) findViewById(R.id.all_reviews_button);
-        seeAllReviewsButton.setEnabled(false);
     }
 
     public void startReviewsActivity(View view) {
@@ -455,11 +436,11 @@ public class AlbumActivity extends AppCompatActivity {
                 for (DataSnapshot d : data) {
                     album.getReviews().add(d.getValue(Review.class));
                 }
-                if (album.getReviews().size() > 0 || getIntent().hasExtra("review"))
+                if (album.getReviews().size() > 0 || getIntent().hasExtra("review")) {
                     showFeaturedReview();
-                for (Review r: album.getReviews())
-                    if (r.getAuthor().equals(User.username))
-                        writeReviewButton.setEnabled(false);
+                } else {
+                    hideFeaturedReview();
+                }
             }
 
             @Override
@@ -505,5 +486,32 @@ public class AlbumActivity extends AppCompatActivity {
 
     }
 
+    public static boolean isTopLeftDark(Bitmap bitmap){
+        boolean dark=false;
+        int height = bitmap.getHeight()/8;
+        int width = bitmap.getWidth()/8;
+
+        float darkThreshold = width*height*0.45f;
+        int darkPixels=0;
+
+        int[] pixels = new int[width*height];
+        bitmap.getPixels(pixels,0,width,0,0,width,height);
+
+        for(int pixel : pixels){
+            int color = pixel;
+            int r = Color.red(color);
+            int g = Color.green(color);
+            int b = Color.blue(color);
+            double luminance = (0.299*r+0.0f + 0.587*g+0.0f + 0.114*b+0.0f);
+            if (luminance<150) {
+                darkPixels++;
+            }
+        }
+
+        if (darkPixels >= darkThreshold) {
+            dark = true;
+        }
+        return dark;
+    }
 
 }

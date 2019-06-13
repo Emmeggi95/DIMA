@@ -35,7 +35,7 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/playlist1"
-                android:textAppearance="@style/PrimaryTextTheme"
+                android:textAppearance="@style/H6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/playlist1_symbol"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,7 +66,7 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/playlist2"
-                android:textAppearance="@style/PrimaryTextTheme"
+                android:textAppearance="@style/H6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/playlist2_symbol"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +97,7 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/playlist3"
-                android:textAppearance="@style/PrimaryTextTheme"
+                android:textAppearance="@style/H6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/playlist3_symbol"
                 app:layout_constraintTop_toTopOf="parent" />

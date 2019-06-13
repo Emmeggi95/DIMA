@@ -21,8 +21,6 @@
     <string name="title_forum">Forum</string>
     <string name="title_social">Social</string>
 
-    <!-- Strings related to Settings -->
-
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
@@ -164,7 +162,7 @@
     <string name="playlist2">To Listen</string>
     <string name="playlist3">On the Go</string>
     <string name="added_to">added to</string>
-    <string name="choose_playlist">Choose a playlist</string>
+    <string name="choose_playlist">Add to a playlist</string>
     <string name="editing_instructions">Drag the albums to rearrange them.\nSwipe to delete them from the playlist.</string>
 
     <!-- User Page -->
@@ -370,6 +368,8 @@
     <string name="clear_history">Clear history</string>
     <string name="no_result_found">No result found.</string>
     <string name="search_new_content">Add new content yourself!</string>
+    <string name="x_axis">animation_x_axis</string>
+    <string name="y_axis">animation_y_axis</string>
 
     <!-- FB LOGIN -->
     <string name="facebook_application_id" translatable="false">593302704491055</string>
