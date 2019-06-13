@@ -127,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Date currenTime = Calendar.getInstance().getTime();
-                SimpleDateFormat sdt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat sdt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 Message newMessage = new Message(input.getText().toString(), sdt.format(currenTime), User.uid, User.username, chatId);
                 viewModel.sendMessage(newMessage);
                 input.setText("");

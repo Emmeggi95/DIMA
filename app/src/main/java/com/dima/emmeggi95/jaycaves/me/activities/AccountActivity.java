@@ -57,6 +57,7 @@ public class AccountActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private DatabaseReference prefReference;
     private DatabaseReference reviewReference;
+    private DatabaseReference notificationReference;
     private StorageReference storageReference;
     private File localFile;
     private boolean usernameTaken = false;
@@ -119,6 +120,8 @@ public class AccountActivity extends AppCompatActivity {
                     if (tempUsername.endsWith(" "))
                         tempUsername= tempUsername.substring(0, tempUsername.length()-1);
 
+                    tempUsername.replaceAll("[^a-zA-Z0-9]", "");
+
 
                 FirebaseDatabase.getInstance().getReference("preferences").orderByChild("username").equalTo(tempUsername).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -151,6 +154,7 @@ public class AccountActivity extends AppCompatActivity {
 
         prefReference = FirebaseDatabase.getInstance().getReference("preferences").child(User.uid);
         reviewReference= FirebaseDatabase.getInstance().getReference("reviews");
+        notificationReference = FirebaseDatabase.getInstance().getReference("notifications");
         storageReference= FirebaseStorage.getInstance().getReference().child("User_covers");
 
 
@@ -277,14 +281,23 @@ public class AccountActivity extends AppCompatActivity {
             Snackbar.make(v, R.string.username_taken, Snackbar.LENGTH_LONG).show();
         }
         else {
-            AccountPreference newPref = new AccountPreference(usernameInput.getText().toString(), (coverId != null) ? coverId : User.cover_photo_id);
+            String parsedInput = usernameInput.getText().toString();
+
+            if (parsedInput.endsWith(" "))
+                parsedInput= parsedInput.substring(0, parsedInput.length()-1);
+
+            parsedInput = parsedInput.replaceAll("[^a-zA-Z0-9]", ""); // eliminate special chars
+            final String finalIput = parsedInput;
+            final String oldUsername = User.username;
+            System.out.println(oldUsername);
+            AccountPreference newPref = new AccountPreference(parsedInput, (coverId != null) ? coverId : User.cover_photo_id);
             prefReference.setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Snackbar.make(v, R.string.changed_preferences, Snackbar.LENGTH_LONG).show();
-                    User.setUsername(usernameInput.getText().toString());
-                    updateReviewsWithNewUsername();
-                    usernameText.setText(usernameInput.getText().toString());
+                    updateServerWithNewUsername(oldUsername);
+                    User.setUsername(finalIput);
+                    usernameText.setText(finalIput);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -299,14 +312,31 @@ public class AccountActivity extends AppCompatActivity {
     /**
      * Corrects all reviews done by user with their most recent username
      */
-    private void updateReviewsWithNewUsername(){
+    private void updateServerWithNewUsername(String oldUsername){
+        // Review Section
         reviewReference.orderByChild("userEmail").equalTo(User.email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for (DataSnapshot d: data){
-                    System.out.println("REVIEW: " + d.getKey());
                     reviewReference.child(d.getKey()).child("author").setValue(User.username);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //
+        notificationReference.orderByChild("liker").equalTo(oldUsername).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                for (DataSnapshot d: data){
+                    System.out.println(d.getKey());
+                    //notificationReference.child(d.getKey()).child("liker").setValue(User.username);
                 }
             }
 

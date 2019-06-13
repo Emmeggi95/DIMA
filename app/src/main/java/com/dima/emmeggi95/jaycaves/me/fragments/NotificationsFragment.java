@@ -1,7 +1,8 @@
 package com.dima.emmeggi95.jaycaves.me.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dima.emmeggi95.jaycaves.me.R;
-import com.dima.emmeggi95.jaycaves.me.entities.Notification;
-import com.dima.emmeggi95.jaycaves.me.entities.User;
+import com.dima.emmeggi95.jaycaves.me.entities.CustomNotification;
+import com.dima.emmeggi95.jaycaves.me.entities.NotificationLike;
 import com.dima.emmeggi95.jaycaves.me.entities.adapters.NotificationsAdapter;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.dima.emmeggi95.jaycaves.me.view_models.NotificationsViewModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,9 +28,7 @@ public class NotificationsFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private NotificationsAdapter adapter;
-
-    private List<Notification> notifications;
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("reviews");
+    private NotificationsViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,39 +37,25 @@ public class NotificationsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         recyclerView = view.findViewById(R.id.notifications_recycler_view);
         linearLayoutManager= new LinearLayoutManager(getActivity());
-        notifications = new ArrayList<>();
-
-        reference.orderByChild("userEmail").equalTo(User.email).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                // not relevant
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                // not relevant
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                // not relevant
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
-
-
-
-
-        adapter = new NotificationsAdapter(getActivity(), notifications);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        // load data from ViewModel
+        viewModel = ViewModelProviders.of(getActivity()).get(NotificationsViewModel.class);
+        adapter = new NotificationsAdapter(getActivity(), new ArrayList<NotificationLike>());
         recyclerView.setAdapter(adapter);
+
+        final Observer<List<NotificationLike>> observer = new Observer<List<NotificationLike>>() {
+            @Override
+            public void onChanged(@Nullable List<NotificationLike> notifications) {
+                adapter = new NotificationsAdapter(getActivity(), notifications);
+                recyclerView.setAdapter(adapter);
+            }
+        };
+
+        viewModel.getData().observe(this, observer);
+
+
+
 
         return view;
     }

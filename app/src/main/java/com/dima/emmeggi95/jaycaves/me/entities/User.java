@@ -24,7 +24,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,6 +60,7 @@ public class User {
     private static DatabaseReference preferenceRef = FirebaseDatabase.getInstance().getReference("preferences");
     private static DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("chats");
     private static StorageReference storageReference = FirebaseStorage.getInstance().getReference("User_covers");
+    private static DatabaseReference notificationReference = FirebaseDatabase.getInstance().getReference("notifications");
 
 
 // STATIC SETTERS
@@ -103,7 +108,7 @@ public class User {
     }
 
     /**
-     *
+     * Fetches user playlists
      */
     public static void initPlaylists(){
 
@@ -130,7 +135,7 @@ public class User {
 
 
     /**
-     *
+     * Fetches user likes. This is used to avoid users to like same review multiple times
      */
     public static void initLikes(){
 
@@ -155,7 +160,7 @@ public class User {
     }
 
     /**
-     *
+     * Retrieves user's personal cover picture and username.
      * @param cover
      */
     public static void initPreferences(final ImageView cover) {
@@ -203,6 +208,9 @@ public class User {
             });
     }
 
+    /**
+     * Retrieves user's already started chats.
+     */
     public static void initChats(){
 
         // SELF INITIATED CHATS
@@ -239,6 +247,8 @@ public class User {
                 chats.clear();
                 chats.addAll(mychats);
                 chats.addAll(otherchats);
+                Collections.sort(chats, ChatPreview.dateComparator);
+
             }
 
             @Override
@@ -291,32 +301,55 @@ public class User {
     // 2) UPDATE SERVER-SIDE METHODS
 
     /**
-     *
-     * @param like id of liked review
+     * Registers on server the like and generates the notification
+     * @param  review liked review
      */
-    public static void addLike(final String like){
+    public static void addLike(final Review review){
 
-        likes.add(like);
+        likes.add(review.getId());
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("likes").child(uid).push();
-        ref.setValue(like);
+        ref.setValue(review.getId());
 
         //Update likes on db
-        reviewsRef.orderByKey().equalTo(like).addListenerForSingleValueEvent(new ValueEventListener() {
+        reviewsRef.orderByKey().equalTo(review.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for(DataSnapshot d: data){
                         // UPDATE NUMBER OF LIKES
-                        Review review = d.getValue(Review.class);
-                        reviewsRef.child(d.getKey()).child("likes").setValue(review.getLikes() + 1);
+                        Review currentReview = d.getValue(Review.class);
+                        reviewsRef.child(d.getKey()).child("likes").setValue(currentReview.getLikes() + 1);
 
                     }
+                preferenceRef.orderByChild("username").equalTo(review.getAuthor()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                        String id = "";
+                        for(DataSnapshot d: data) {
+                             id = d.getKey();
+                        }
+                        Date currenTime = Calendar.getInstance().getTime();
+                        SimpleDateFormat sdt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        NotificationLike newNote = new NotificationLike("", sdt.format(currenTime), false, review.getId(), review.getTitle(), id, User.username);
+                        DatabaseReference newRef = notificationReference.child(id).push();
+                        newRef.setValue(newNote);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 }
+
+
 
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                    likes.remove(like);
+                    likes.remove(review.getId());
             }
         });
     }

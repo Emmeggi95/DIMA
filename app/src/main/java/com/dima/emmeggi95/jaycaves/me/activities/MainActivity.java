@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -41,8 +42,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -127,6 +131,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+
+        authentication.addAuthStateListener(authStateListener);
 
 
         setContentView(R.layout.activity_main);
@@ -229,7 +235,7 @@ public class MainActivity extends AppCompatActivity
             navigateToId(R.id.nav_home);
         }
 
-        findViewById(R.id.drawer_layout).setVisibility(View.GONE);
+
 
     }
 
@@ -238,7 +244,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        authentication.removeAuthStateListener(authStateListener);
         if(this.networkChangeReceiver!=null) {
             unregisterReceiver(this.networkChangeReceiver);
         }
@@ -248,7 +253,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        authentication.addAuthStateListener(authStateListener);
+
         // Create an IntentFilter instance.
         intentFilter = new IntentFilter();
 
@@ -265,6 +270,7 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(networkChangeReceiver, intentFilter);
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -293,72 +299,84 @@ public class MainActivity extends AppCompatActivity
 
     private void onSignInInitialize(final FirebaseUser firebaseUser) {
 
-        FirebaseUserMetadata metadata= authentication.getCurrentUser().getMetadata();
         User.setUid(firebaseUser.getUid());
         User.setEmail(firebaseUser.getEmail());
-        String newUsername= "User "+ CustomRandomId.randomNumberGenerator(4);
-        User.setUsername(newUsername);
 
-        if (metadata.getCreationTimestamp()== metadata.getLastSignInTimestamp()){
-
-            // USER JUST REGISTERED
-            if(firebaseUser.getProviders().contains("password"))
-                firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        //Alert Dialog
-                    }
-                });
-            AccountPreference newPref= new AccountPreference(newUsername, "image:209839Ry8C5wbAn6");
-            prefReference.child(firebaseUser.getUid()).setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    User.initPreferences(custom_image);
+        prefReference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    // USER JUST REGISTERED
+                    if(firebaseUser.getProviders().contains("password"))
+                        firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                    System.out.println("SENT");
+                            }
+                        });
+                    String newUsername= "User "+ CustomRandomId.randomNumberGenerator(4);
+                    User.setUsername(newUsername);
+                    AccountPreference newPref= new AccountPreference(newUsername, "image:209839Ry8C5wbAn6");
+                    prefReference.child(firebaseUser.getUid()).setValue(newPref).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            User.initPreferences(custom_image);
+                        }
+                    });
                 }
-            });
+                else
+                    User.initPreferences(custom_image);
 
-        } else {
-
-            if(firebaseUser.getProviders().contains("password") && !firebaseUser.isEmailVerified()){
-                findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
-                new AlertDialog.Builder(this)
-                        .setTitle("Verify your email address")
-                        .setMessage("We sent you an email when you first registered. Please confirm your email and restart the app")
-                        .setCancelable(false)
-                        .setIconAttribute(android.R.attr.alertDialogIcon)
-                        .setPositiveButton("Send it again!", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                firebaseUser.sendEmailVerification();
-                                Snackbar.make(getCurrentFocus(), "Confermation mail resent!", Snackbar.LENGTH_LONG).show();
-                                finish();
-
-                            }
-                        })
-                        .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .show();
-
-                finish();
+                User.initLikes();
+                User.initReviews();
+                User.initPlaylists();
+                User.initChats();
             }
 
-            // USER IS AN OLD ONE
-            User.initPreferences(custom_image);
-            User.initLikes();
-            User.initReviews();
-            User.initPlaylists();
-            User.initChats();
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+
+        if(firebaseUser.getProviders().contains("password") && !firebaseUser.isEmailVerified()) {
+            findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
+            new AlertDialog.Builder(this)
+                    .setTitle("Verify your email address")
+                    .setMessage("We sent you an email when you first registered. Please confirm your email and restart the app")
+                    .setCancelable(false)
+                    .setIconAttribute(android.R.attr.alertDialogIcon)
+                    .setPositiveButton("Send it again!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            firebaseUser.sendEmailVerification();
+                            Snackbar.make(getCurrentFocus(), "Confermation mail resent! App will shut down soon...", Snackbar.LENGTH_LONG).show();
+                            Handler handler = new Handler();
+
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    System.exit(0);
+                                }
+                            }, 7000);
+
+                        }
+                    })
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    })
+                    .setNeutralButton("Logout", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            FirebaseAuth.getInstance().signOut();
+                        }
+                    })
+                    .show();
 
         }
-
-        findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
-
-
     }
 
    // GRAPHICAL ELEMENT SETUP METHODS

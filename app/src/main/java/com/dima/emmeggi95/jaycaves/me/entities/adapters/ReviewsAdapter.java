@@ -140,7 +140,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Animation bump = AnimationUtils.loadAnimation(context, R.anim.bump);
                 heart.startAnimation(bump);
                 message.setText(context.getResources().getString(R.string.liked));
-                User.addLike(review.getId());
+                User.addLike(review);
 
 
             }

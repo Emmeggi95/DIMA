@@ -1,13 +1,17 @@
 package com.dima.emmeggi95.jaycaves.me.entities.db;
 
+import com.dima.emmeggi95.jaycaves.me.entities.NotificationLike;
 import com.google.firebase.database.ServerValue;
 
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
  */
-public class ChatPreview implements Comparable<ChatPreview> {
+public class ChatPreview{
 
     private String chatId, user_1, user_2;
     private String lastMessage;
@@ -88,10 +92,18 @@ public class ChatPreview implements Comparable<ChatPreview> {
         this.unreadMessages_2 = unreadMessages_2;
     }
 
-    @Override
-    public int compareTo(ChatPreview o) {
-        return (int) ((long) this.lastAccess - (long)o.lastAccess);
-    }
+
+
+    public static Comparator<ChatPreview> dateComparator = new Comparator<ChatPreview>() {
+
+        public int compare(ChatPreview c1, ChatPreview c2) {
+
+
+
+            return (int) ((long) c2.lastAccess - (long)c1.lastAccess);
+
+
+        }};
 
     @Override
     public String toString() {

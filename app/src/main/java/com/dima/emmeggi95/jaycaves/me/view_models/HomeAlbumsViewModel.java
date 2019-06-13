@@ -47,49 +47,6 @@ public class HomeAlbumsViewModel extends ViewModel {
 
 
 
-     /*   database.getReference("reviews").orderByChild("creation").limitToLast(10).addValueEventListener(new ValueEventListener() {
-
-           @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                albumList.clear();
-                List<Review> reviews = new ArrayList<>();
-                for (DataSnapshot d : data)
-                    reviews.add(d.getValue(Review.class));
-                Collections.sort(reviews, Review.dateComparator);
-
-                for(Review r: reviews){
-                   database.getReference("albums").orderByKey().equalTo(r.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                            for(DataSnapshot d : data){
-                                albumList.add(d.getValue(Album.class));
-                            }
-                            albums.postValue(albumList);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                    System.out.println("DATABASE DENIED DOWNLOAD");
-            }
-        }); */
-
-
-
-
     }
 
     public LiveData<List<Album>> getData(){

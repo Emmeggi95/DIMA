@@ -88,7 +88,7 @@ public class Message {
 
         public int compare(Message m1, Message m2) {
 
-            SimpleDateFormat formatter= new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            SimpleDateFormat formatter= new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date1 = new Date();
             Date date2 = new Date();
             try {

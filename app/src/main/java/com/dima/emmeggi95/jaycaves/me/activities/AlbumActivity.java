@@ -374,7 +374,7 @@ public class AlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!reviewLiked){
-                    User.addLike(featuredReview.getId());
+                    User.addLike(featuredReview);
                     likeSymbol.setImageResource(R.drawable.ic_favorite_black_24dp);
                     reviewLiked = true;
                     featuredReview.setLikes(featuredReview.getLikes()+1);
