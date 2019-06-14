@@ -1,5 +1,6 @@
 package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +54,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TextView title, author, genre, rating;
         public ImageView cover;
         public List<ImageView> stars;
-        public CardView card;
+        public CardView card, coverCard;
         public ProgressBar loading;
 
         public ItemViewHolder(View view) {
@@ -69,6 +71,7 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             stars.add((ImageView) view.findViewById(R.id.star_4));
             stars.add((ImageView) view.findViewById(R.id.star));
             card = (CardView) view.findViewById(R.id.card);
+            coverCard = view.findViewById(R.id.cover_card);
             loading= (ProgressBar) view.findViewById(R.id.loading_cover);
 
         }
@@ -133,7 +136,9 @@ public class HomeAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", albumList.get(position));
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.cover, "album_cover");
+                intent.putExtra("return_radius", context.getResources().getDimension(R.dimen.card_radius));
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.coverCard, "album_cover");
+
                 context.startActivity(intent, options.toBundle());
             }
         });

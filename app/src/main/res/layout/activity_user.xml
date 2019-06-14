@@ -18,8 +18,7 @@
         android:id="@+id/user_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_toolbar"
-        android:layout_marginTop="@dimen/layout_margin">
+        android:layout_below="@+id/user_toolbar">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_picture"

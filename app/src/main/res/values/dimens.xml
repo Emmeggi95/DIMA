@@ -65,7 +65,7 @@
     <dimen name="rank_width">25dp</dimen>
 
     <!--Playlist Page-->
-    <dimen name="playlist_cover_side">50dp</dimen>
+    <dimen name="playlist_cover_side">70dp</dimen>
     <dimen name="divider_genre_year">8dp</dimen>
 
     <!-- Account Page -->

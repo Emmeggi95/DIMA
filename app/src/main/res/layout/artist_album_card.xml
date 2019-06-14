@@ -10,6 +10,7 @@
         android:layout_width="@dimen/artist_album_cover_side"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/card_margin"
+        android:foreground="@drawable/ripple_effect"
         app:cardBackgroundColor="@color/default_card_background"
         app:cardCornerRadius="@dimen/card_radius"
         app:cardElevation="@dimen/card_elevation">

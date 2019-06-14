@@ -150,10 +150,10 @@ public class ArtistActivity extends AppCompatActivity {
                 // Set album list
                 if(albums.size()>0) {
                     recyclerView = findViewById(R.id.artist_albums_recyclerview);
-                    layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                    layoutManager = new GridLayoutManager(ArtistActivity.this, 2);
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, getResources().getDimensionPixelSize(R.dimen.layout_margin), true));
-                    adapter = new ArtistAlbumsAdapter(getApplicationContext(), albums);
+                    adapter = new ArtistAlbumsAdapter(ArtistActivity.this, albums);
                     recyclerView.setAdapter(adapter);
                 } else {
                     ConstraintLayout noAlbumArea = findViewById(R.id.no_album_area);

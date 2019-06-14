@@ -40,7 +40,7 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
         TextView title, artist, rating;
         ImageView cover;
         public ProgressBar loading;
-        CardView card;
+        CardView card, coverCard;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -51,6 +51,7 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
             cover = itemView.findViewById(R.id.fresh_cover);
             loading = itemView.findViewById(R.id.fresh_loading_cover);
             card= itemView.findViewById(R.id.fresh_album_card);
+            coverCard = itemView.findViewById(R.id.fresh_cover_card);
         }
     }
 
@@ -80,7 +81,8 @@ public class FreshAlbumsAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", album);
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.cover, "album_cover");
+                intent.putExtra("return_radius", context.getResources().getDimension(R.dimen.card_radius_little));
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.coverCard, "album_cover");
                 context.startActivity(intent, options.toBundle());
             }
         });

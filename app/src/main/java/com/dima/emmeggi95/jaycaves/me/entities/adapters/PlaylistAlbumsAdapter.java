@@ -1,5 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -45,7 +47,7 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder{
-        public CardView card;
+        public CardView card, coverCard;
         public TextView title;
         public TextView artist;
         public TextView genre;
@@ -56,6 +58,7 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.playlist_album_card);
+            coverCard = itemView.findViewById(R.id.cover_card);
             title = itemView.findViewById(R.id.playlist_album_title);
             artist = itemView.findViewById(R.id.playlist_album_artist);
             genre = itemView.findViewById(R.id.playlist_album_genre);
@@ -76,22 +79,25 @@ public class PlaylistAlbumsAdapter extends RecyclerView.Adapter implements ItemT
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int i) {
         final Album album = albums.get(i);
+        final ItemViewHolder h = (ItemViewHolder) holder;
 
-        ((ItemViewHolder) holder).title.setText(album.getTitle());
-        ((ItemViewHolder) holder).artist.setText(album.getArtist());
-        ((ItemViewHolder) holder).genre.setText(album.getGenre1());
-        ((ItemViewHolder) holder).year.setText(album.getDate());
+        h.title.setText(album.getTitle());
+        h.artist.setText(album.getArtist());
+        h.genre.setText(album.getGenre1());
+        h.year.setText(album.getDate());
 
         // Fetch image from storage
         CoverCache.retrieveCover(album.getCover(),((PlaylistAlbumsAdapter.ItemViewHolder) holder).cover, ((PlaylistAlbumsAdapter.ItemViewHolder) holder).loading,
                 context.getApplicationContext().getDir(CoverCache.INTERNAL_DIRECTORY_ALBUM,MODE_PRIVATE));
 
-        ((ItemViewHolder) holder).card.setOnClickListener(new CardView.OnClickListener(){
+        h.card.setOnClickListener(new CardView.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", album);
-                context.startActivity(intent);
+                intent.putExtra("return_radius", context.getResources().getDimension(R.dimen.card_radius));
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.coverCard, "album_cover");
+                context.startActivity(intent, options.toBundle());
             }
         });
 

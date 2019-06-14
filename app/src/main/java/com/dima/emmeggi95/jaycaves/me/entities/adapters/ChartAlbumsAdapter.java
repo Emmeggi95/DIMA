@@ -39,7 +39,7 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        CardView card;
+        CardView card, coverCard;
         TextView rank, title, artist, score, votes;
         ImageView cover;
         ProgressBar loading;
@@ -48,6 +48,7 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
 
             card = (CardView) itemView.findViewById(R.id.chart_album_card);
+            coverCard = itemView.findViewById(R.id.cover_card);
             rank = (TextView) itemView.findViewById(R.id.rank_text);
             title = (TextView) itemView.findViewById(R.id.chart_title_text);
             artist = (TextView) itemView.findViewById(R.id.chart_artist_text);
@@ -87,7 +88,8 @@ public class ChartAlbumsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(context, AlbumActivity.class);
                 intent.putExtra("album", album);
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.cover, "album_cover");
+                intent.putExtra("return_radius", context.getResources().getDimension(R.dimen.card_radius_little));
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context, h.coverCard, "album_cover");
                 context.startActivity(intent, options.toBundle());
             }
         });

@@ -1,7 +1,9 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +24,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -62,8 +66,11 @@ public class AlbumActivity extends AppCompatActivity {
     // Layout elements
     Album album;
     ImageView coverView;
+    CardView coverCard;
     ProgressBar loading;
     FloatingActionButton fab;
+    boolean exiting = false;
+    boolean isTransitionExecuted = false;
 
     // Temp variables
     //List<Playlist> playlists;
@@ -242,10 +249,53 @@ public class AlbumActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // Correct the shared element transition setting the final radius of the card containing the album cover to zero
+        coverCard = findViewById(R.id.cover_card);
+        getWindow().getSharedElementEnterTransition()
+                .addListener(new Transition.TransitionListener() {
+                    @Override
+                    public void onTransitionEnd(Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionCancel(Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionPause(Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionResume(Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionStart(Transition transition) {
+                        isTransitionExecuted = true;
+                        ObjectAnimator animator;
+                        if(exiting){
+                            animator = ObjectAnimator.ofFloat(coverCard, "radius", getIntent().getFloatExtra("return_radius", getResources().getDimension(R.dimen.card_radius)));
+                        } else {
+                            animator = ObjectAnimator
+                                    .ofFloat(coverCard, "radius", 0);
+                        }
+                        animator.setDuration(250);
+                        animator.start();
+                    }
+                });
+        if(!getIntent().hasExtra("return_radius")){
+            coverCard.setRadius(0);
+        }
     }
 
     @Override
     public void onBackPressed() {
+        exiting = true;
         super.onBackPressed();
         hideFab();
     }
@@ -483,6 +533,8 @@ public class AlbumActivity extends AppCompatActivity {
         // Set rating
         TextView ratingText = findViewById(R.id.text_rating);
         ratingText.setText(String.format("%.2f", album.getScore()));
+
+
 
     }
 
