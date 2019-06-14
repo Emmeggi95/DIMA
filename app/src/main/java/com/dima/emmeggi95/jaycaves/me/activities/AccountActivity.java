@@ -329,7 +329,7 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        //
+        // FUTURE NOTE
         notificationReference.orderByChild("liker").equalTo(oldUsername).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

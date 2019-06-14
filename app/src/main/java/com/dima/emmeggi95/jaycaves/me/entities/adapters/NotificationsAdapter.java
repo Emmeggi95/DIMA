@@ -1,6 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.activities.AlbumActivity;
 import com.dima.emmeggi95.jaycaves.me.entities.CustomNotification;
 import com.dima.emmeggi95.jaycaves.me.entities.NotificationLike;
 import com.dima.emmeggi95.jaycaves.me.entities.NotificationReader;
@@ -31,7 +33,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private Context context;
     private List<NotificationLike> notifications;
     private ItemViewHolder currentHolder;
-    private HashMap<String,Album> albumHashMap;
     private DatabaseReference notificationReference= FirebaseDatabase.getInstance().getReference("notifications").child(User.uid);
 
     public NotificationsAdapter(Context context, List<NotificationLike> notifications) {
@@ -97,6 +98,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         }
                         newVal.setRead(true);
                         notificationReference.child(id).setValue(newVal);
+                        Intent intent = new Intent(context, AlbumActivity.class);
+                        intent.putExtra("review", User.getReviewFromId(notification.getReviewId()));
+                        intent.putExtra("album", User.reviewedAlbums.get(notification.getReviewId()));
+                        context.startActivity(intent);
                     }
 
                     @Override

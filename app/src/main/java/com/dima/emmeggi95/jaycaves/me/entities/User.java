@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import com.dima.emmeggi95.jaycaves.me.entities.db.AccountPreference;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Album;
 import com.dima.emmeggi95.jaycaves.me.entities.db.ChatPreview;
-import com.dima.emmeggi95.jaycaves.me.entities.db.Message;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Playlist;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Review;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,7 +49,8 @@ public class User {
     public static List<ChatPreview> chats = new ArrayList<>();
     private static List<ChatPreview> mychats = new ArrayList<>();
     private static List<ChatPreview> otherchats= new ArrayList<>();
-    public static HashMap<String,ArrayList<String>> friends = new HashMap<>();
+    public static HashMap<String,ArrayList<String>> friends = new HashMap<>(); // for performance improvement
+    public static HashMap<String, Album> reviewedAlbums = new HashMap<>(); // for performance improvement
 
     // DB REFERENCES
     private static DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference("likes");
@@ -79,6 +79,16 @@ public class User {
     }
 
 
+// STATIC CUSTOM GETTERS
+
+    public static Review getReviewFromId(String id){
+        for (Review r: reviews)
+            if(r.getId().equals(id))
+                return r;
+        return null; // could not find review
+    }
+
+
 
 
 // STATIC METHODS
@@ -95,8 +105,25 @@ public class User {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 reviews.clear();
-                for (DataSnapshot d1: data)
-                    reviews.add(d1.getValue(Review.class));
+                reviewedAlbums.clear();
+                for (DataSnapshot d1: data) {
+                    final Review recent = d1.getValue(Review.class);
+                    reviews.add(recent);
+                    albumRef.orderByKey().equalTo(recent.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                            for (DataSnapshot d1: data) {
+                                reviewedAlbums.put(recent.getId(), d1.getValue(Album.class)); // fetch albums to avoid downloads
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
 
             }
 

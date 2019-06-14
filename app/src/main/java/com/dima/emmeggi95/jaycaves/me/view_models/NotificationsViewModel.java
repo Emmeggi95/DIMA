@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class NotificationsViewModel extends ViewModel {
@@ -63,20 +64,6 @@ public class NotificationsViewModel extends ViewModel {
                     String message = mostRecentLikers + " liked your review of '" + part1 + "', by '" + part2 + "'";
                     n1.setMessage(message);
 
-                    database.getReference("albums").orderByKey().equalTo(n1.getReviewAlbum()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                            for (DataSnapshot d : data) {
-                                albumList.add(d.getValue(Album.class));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
 
                 }
 
