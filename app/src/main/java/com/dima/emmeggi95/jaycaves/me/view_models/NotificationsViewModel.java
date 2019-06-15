@@ -17,7 +17,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 public class NotificationsViewModel extends ViewModel {
@@ -51,7 +50,7 @@ public class NotificationsViewModel extends ViewModel {
 
                     String mostRecentLikers = n1.getLiker();
                     char c = ',';
-                    int likes = countOccurences(n1.getLiker(), c,0);
+                    int likes = countOccurrences(n1.getLiker(), c,0);
                     if (likes > 3) {
                         String[] likers = n1.getLiker().split(",");
                         mostRecentLikers = likers[0]+", "+likers[1]+" and "+ Integer.toString(likes-2) + " others";
@@ -83,14 +82,14 @@ public class NotificationsViewModel extends ViewModel {
         return notifications;
     }
 
-    private static int countOccurences(
+    private static int countOccurrences(
             String someString, char searchedChar, int index) {
         if (index >= someString.length()) {
             return 0;
         }
 
         int count = someString.charAt(index) == searchedChar ? 1 : 0;
-        return count + countOccurences(
+        return count + countOccurrences(
                 someString, searchedChar, index + 1);
     }
 }

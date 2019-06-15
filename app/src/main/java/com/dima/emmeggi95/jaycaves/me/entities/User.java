@@ -37,9 +37,10 @@ import java.util.List;
 public class User {
 
     // ATTRIBUTES
-    public static String username; // ="pietro@grotti";
-    public static String email; // = "pietro@grotti";
+    public static String username;
+    public static String email;
     public static String uid;
+    public static String token_id;
     public static String cover_photo_id;
     public static Bitmap cover_image;
     public static File localFile;
@@ -77,6 +78,8 @@ public class User {
     public static void setUid(String uid){
         User.uid= uid;
     }
+
+    public static void setToken_id(String token_id){ User.token_id=token_id;}
 
 
 // STATIC CUSTOM GETTERS

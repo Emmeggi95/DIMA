@@ -32,11 +32,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.dima.emmeggi95.jaycaves.me.activities.MainActivity.PHOTO_PICKER;
 
@@ -59,6 +62,7 @@ public class AccountActivity extends AppCompatActivity {
     private DatabaseReference reviewReference;
     private DatabaseReference notificationReference;
     private StorageReference storageReference;
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private File localFile;
     private boolean usernameTaken = false;
     private boolean uncheckedUsername = false;
@@ -188,6 +192,11 @@ public class AccountActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Map<String, Object> user = new HashMap<>();
+                user.put("uid", User.uid);
+                user.put("username", User.username);
+                user.put("token", "");
+                firestore.collection("Users").document(User.uid).update(user);
                 FirebaseAuth.getInstance().signOut();
                 finish();
 

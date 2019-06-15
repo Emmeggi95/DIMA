@@ -41,20 +41,26 @@ import com.dima.emmeggi95.jaycaves.me.fragments.LoadingFragment;
 import com.dima.emmeggi95.jaycaves.me.fragments.PlaylistsFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseDatabase database;
     private DatabaseReference adminReference;
     private DatabaseReference prefReference;
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage;
     private StorageReference storageReference;
     public static final String ANONYMOUS = "anonymous";
@@ -304,12 +311,31 @@ public class MainActivity extends AppCompatActivity
         User.setUid(firebaseUser.getUid());
         User.setEmail(firebaseUser.getEmail());
 
+        // Token init
+        Task<InstanceIdResult> tokenTask = FirebaseInstanceId.getInstance().getInstanceId();
+        tokenTask.addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                User.setToken_id(instanceIdResult.getToken());
+                // Create a new user with a first and last name
+                Map<String, Object> user = new HashMap<>();
+                user.put("uid", User.uid);
+                user.put("username", User.username);
+                user.put("token", User.token_id);
+                firestore.collection("Users").document(User.uid).set(user);
+
+            }
+        });
+
+
+
+
         prefReference.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     // USER JUST REGISTERED
-                    if(firebaseUser.getProviders().contains("password"))
+                    if(firebaseUser.getProviderId().contains("password"))
                         firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -342,7 +368,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        if(firebaseUser.getProviders().contains("password") && !firebaseUser.isEmailVerified()) {
+        if(firebaseUser.getProviderId().contains("password") && !firebaseUser.isEmailVerified()) {
             findViewById(R.id.drawer_layout).setVisibility(View.VISIBLE);
             new AlertDialog.Builder(this)
                     .setTitle("Verify your email address")
