@@ -32,8 +32,10 @@
     </style>
 
     <style name="AppTheme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorPrimaryDark">@color/colorDarkBackground</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
@@ -44,6 +46,11 @@
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="colorControlNormal">@color/colorGrayText</item>
         <item name="android:textColorPrimary">@color/colorGrayText</item>
+    </style>
+
+    <style name="AppTheme.DarkToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">@color/colorDarkBackground</item>
+        <item name="android:tint">@color/colorTextOnDarkBackground</item>
     </style>
 
     <!-- Font styles -->
@@ -123,6 +130,13 @@
         <item name="colorControlNormal">@color/colorAccent</item>
         <item name="colorControlActivated">@color/colorAccent</item>
 
+    </style>
+
+    <style name="SearchTheme">
+        <item name="android:editTextColor">@color/colorTextOnDarkBackground</item>
+        <item name="android:textColorHint">@color/colorTextOnDarkBackgroundSecondary</item>
+        <item name="android:background">@color/colorDarkBackground</item>
+        <item name="android:colorControlActivated">@color/colorAccentMuted</item>
     </style>
 
 </resources>

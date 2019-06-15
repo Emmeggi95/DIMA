@@ -47,6 +47,7 @@ public class ArtistActivity extends AppCompatActivity {
     List<Album> albums;
     ImageView cover;
     ProgressBar loading;
+    ProgressBar progressBar;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -124,7 +125,7 @@ public class ArtistActivity extends AppCompatActivity {
         NestedScrollView container = findViewById(R.id.container);
         container.setBackgroundColor(p.getLightMutedColor(getResources().getColor(R.color.default_background_gradient)));
 
-
+        progressBar = findViewById(R.id.progress_bar);
         initAlbums();
 
     }
@@ -140,6 +141,7 @@ public class ArtistActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                progressBar.setVisibility(View.GONE);
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 for(DataSnapshot d : data){
                     // Add album to list

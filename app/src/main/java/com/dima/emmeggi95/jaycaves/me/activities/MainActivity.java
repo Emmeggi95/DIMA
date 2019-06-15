@@ -573,8 +573,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            // Get center of search icon
 
+            // Get center of search icon
             View searchIcon = findViewById(R.id.action_search);
             int coordinates[] = new int[2];
             searchIcon.getLocationOnScreen(coordinates);

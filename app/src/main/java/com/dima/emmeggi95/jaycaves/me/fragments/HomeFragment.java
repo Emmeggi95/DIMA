@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.activities.UserActivity;
@@ -36,12 +37,14 @@ public class HomeFragment extends Fragment {
 
     private HomeAlbumsViewModel viewModel;
 
+    private ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.home_recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -56,12 +59,16 @@ public class HomeFragment extends Fragment {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
         recyclerView.setLayoutAnimation(animation);
 
+        progressBar = view.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+
         // load data from ViewModel
         viewModel = ViewModelProviders.of(getActivity()).get(HomeAlbumsViewModel.class);
 
         final Observer<List<Album>> observer = new Observer<List<Album>>() {
             @Override
             public void onChanged(@Nullable List<Album> homeAlbums) {
+                progressBar.setVisibility(View.GONE);
                 adapter = new HomeAlbumsAdapter(getActivity(), homeAlbums);
                 recyclerView.setAdapter(adapter);
             }
@@ -83,7 +90,5 @@ public class HomeFragment extends Fragment {
 
         return  view;
     }
-
-
 }
 

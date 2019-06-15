@@ -71,6 +71,8 @@ public class AlbumActivity extends AppCompatActivity {
     FloatingActionButton fab;
     boolean exiting = false;
     boolean isTransitionExecuted = false;
+    BottomNavigationView bottomNavigationView;
+    BottomNavigationView bottomNavigationView2;
 
     // Temp variables
     //List<Playlist> playlists;
@@ -195,60 +197,9 @@ public class AlbumActivity extends AppCompatActivity {
         //hideFeaturedReview();
 
         // Bottom navigation
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.album_bottom_nav);
-        final BottomNavigationView bottomNavigationView2 = findViewById(R.id.album_bottom_nav_2);
+        bottomNavigationView = findViewById(R.id.album_bottom_nav);
+        bottomNavigationView2 = findViewById(R.id.album_bottom_nav_2);
         reviewWritten = false;
-        /*
-        if(album.getReviews().size()<2){
-            bottomNavigationView2.getMenu().getItem(0).setCheckable(false);
-        }
-        */
-        int i = 0;
-        while(!reviewWritten && i<User.reviews.size()){
-            if (User.reviews.get(i).getTitle().equals(id)){
-                reviewWritten = true;
-                bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_create_24px);
-                bottomNavigationView.getMenu().getItem(0).setTitle(R.string.edit_review);
-                myReview = User.reviews.get(i);
-            }
-            i++;
-        }
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.write_review:
-                        Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
-                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
-                        intent.putExtra("album", album);
-                        if(reviewWritten){
-                            intent.putExtra("review", myReview);
-                        }
-                        startActivity(intent, options.toBundle());
-                        return true;
-                }
-                return false;
-            }
-        });
-        bottomNavigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.read_reviews:
-                        if(!bottomNavigationView2.getMenu().getItem(0).isCheckable()){
-                            Toast toast2 = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_no_review_available), Toast.LENGTH_LONG);
-                            toast2.show();
-                        } else {
-                            Intent intent2 = new Intent(getApplicationContext(), ReviewsActivity.class);
-                            intent2.putExtra("album", album);
-                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
-                            startActivity(intent2, options.toBundle());
-                        }
-                        return true;
-                }
-                return false;
-            }
-        });
 
         // Correct the shared element transition setting the final radius of the card containing the album cover to zero
         coverCard = findViewById(R.id.cover_card);
@@ -534,6 +485,58 @@ public class AlbumActivity extends AppCompatActivity {
         TextView ratingText = findViewById(R.id.text_rating);
         ratingText.setText(String.format("%.2f", album.getScore()));
 
+        int i = 0;
+        while(!reviewWritten && i<User.reviews.size()){
+            if (User.reviews.get(i).getTitle().equals(id)){
+                reviewWritten = true;
+                bottomNavigationView.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_create_24px);
+                bottomNavigationView.getMenu().getItem(0).setTitle(R.string.edit_review);
+                myReview = User.reviews.get(i);
+            }
+            i++;
+        }
+
+        if(album.getReviews().size() > 1){
+            bottomNavigationView2.getMenu().getItem(0).setCheckable(true);
+        } else {
+            bottomNavigationView2.getMenu().getItem(0).setCheckable(false);
+        }
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.write_review:
+                        Intent intent = new Intent(getApplicationContext(), NewReviewActivity.class);
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
+                        intent.putExtra("album", album);
+                        if(reviewWritten){
+                            intent.putExtra("review", myReview);
+                        }
+                        startActivity(intent, options.toBundle());
+                        return true;
+                }
+                return false;
+            }
+        });
+        bottomNavigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.read_reviews:
+                        if(!bottomNavigationView2.getMenu().getItem(0).isCheckable()){
+                            Toast toast2 = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_no_review_available), Toast.LENGTH_LONG);
+                            toast2.show();
+                        } else {
+                            Intent intent2 = new Intent(getApplicationContext(), ReviewsActivity.class);
+                            intent2.putExtra("album", album);
+                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
+                            startActivity(intent2, options.toBundle());
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
 
 
     }

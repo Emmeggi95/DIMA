@@ -22,6 +22,13 @@
             android:text="@string/home_header_title"
             android:textAppearance="@style/H4" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
         <Button
             android:id="@+id/revenant_button"
             android:layout_width="wrap_content"

@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.dima.emmeggi95.jaycaves.me.R;
@@ -38,6 +39,8 @@ public class ChartsFragment extends Fragment {
 
     Spinner genresSpinner;
     Spinner yearsSpinner;
+    View filtersContainer;
+    ProgressBar progressBar;
 
     GenresViewModel genresViewModel;
     YearViewModel yearsViewModel;
@@ -65,7 +68,8 @@ public class ChartsFragment extends Fragment {
         chartsLayoutManager = new LinearLayoutManager(getActivity());
         chartsRecyclerView.setLayoutManager(chartsLayoutManager);
 
-
+        filtersContainer = view.findViewById(R.id.filters_container);
+        progressBar = view.findViewById(R.id.progress_bar);
 
         // Genres spinner init
         genresSpinner = view.findViewById(R.id.genre_spinner);
@@ -74,6 +78,9 @@ public class ChartsFragment extends Fragment {
         final Observer genresObserver = new Observer<List<String>>() {
             @Override
             public void onChanged(@Nullable List<String> genresList) {
+                if(years.size() > 0){
+                    filtersContainer.setVisibility(View.VISIBLE);
+                }
                 genres.clear();
                 genres.add(getResources().getString(R.string.all_genres));
                 genres.addAll(genresList);
@@ -102,6 +109,9 @@ public class ChartsFragment extends Fragment {
         final Observer yearsObserver = new Observer<List<String>>() {
             @Override
             public void onChanged(@Nullable List<String> yearsList) {
+                if(genres.size() > 0){
+                    filtersContainer.setVisibility(View.VISIBLE);
+                }
                 years.clear();
                 years.add(getResources().getString(R.string.all_years));
                 years.addAll(yearsList);
@@ -129,6 +139,7 @@ public class ChartsFragment extends Fragment {
         final Observer observer = new Observer<List<Album>>() {
             @Override
             public void onChanged(@Nullable List<Album> chartAlbums) {
+                progressBar.setVisibility(View.GONE);
                 // set animation for the recyclerview
                 LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
                 chartsRecyclerView.setLayoutAnimation(animation);

@@ -77,7 +77,15 @@
                 android:text="@string/album_list"
                 android:textAppearance="@style/H5"
                 android:textStyle="bold" />
+
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -132,6 +140,7 @@
 
                 <TextView
                     android:id="@+id/new_content_text"
+                    style="@style/Link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

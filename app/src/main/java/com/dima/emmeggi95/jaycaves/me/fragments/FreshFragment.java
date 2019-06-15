@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ProgressBar;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Album;
@@ -28,6 +29,8 @@ public class FreshFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
+
+    private ProgressBar progressBar;
 
     public static FreshFragment newInstance() {
         return new FreshFragment();
@@ -47,6 +50,8 @@ public class FreshFragment extends Fragment {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_list);
         recyclerView.setLayoutAnimation(animation);
 
+        progressBar = view.findViewById(R.id.progress_bar);
+
         return view;
     }
 
@@ -57,6 +62,7 @@ public class FreshFragment extends Fragment {
         final Observer<List<Album>> observer = new Observer<List<Album>>() {
             @Override
             public void onChanged(@Nullable List<Album> albums) {
+                progressBar.setVisibility(View.GONE);
                 adapter = new FreshAlbumsAdapter(getActivity(), albums);
                 recyclerView.setAdapter(adapter);
             }

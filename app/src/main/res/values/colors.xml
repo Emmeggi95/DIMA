@@ -12,7 +12,7 @@
 
     <!--Background colors-->
     <color name="colorLightBackground">#ffffff</color>
-    <color name="colorDarkBackground">#212121</color>
+    <color name="colorDarkBackground">#424242</color>
     <color name="default_background_gradient">#e0e0e0</color>
 
     <!--Text colors-->
@@ -20,8 +20,8 @@
     <color name="colorTextOnSecondary">#ffffff</color>
     <color name="colorTextOnAccent">@color/colorTextOnSecondary</color>
     <color name="colorTextOnLightBackground">#212121</color>
-    <color name="colorTextOnDarkBackground">#FFFFFF</color>
-    <color name="colorTextOnDarkBackgroundSecondary">#eeeeee</color>
+    <color name="colorTextOnDarkBackground">#fafafa</color>
+    <color name="colorTextOnDarkBackgroundSecondary">#e0e0e0</color>
     <color name="colorDarkText">#212121</color>
     <color name="colorLightText">#ffffff</color>
     <color name="colorGrayText">#616161</color>

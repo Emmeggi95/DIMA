@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -60,6 +61,8 @@ public class SearchableActivity extends AppCompatActivity {
     private TextView albumHeader;
     private TextView noResult;
     private TextView newContent;
+    private View divider;
+    private ProgressBar progressBar;
 
     private List<String> history;
     private RecyclerView historyRecyclerView;
@@ -177,10 +180,15 @@ public class SearchableActivity extends AppCompatActivity {
             }
         });
 
+
         artistHeader = findViewById(R.id.artist_search_header);
         albumHeader = findViewById(R.id.album_search_header);
         noResult = findViewById(R.id.no_result_text);
         newContent = findViewById(R.id.new_content);
+        divider = findViewById(R.id.divider_album_artist);
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar.getIndeterminateDrawable().setColorFilter(
+                getResources().getColor(R.color.colorAccentMuted), android.graphics.PorterDuff.Mode.SRC_IN);
 
         newContent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,6 +208,7 @@ public class SearchableActivity extends AppCompatActivity {
             historyAdapter.setItems(new ArrayList<String>());
             historyAdapter.notifyDataSetChanged();
             clearHistory.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
 
             final String parsedQuery = query.substring(0, 1).toUpperCase() + query.substring(1);
 
@@ -207,6 +216,7 @@ public class SearchableActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(!emptySearchField) {
+                        progressBar.setVisibility(View.GONE);
                         Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                         artistResults.clear();
                         for (DataSnapshot d : data) {
@@ -216,6 +226,9 @@ public class SearchableActivity extends AppCompatActivity {
                         if (artistResults.size() > 0) {
                             artistHeader.setVisibility(View.VISIBLE);
                             checkIfResultsExist(query);
+                            if(albumResults.size() > 0){
+                                divider.setVisibility(View.VISIBLE);
+                            }
 
                         } else {
                             artistHeader.setVisibility(View.GONE);
@@ -237,6 +250,7 @@ public class SearchableActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(!emptySearchField) {
+                        progressBar.setVisibility(View.GONE);
                         Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                         albumResults.clear();
                         for (DataSnapshot d : data) {
@@ -247,10 +261,13 @@ public class SearchableActivity extends AppCompatActivity {
                         if (albumResults.size() > 0) {
                             albumHeader.setVisibility(View.VISIBLE);
                             checkIfResultsExist(query);
-
+                            if(artistResults.size() > 0){
+                                divider.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             albumHeader.setVisibility(View.GONE);
                             checkIfResultsExist(query);
+
                         }
                         albumAdapter.setItems(albumResults);
                         albumAdapter.notifyDataSetChanged();
@@ -267,6 +284,7 @@ public class SearchableActivity extends AppCompatActivity {
         } else {
             // Do the following if the search field is empty
             checkIfResultsExist(query);
+            progressBar.setVisibility(View.GONE);
 
         }
 
@@ -275,8 +293,6 @@ public class SearchableActivity extends AppCompatActivity {
         artistResults.clear();
         albumHeader.setVisibility(View.GONE);
         albumResults.clear();
-
-
     }
 
     @Override
@@ -358,6 +374,7 @@ public class SearchableActivity extends AppCompatActivity {
     }
 
     private void checkIfResultsExist(String query){
+        divider.setVisibility(View.GONE);
         if(albumHeader.getVisibility()==View.GONE && artistHeader.getVisibility()==View.GONE && !query.equals("")){
             noResult.setVisibility(View.VISIBLE);
             newContent.setVisibility(View.VISIBLE);
