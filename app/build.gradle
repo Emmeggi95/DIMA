@@ -45,17 +45,24 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
     // FIREBASE DEPENDENCIES
     // Firebase services setup dependency
     implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    // Firebase Firestorage
+    implementation 'com.google.firebase:firebase-firestore:19.0.2'
     // FirebaseUI for Firebase Realtime Database
-    implementation 'com.firebaseui:firebase-ui-database:4.2.1'
+    implementation 'com.firebaseui:firebase-ui-database:5.0.0'
     // FirebaseUI for Cloud Storage
-    implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
+    implementation 'com.firebaseui:firebase-ui-storage:5.0.0'
     // FirebaseUI for Firebase Auth
-    implementation 'com.firebaseui:firebase-ui-auth:4.2.1'
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.facebook.android:facebook-login:4.41.0'
+
+
+
     // TESTING
     // Required -- JUnit 4 framework
     testImplementation 'junit:junit:4.12'

@@ -83,6 +83,7 @@
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
+    <string name="default_notification_channel_id">ME_CH_01</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 
