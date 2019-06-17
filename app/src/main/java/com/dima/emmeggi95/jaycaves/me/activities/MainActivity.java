@@ -65,6 +65,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -265,6 +267,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Set badges to zero
+        ShortcutBadger.applyCount(getApplicationContext(), 0);
 
         // Create an IntentFilter instance.
         intentFilter = new IntentFilter();
