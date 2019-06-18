@@ -3,6 +3,8 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.UploadFragment;
 import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
 import com.dima.emmeggi95.jaycaves.me.entities.adapters.ViewPagerAdapter;
 import com.dima.emmeggi95.jaycaves.me.fragments.NewAlbumFragment;
 import com.dima.emmeggi95.jaycaves.me.fragments.NewArtistFragment;
+
+import static android.view.View.GONE;
 
 /**
  * New content is inserted in the system through this activity. There are two main fragments: @NewAlbumFragment, where user can insert new albums, and @NewArtistFragment, where user can insert new artists
@@ -26,9 +31,14 @@ public class AddContentActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private BottomNavigationView navigationView;
+    private View container;
+    private Toolbar toolbar;
     MenuItem prevMenuItem;
     private NetworkChangeReceiver networkChangeReceiver = null;
     private IntentFilter intentFilter;
+
+    private boolean backEnabled = true;
+    private UploadFragment uploadFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +93,7 @@ public class AddContentActivity extends AppCompatActivity {
         });
 
         // Set toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -93,7 +103,14 @@ public class AddContentActivity extends AppCompatActivity {
             }
         });
         setTitle(R.string.add_content_title);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
+        container = findViewById(R.id.container);
 
     }
 
@@ -127,7 +144,46 @@ public class AddContentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if(backEnabled){
+            finish();
+        }
+    }
+
     public ViewPager getViewPager() {
         return viewPager;
+    }
+
+    public void showUploadFragment(){
+        uploadFragment = new UploadFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container, uploadFragment);
+        ft.commit();
+        backEnabled = false;
+        setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        container.setAlpha(0f);
+        container.setVisibility(View.VISIBLE);
+        container.animate().alpha(1f).setDuration(250);
+        viewPager.setVisibility(GONE);
+        navigationView.setVisibility(GONE);
+    }
+
+    public void uploadSuccess(String message){
+        uploadFragment.success(message);
+    }
+
+    public void uploadFailure(String message){
+        uploadFragment.failure(message);
+    }
+
+    public void goBackToFragment(){
+        container.setVisibility(GONE);
+        viewPager.setVisibility(View.VISIBLE);
+        navigationView.setVisibility(View.VISIBLE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.add_content_title);
+        backEnabled = true;
     }
 }

@@ -2,8 +2,10 @@ package com.dima.emmeggi95.jaycaves.me.fragments;
 
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.activities.AddContentActivity;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Album;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Artist;
 import com.dima.emmeggi95.jaycaves.me.entities.CustomRandomId;
@@ -60,6 +63,7 @@ public class NewAlbumFragment extends Fragment {
 
     // Layout elements
     private ImageView newAlbumPicture;
+    private ImageView button;
     private EditText newAlbumNameInput;
     private EditText newAlbumReleaseDateInput;
     private EditText newAlbumArtistInput;
@@ -78,7 +82,7 @@ public class NewAlbumFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_album, container, false);
-        
+
         rootLayout = view.getRootView();
         
         // Storage setup
@@ -169,7 +173,7 @@ public class NewAlbumFragment extends Fragment {
         });
 
         // Button for image selection
-        ImageButton button = view.findViewById(R.id.photoPickerButton);
+        button = view.findViewById(R.id.photoPickerButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,6 +201,36 @@ public class NewAlbumFragment extends Fragment {
         });
 
 
+        Button button3 = view.findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AddContentActivity) getActivity()).showUploadFragment();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((AddContentActivity) getActivity()).uploadSuccess(getResources().getString(R.string.album_success));
+                    }
+                }, 3000);
+            }
+        });
+
+        Button button4 = view.findViewById(R.id.button4);
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AddContentActivity) getActivity()).showUploadFragment();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.album_unknown_error));
+                    }
+                }, 3000);
+            }
+        });
+
         return view;
     }
 
@@ -219,10 +253,8 @@ public class NewAlbumFragment extends Fragment {
             selectedImageUri = data.getData();
             newAlbumPicture.setImageURI(selectedImageUri);
             newAlbumPicture.setActivated(true);
-
+            button.setColorFilter(getResources().getColor(R.color.colorLightBackground));
         }
-
-
     }
 
     /**
@@ -269,6 +301,9 @@ public class NewAlbumFragment extends Fragment {
      * Procedure to store the new album in the real-time database and to upload the album cover in the storage
      */
     private void newAlbumUpload() {
+
+        // Show upload screen
+        ((AddContentActivity) getActivity()).showUploadFragment();
 
         // Temp variables to parse user inputs
         String tempAlbumName = newAlbumNameInput.getText().toString();
@@ -320,17 +355,20 @@ public class NewAlbumFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Snackbar.make(rootLayout,R.string.album_success, Snackbar.LENGTH_LONG).show();
+                                //Snackbar.make(rootLayout,R.string.album_success, Snackbar.LENGTH_LONG).show();
+                                ((AddContentActivity) getActivity()).uploadSuccess(getResources().getString(R.string.album_success));
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Snackbar.make(rootLayout,R.string.album_cover_error,Snackbar.LENGTH_LONG).show();
+                                //Snackbar.make(rootLayout,R.string.album_cover_error,Snackbar.LENGTH_LONG).show();
                                 dbReference.child(finalAlbumName).removeValue();
+                                ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.album_cover_error));
 
                     }
                 });
+
             }
         })
         .addOnFailureListener(new OnFailureListener() {
@@ -339,9 +377,11 @@ public class NewAlbumFragment extends Fragment {
 
                 String code= e.getMessage();
                 if(code.contains("Permission denied"))
-                    Snackbar.make(rootLayout,R.string.album_existing_error,Snackbar.LENGTH_LONG).show();
+                    //Snackbar.make(rootLayout,R.string.album_existing_error,Snackbar.LENGTH_LONG).show();
+                    ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.album_existing_error));
                 else
-                    Snackbar.make(rootLayout,R.string.album_unknown_error,Snackbar.LENGTH_LONG).show();
+                    //Snackbar.make(rootLayout,R.string.album_unknown_error,Snackbar.LENGTH_LONG).show();
+                    ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.album_unknown_error));
             }
 
         });

@@ -188,6 +188,11 @@
     <string name="new_artist_genre1">Genre 1</string>
     <string name="new_artist_genre2">Genre 2 (optional)</string>
     <string name="new_artist_genre3">Genre 3 (optional)</string>
+    <!--Upload-->
+    <string name="uploading_message">Uploading new content...</string>
+    <string name="success_message">Content successfully uploaded!</string>
+    <string name="submit_success">YAY!</string>
+    <string name="submit_failure">Retry</string>
 
     <!-- Account Page -->
     <string name="change_image_instructions">Tap to change profile picture</string>

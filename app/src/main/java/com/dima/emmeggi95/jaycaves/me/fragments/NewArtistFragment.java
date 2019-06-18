@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dima.emmeggi95.jaycaves.me.R;
+import com.dima.emmeggi95.jaycaves.me.activities.AddContentActivity;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Artist;
 import com.dima.emmeggi95.jaycaves.me.entities.CustomRandomId;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -58,6 +59,7 @@ public class NewArtistFragment extends Fragment {
 
         // Layout elements
         private ImageView newArtistPicture;
+        private ImageView button;
         private EditText newArtistNameInput;
         private EditText newArtistReleaseDateInput;
         private EditText newArtistStory;
@@ -117,7 +119,7 @@ public class NewArtistFragment extends Fragment {
             });
 
             // Button for image selection
-            ImageButton button = view.findViewById(R.id.photoPickerButton2);
+            button = view.findViewById(R.id.photoPickerButton2);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -171,34 +173,34 @@ public class NewArtistFragment extends Fragment {
 
     private boolean isYearValid(EditText editText){
 
-        int selectedYear= Integer.parseInt(editText.getText().toString());
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                int selectedYear= Integer.parseInt(editText.getText().toString());
+                int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        return ((selectedYear<=currentYear) && (selectedYear>0));
-    }
-
-
-        /**
-         * It is used to capture and display user selection of the cover image
-         * @param requestCode
-         * @param resultCode
-         * @param data
-         */
-        @Override
-        public void onActivityResult(final int requestCode, final int resultCode, Intent data) {
-
-            super.onActivityResult(requestCode, resultCode, data);
-
-            // used to capture the picture-to-be-uploaded selection activity result
-            if (requestCode == PHOTO_PICKER && resultCode == RESULT_OK) {
-                selectedImageUri = data.getData();
-                newArtistPicture.setImageURI(selectedImageUri);
-                newArtistPicture.setActivated(true);
-
+                return ((selectedYear<=currentYear) && (selectedYear>0));
             }
 
 
-        }
+            /**
+             * It is used to capture and display user selection of the cover image
+             * @param requestCode
+             * @param resultCode
+             * @param data
+             */
+            @Override
+            public void onActivityResult(final int requestCode, final int resultCode, Intent data) {
+
+                super.onActivityResult(requestCode, resultCode, data);
+
+                // used to capture the picture-to-be-uploaded selection activity result
+                if (requestCode == PHOTO_PICKER && resultCode == RESULT_OK) {
+                    selectedImageUri = data.getData();
+                    newArtistPicture.setImageURI(selectedImageUri);
+                    newArtistPicture.setActivated(true);
+                    button.setColorFilter(getResources().getColor(R.color.colorLightBackground));
+                }
+
+
+            }
 
         /**
          * Checks if the form is completely and correctly filled by the user
@@ -216,6 +218,8 @@ public class NewArtistFragment extends Fragment {
          * Procedure to store the new album in the real-time database and to upload the album cover in the storage
          */
         private void newArtistUpload() {
+
+            ((AddContentActivity) getActivity()).showUploadFragment();
 
             // Temp variables to parse user inputs and store query results
             String tempArtistName = newArtistNameInput.getText().toString();
@@ -263,14 +267,16 @@ public class NewArtistFragment extends Fragment {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                             Snackbar.make(rootLayout,R.string.artist_success, Snackbar.LENGTH_LONG).show();
+                                            ((AddContentActivity) getActivity()).uploadSuccess(getResources().getString(R.string.artist_success));
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Snackbar.make(rootLayout,R.string.artist_cover_error,Snackbar.LENGTH_LONG).show();
+                                            //Snackbar.make(rootLayout,R.string.artist_cover_error,Snackbar.LENGTH_LONG).show();
                                             //dbReference.child(newAlbumNameInput.getText().toString()).removeValue();
                                             // HANDLE
+                                            ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.artist_cover_error));
                                         }
                                     });
                         }
@@ -281,9 +287,11 @@ public class NewArtistFragment extends Fragment {
 
                             String code= e.getMessage();
                             if(code.contains("Permission denied"))
-                                Snackbar.make(rootLayout,R.string.artist_existing_error,Snackbar.LENGTH_LONG).show();
+                                //Snackbar.make(rootLayout,R.string.artist_existing_error,Snackbar.LENGTH_LONG).show();
+                                ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.artist_existing_error));
                             else
-                                Snackbar.make(rootLayout,R.string.artist_unknown_error,Snackbar.LENGTH_LONG).show();
+                                //Snackbar.make(rootLayout,R.string.artist_unknown_error,Snackbar.LENGTH_LONG).show();
+                                ((AddContentActivity) getActivity()).uploadFailure(getResources().getString(R.string.artist_unknown_error));
                         }
 
                     });
