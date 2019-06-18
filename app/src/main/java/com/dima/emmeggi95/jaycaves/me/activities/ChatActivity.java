@@ -63,7 +63,6 @@ public class ChatActivity extends AppCompatActivity {
     private IntentFilter intentFilter;
 
     // DB
-    private DatabaseReference coverReference = FirebaseDatabase.getInstance().getReference("preferences");
     private DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference("chats");
 
 
@@ -114,6 +113,7 @@ public class ChatActivity extends AppCompatActivity {
                 messages.addAll(data);
                 messages.add(null);
                 adapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(viewModel.current_position);
             }
         };
 

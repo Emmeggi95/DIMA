@@ -5,10 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import com.dima.emmeggi95.jaycaves.me.entities.User;
 import com.dima.emmeggi95.jaycaves.me.entities.db.ChatPreview;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Message;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 public class MessagesViewModel extends ViewModel {
@@ -33,11 +30,15 @@ public class MessagesViewModel extends ViewModel {
 
     private final int MESSAGES_TO_DOWNLOAD = 10;
     private int numberOfLoadings;
+    private int newMessages;
+    public int current_position;
 
     public MessagesViewModel(String chatId) {
 
         this.chatId = chatId;
         numberOfLoadings = 1;
+        newMessages = -1;
+        current_position=0;
 
         chatReference.orderByKey().equalTo(chatId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -60,13 +61,19 @@ public class MessagesViewModel extends ViewModel {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();
                 fullList.clear();
+                newMessages++;
+                if (newMessages > MESSAGES_TO_DOWNLOAD) {
+                    numberOfLoadings++;
+                    newMessages =0; // reset counter
+                }
                 for (DataSnapshot d : data) {
                     fullList.add(d.getValue(Message.class));
                 }
 
+
                 Collections.sort(fullList, Message.dateComparator);
-                System.out.println(fullList);
-                currentList = fullList.subList(Math.max(fullList.size()-(numberOfLoadings*MESSAGES_TO_DOWNLOAD),0) , fullList.size());
+                currentList = fullList.subList(0, Math.min(numberOfLoadings*MESSAGES_TO_DOWNLOAD,fullList.size()));
+                current_position=0;
                 messages.postValue(currentList);
             }
 
@@ -105,7 +112,8 @@ public class MessagesViewModel extends ViewModel {
     public void loadMoreMessages(){
 
         numberOfLoadings ++;
-        currentList = fullList.subList(Math.max(fullList.size()-(numberOfLoadings*MESSAGES_TO_DOWNLOAD),0) , fullList.size());
+        currentList = fullList.subList(0, Math.min(numberOfLoadings*MESSAGES_TO_DOWNLOAD,fullList.size()));
+        current_position= -1;
         messages.postValue(currentList);
 
     }

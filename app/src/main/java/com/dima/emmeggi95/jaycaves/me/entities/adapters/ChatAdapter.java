@@ -97,6 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     viewModel.loadMoreMessages();
+
                 }
             });
         }

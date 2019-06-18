@@ -6,12 +6,14 @@ import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         authentication = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -250,6 +253,14 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        if (getIntent().getStringExtra("type") != null){
+
+            Intent new_intent = new Intent(this, SocialActivity.class);
+            new_intent.putExtra("type", getIntent().getStringExtra("type"));
+            startActivity(new_intent);
+        }
+
+
 
     }
 
@@ -265,11 +276,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (getIntent().getStringExtra("type") != null){
+
+            Intent new_intent = new Intent(this, SocialActivity.class);
+            new_intent.putExtra("type", getIntent().getStringExtra("type"));
+            startActivity(new_intent);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-
-        // Set badges to zero
-        ShortcutBadger.applyCount(getApplicationContext(), 0);
 
         // Create an IntentFilter instance.
         intentFilter = new IntentFilter();

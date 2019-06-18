@@ -1,7 +1,9 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,8 @@ import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
 import com.dima.emmeggi95.jaycaves.me.entities.adapters.ViewPagerAdapter;
 import com.dima.emmeggi95.jaycaves.me.fragments.ChatFragment;
 import com.dima.emmeggi95.jaycaves.me.fragments.NotificationsFragment;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class SocialActivity extends AppCompatActivity {
 
@@ -80,7 +84,11 @@ public class SocialActivity extends AppCompatActivity {
         });
 
         // Init fragments
-        viewPager.setCurrentItem(0);
+        String type = getIntent().getStringExtra("type");
+        if ((type != null) && (type.equals("message")))
+            viewPager.setCurrentItem(1);
+        else
+            viewPager.setCurrentItem(0);
 
     }
 
@@ -115,6 +123,13 @@ public class SocialActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Set badges to zero
+        ShortcutBadger.applyCount(getApplicationContext(), 0);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("badge_count", 0);
+        editor.apply();
 
         // Create an IntentFilter instance.
         intentFilter = new IntentFilter();
