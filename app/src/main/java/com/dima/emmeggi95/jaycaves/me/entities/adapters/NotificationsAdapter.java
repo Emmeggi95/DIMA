@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +78,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void notify(final NotificationLike notification) {
 
-        currentHolder.text.setText(notification.getMessage());
+        currentHolder.text.setText(Html.fromHtml(notification.getMessage()));
         currentHolder.date.setText(notification.getDate());
         setReadState(notification);
         currentHolder.card.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +98,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                             id = d.getKey();
                         }
                         newVal.setRead(true);
-                        notificationReference.child(id).setValue(newVal);
+                        if(id!=null)
+                            notificationReference.child(id).setValue(newVal);
                         Intent intent = new Intent(context, AlbumActivity.class);
                         intent.putExtra("review", User.getReviewFromId(notification.getReviewId()));
                         intent.putExtra("album", User.reviewedAlbums.get(notification.getReviewId()));

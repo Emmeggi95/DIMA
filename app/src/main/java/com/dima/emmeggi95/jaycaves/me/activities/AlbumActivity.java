@@ -442,6 +442,30 @@ public class AlbumActivity extends AppCompatActivity {
                 } else {
                     hideFeaturedReview();
                 }
+                if(album.getReviews().size() > 1){
+                    bottomNavigationView2.getMenu().getItem(0).setCheckable(true);
+                } else {
+                    bottomNavigationView2.getMenu().getItem(0).setCheckable(false);
+                }
+                bottomNavigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.read_reviews:
+                                if(!bottomNavigationView2.getMenu().getItem(0).isCheckable()){
+                                    Toast toast2 = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_no_review_available), Toast.LENGTH_LONG);
+                                    toast2.show();
+                                } else {
+                                    Intent intent2 = new Intent(getApplicationContext(), ReviewsActivity.class);
+                                    intent2.putExtra("album", album);
+                                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
+                                    startActivity(intent2, options.toBundle());
+                                }
+                                return true;
+                        }
+                        return false;
+                    }
+                });
             }
 
             @Override
@@ -496,11 +520,7 @@ public class AlbumActivity extends AppCompatActivity {
             i++;
         }
 
-        if(album.getReviews().size() > 1){
-            bottomNavigationView2.getMenu().getItem(0).setCheckable(true);
-        } else {
-            bottomNavigationView2.getMenu().getItem(0).setCheckable(false);
-        }
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -513,25 +533,6 @@ public class AlbumActivity extends AppCompatActivity {
                             intent.putExtra("review", myReview);
                         }
                         startActivity(intent, options.toBundle());
-                        return true;
-                }
-                return false;
-            }
-        });
-        bottomNavigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.read_reviews:
-                        if(!bottomNavigationView2.getMenu().getItem(0).isCheckable()){
-                            Toast toast2 = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_no_review_available), Toast.LENGTH_LONG);
-                            toast2.show();
-                        } else {
-                            Intent intent2 = new Intent(getApplicationContext(), ReviewsActivity.class);
-                            intent2.putExtra("album", album);
-                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(AlbumActivity.this, coverView, "album_cover");
-                            startActivity(intent2, options.toBundle());
-                        }
                         return true;
                 }
                 return false;

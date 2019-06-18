@@ -3,8 +3,11 @@ package com.dima.emmeggi95.jaycaves.me.view_models;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 
+import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.entities.NotificationLike;
 import com.dima.emmeggi95.jaycaves.me.entities.User;
 import com.dima.emmeggi95.jaycaves.me.entities.db.Album;
@@ -12,7 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.google.firebase.database.collection.LLRBNode;
 
 
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ public class NotificationsViewModel extends ViewModel {
                 notificationList.clear();
                 for(DataSnapshot d: data){ // fetch notifications
                     NotificationLike newNote = d.getValue(NotificationLike.class);
+                    newNote.setLiker("<b>" + newNote.getLiker() + "</b>");
                     for(NotificationLike n: notificationList){
                         if (n.getReviewId().equals(newNote.getReviewId())){
                             newNote.setLiker(newNote.getLiker()+", "+n.getLiker());
@@ -60,7 +64,7 @@ public class NotificationsViewModel extends ViewModel {
                     String[] parts = albumData.split("@");
                     String part1 = parts[0];
                     String part2 = parts[1];
-                    String message = mostRecentLikers + " liked your review of '" + part1 + "', by '" + part2 + "'";
+                    String message = mostRecentLikers + " liked your review of <i>" + part1 + "</i>, by <i>" + part2 + "</i>";
                     n1.setMessage(message);
 
 
