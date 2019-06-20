@@ -2,6 +2,7 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -91,6 +92,16 @@ public class ChatActivity extends AppCompatActivity {
         // Set user picture
         loading = findViewById(R.id.progressBar);
         cover = findViewById(R.id.user_image);
+
+        View userTop = findViewById(R.id.title_container);
+        userTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChatActivity.this, UserActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+            }
+        });
 
         // Get messages
         messages = new ArrayList<>();
