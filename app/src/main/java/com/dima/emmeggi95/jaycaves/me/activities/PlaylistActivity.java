@@ -29,7 +29,6 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
     Playlist playlist;
     int position;
 
-
     RecyclerView recyclerView;
     PlaylistAlbumsAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -37,6 +36,8 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
     ItemTouchHelper itemTouchHelper;
 
     Menu menu;
+
+    private TextView emptyMessage;
 
     private NetworkChangeReceiver networkChangeReceiver = null;
     private IntentFilter intentFilter;
@@ -56,10 +57,17 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
             }
         });
 
+        emptyMessage = findViewById(R.id.empty_playlist_message);
+
         //playlist = (Playlist) getIntent().getSerializableExtra("playlist");
         position = getIntent().getIntExtra("position", 0);
         playlist = User.playlists.get(position);
 
+        if(playlist.getAlbums().size() == 0){
+            emptyMessage.setVisibility(View.VISIBLE);
+        } else {
+            emptyMessage.setVisibility(View.GONE);
+        }
 
         setTitle(playlist.getName());
 
@@ -134,7 +142,9 @@ public class PlaylistActivity extends AppCompatActivity implements OnStartDragLi
         User.updatePlaylist(playlist, playlist.getAlbums().get(x), "REMOVE");
         playlist.removeAlbum(x);
         User.reorderPlaylist(playlist);
-
+        if(playlist.getAlbums().size() == 0){
+            emptyMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

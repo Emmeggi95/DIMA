@@ -165,6 +165,7 @@
     <string name="added_to">added to</string>
     <string name="choose_playlist">Add to a playlist</string>
     <string name="editing_instructions">Drag the albums to rearrange them.\nSwipe to delete them from the playlist.</string>
+    <string name="empty_playlist">This playlist is empty!</string>
 
     <!-- User Page -->
     <string name="message_no_review_for_this_user">This user didn\'t write any review.</string>

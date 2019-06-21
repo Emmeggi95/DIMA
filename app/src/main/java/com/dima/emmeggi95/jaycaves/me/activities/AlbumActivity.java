@@ -1,9 +1,7 @@
 package com.dima.emmeggi95.jaycaves.me.activities;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,10 +27,8 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -123,11 +119,11 @@ public class AlbumActivity extends AppCompatActivity {
 
                             if(User.playlists.get(which).addEntry(album)){
                                  User.updatePlaylist(User.playlists.get(which), album, "ADD");
-                                 Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + User.playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                                 Snackbar.make(view, album.getTitle() + " " + getResources().getString(R.string.added_to) + " " + User.playlists.get(which).getDbName(), Snackbar.LENGTH_LONG)
                                              .setAction("Action", null).show();
                             }
                             else{
-                                 Snackbar.make(view, album.getTitle() + " is already in "+ User.playlists.get(which).getName(), Snackbar.LENGTH_LONG)
+                                 Snackbar.make(view, album.getTitle() + " is already in "+ User.playlists.get(which).getDbName(), Snackbar.LENGTH_LONG)
                                          .setAction("Action", null).show();
                             }
                     }

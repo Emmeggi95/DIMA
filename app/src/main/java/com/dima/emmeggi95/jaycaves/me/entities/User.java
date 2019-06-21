@@ -146,9 +146,9 @@ public class User {
         playlists.clear();
 
         // INIT
-        Playlist favorites = new Playlist("Favorites");
-        Playlist onthego= new Playlist("Onthego");
-        Playlist tolisten = new Playlist("Tolisten");
+        Playlist favorites = new Playlist("Favorites", "Favorites");
+        Playlist onthego= new Playlist("Onthego", "On the Go");
+        Playlist tolisten = new Playlist("Tolisten", "To Listen");
 
 
         // GET ALBUMS FROM DATABASE
@@ -394,7 +394,7 @@ public class User {
 
         String id = album.getTitle()+"@"+album.getArtist();
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
-                .child(uid).child(playlist.getName().toLowerCase()).child(id);
+                .child(uid).child(playlist.getDbName().toLowerCase()).child(id);
         switch (action){
             case "ADD": {
                 ref.child("position").setValue(playlist.getAlbums().size());// Insert
@@ -420,7 +420,7 @@ public class User {
     public static void reorderPlaylist(Playlist playlist){
 
         DatabaseReference ref= FirebaseDatabase.getInstance().getReference("playlists")
-                .child(uid).child(playlist.getName().toLowerCase());
+                .child(uid).child(playlist.getDbName().toLowerCase());
         List<Album> newList= playlist.getAlbums();
         int position =1;
 
@@ -437,7 +437,7 @@ public class User {
 
     private static void fetchAlbums(final Playlist playlist){
 
-        playlistsRef.child(uid).child(playlist.getName().toLowerCase()).orderByChild("position").addListenerForSingleValueEvent(new ValueEventListener() {
+        playlistsRef.child(uid).child(playlist.getDbName().toLowerCase()).orderByChild("position").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> data = dataSnapshot.getChildren();

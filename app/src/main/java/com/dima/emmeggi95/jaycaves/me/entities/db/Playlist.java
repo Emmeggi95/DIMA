@@ -10,17 +10,23 @@ import java.util.List;
  */
 public class Playlist implements Serializable {
 
-    private String name;
+    private String dbName, name;
     private List<Album> albums;
 
-    public Playlist(String name, List<Album> albums) {
+    public Playlist(String dbName, String name, List<Album> albums) {
+        this.dbName = dbName;
         this.name = name;
         this.albums = albums;
     }
 
-    public Playlist(String name){
-        this.name=name;
+    public Playlist(String dbName, String name){
+        this.dbName = dbName;
+        this.name = name;
         albums= new ArrayList<>();
+    }
+
+    public String getDbName() {
+        return dbName;
     }
 
     public String getName() {
@@ -66,7 +72,7 @@ public class Playlist implements Serializable {
 
     @Override
     public String toString() {
-        return "Playlist: " + name +
+        return "Playlist: " + dbName +
                 ", albums=" + albums +
                 '}';
     }
