@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "497623901285-mqi7antpq5sj23jfbf9bvf0ejp24m3hq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dima.emmeggi95.jaycaves.me",
+            "certificate_hash": "2efd6f43aef0ac61e8d41fd624f04dcbd81ddcd1"
+          }
+        },
+        {
           "client_id": "497623901285-0clcrd011hpejrfm32kf4ihm06lqheg9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
