@@ -66,10 +66,8 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
         ChatPreview chat = chats.get(i);
-
-        System.out.println(chat);
 
         String userId = "";
         if (chat.getUser_1().equals(User.uid))
@@ -78,28 +76,70 @@ public class ChatPreviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             userId = chat.getUser_1();
 
         final String chatId = chat.getChatId();
-        final String username = User.friends.get(userId).get(0);
+        final String username;
         final String uid = userId;
+        if (User.friends.get(userId)!=null){ // friend is initialized
 
-        ((ItemViewHolder) viewHolder).user.setText(username);
+            username = User.friends.get(userId).get(0);
 
-        ((ItemViewHolder) viewHolder).card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            ((ItemViewHolder) viewHolder).user.setText(username);
 
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("username", username);
-                intent.putExtra("chatId", chatId );
-                intent.putExtra("cover", User.friends.get(uid).get(1));
-                context.startActivity(intent);
-            }
-        });
+            ((ItemViewHolder) viewHolder).user.setText(username);
 
+            ((ItemViewHolder) viewHolder).card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        CoverCache.retrieveCover(User.friends.get(userId).get(1), ((ItemViewHolder) viewHolder).icon, ((ItemViewHolder) viewHolder).loading,
-                context.getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("chatId", chatId );
+                    intent.putExtra("cover", User.friends.get(uid).get(1));
+                    context.startActivity(intent);
+                }
+            });
 
-        ((ItemViewHolder) viewHolder).description.setText(chat.getLastMessage());
+            CoverCache.retrieveCover(User.friends.get(userId).get(1), ((ItemViewHolder) viewHolder).icon, ((ItemViewHolder) viewHolder).loading,
+                    context.getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
+
+            ((ItemViewHolder) viewHolder).description.setText(chat.getLastMessage());
+
+        }else { // friend is not initialized
+            final String lastmessage = chat.getLastMessage();
+            FirebaseDatabase.getInstance().getReference("preferences").orderByKey().equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                    for (DataSnapshot d: data) {
+                        ((ItemViewHolder) viewHolder).user.setText(d.getValue(AccountPreference.class).getUsername());
+                        final String user = d.getValue(AccountPreference.class).getUsername();
+                        final String cover = d.getValue(AccountPreference.class).getCoverphoto();
+                        ((ItemViewHolder) viewHolder).card.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Intent intent = new Intent(context, ChatActivity.class);
+                                intent.putExtra("username", user);
+                                intent.putExtra("chatId", chatId);
+                                intent.putExtra("cover", cover);
+                                context.startActivity(intent);
+                            }
+                        });
+
+                        CoverCache.retrieveCover(cover, ((ItemViewHolder) viewHolder).icon, ((ItemViewHolder) viewHolder).loading,
+                                context.getDir(CoverCache.INTERNAL_DIRECTORY_USERS,MODE_PRIVATE));
+
+                        ((ItemViewHolder) viewHolder).description.setText(lastmessage);
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
     }
 

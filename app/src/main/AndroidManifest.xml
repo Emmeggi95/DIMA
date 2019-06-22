@@ -112,13 +112,6 @@
             android:name=".activities.NewReviewActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.NotificationOpenActivity"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-        </activity>
-
 
 
         <service

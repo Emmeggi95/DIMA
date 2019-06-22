@@ -2,7 +2,6 @@ package com.dima.emmeggi95.jaycaves.me.entities;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -10,7 +9,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.activities.MainActivity;
-import com.dima.emmeggi95.jaycaves.me.activities.NotificationOpenActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

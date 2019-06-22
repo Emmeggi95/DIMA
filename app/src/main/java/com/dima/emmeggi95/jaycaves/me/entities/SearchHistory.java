@@ -28,7 +28,7 @@ public class SearchHistory {
         Gson gson = new Gson();
         SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.search_file_key), Context.MODE_PRIVATE);
         Type type = new TypeToken<List<String>>(){}.getType();
-        String j = pref.getString(context.getString(R.string.search_history_key), "");
+        String j = pref.getString(context.getString(R.string.search_history_key), gson.toJson(new ArrayList<String>()));
         history = gson.fromJson(j, type);
         return history;
     }

@@ -318,6 +318,7 @@ public class User {
                 chats.clear();
                 chats.addAll(mychats);
                 chats.addAll(otherchats);
+                Collections.sort(chats, ChatPreview.dateComparator);
             }
 
             @Override
