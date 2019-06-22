@@ -2,9 +2,7 @@ package com.dima.emmeggi95.jaycaves.me.entities.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -137,7 +135,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(final View v) {
                 heart.setImageResource(R.drawable.ic_favorite_black_24dp);
-                Animation bump = AnimationUtils.loadAnimation(context, R.anim.bump);
+                Animation bump = AnimationUtils.loadAnimation(context, R.anim.bounce_up);
                 heart.startAnimation(bump);
                 message.setText(context.getResources().getString(R.string.liked));
                 User.addLike(review);

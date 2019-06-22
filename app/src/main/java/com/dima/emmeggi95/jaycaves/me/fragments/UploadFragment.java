@@ -1,4 +1,4 @@
-package com.dima.emmeggi95.jaycaves.me;
+package com.dima.emmeggi95.jaycaves.me.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.dima.emmeggi95.jaycaves.me.R;
 import com.dima.emmeggi95.jaycaves.me.activities.AddContentActivity;
 
 

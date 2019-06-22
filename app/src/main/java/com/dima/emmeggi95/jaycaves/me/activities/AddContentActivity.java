@@ -3,7 +3,6 @@ package com.dima.emmeggi95.jaycaves.me.activities;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.dima.emmeggi95.jaycaves.me.R;
-import com.dima.emmeggi95.jaycaves.me.UploadFragment;
+import com.dima.emmeggi95.jaycaves.me.fragments.UploadFragment;
 import com.dima.emmeggi95.jaycaves.me.entities.NetworkChangeReceiver;
 import com.dima.emmeggi95.jaycaves.me.entities.adapters.ViewPagerAdapter;
 import com.dima.emmeggi95.jaycaves.me.fragments.NewAlbumFragment;

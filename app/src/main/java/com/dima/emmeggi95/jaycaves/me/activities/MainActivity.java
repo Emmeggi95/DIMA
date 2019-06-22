@@ -72,7 +72,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    // Firebase
     protected FirebaseAuth authentication;
     protected static FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase database;
@@ -112,13 +112,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        // Login
         authentication = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         adminReference = database.getReference("admins");
         prefReference= database.getReference("preferences");
         setContentView(R.layout.activity_main);
-
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -252,9 +251,8 @@ public class MainActivity extends AppCompatActivity
             navigateToId(R.id.nav_home);
         }
 
-
+        // If you click on a notification open the correct page
         if (getIntent().getStringExtra("type") != null){
-
             Intent new_intent = new Intent(this, SocialActivity.class);
             new_intent.putExtra("type", getIntent().getStringExtra("type"));
             startActivity(new_intent);
@@ -278,9 +276,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);
+        // Open the correct page if you click on a notification while the app is open
         setIntent(intent);
         if (getIntent().getStringExtra("type") != null){
-
             Intent new_intent = new Intent(this, SocialActivity.class);
             new_intent.putExtra("type", getIntent().getStringExtra("type"));
             startActivity(new_intent);
@@ -330,6 +328,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Notify the correct login
         if (requestCode == SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
@@ -457,12 +456,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        // Save the navigation history when you leave the activity
         outState.putIntegerArrayList(NAV_HISTORY, (ArrayList<Integer>) navigationHistory);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onBackPressed() {
+        // Proceed backwards in the navigation history
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -522,6 +523,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // Virtually click on a navigation drawer item
     private void navigateToId(int id) {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setCheckedItem(id);
@@ -554,6 +556,7 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    // Set fragment with an animation
     public void setFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -599,6 +602,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_app_bar_main, menu);
 
+        // Set the app bar icons to gray
         for(int i = 0; i < menu.size(); i++){
             Drawable drawable = menu.getItem(i).getIcon();
             if(drawable != null) {
@@ -628,13 +632,11 @@ public class MainActivity extends AppCompatActivity
             int cy = coordinates[1];
             Intent intent = new Intent(this, SearchableActivity.class);
 
-
+            // Pass the coordinates to the Searchable Activity
             intent.putExtra(getString(R.string.x_axis), cx);
             intent.putExtra(getString(R.string.y_axis), cy);
 
-            //ActivityOptions options = ActivityOptions.makeCustomAnimation(this, R.anim.fade_in, R.anim.fade_out);
             startActivity(intent);
-            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             return true;
         }
 

@@ -244,6 +244,7 @@ public class AlbumActivity extends AppCompatActivity {
     public void onBackPressed() {
         exiting = true;
         super.onBackPressed();
+        // Hide fab not to interfere with animation
         hideFab();
     }
 
@@ -361,8 +362,14 @@ public class AlbumActivity extends AppCompatActivity {
                     }
                     reviewLikes.setText(String.valueOf(featuredReview.getLikes()) + ' ' + likesText);
                 }
-                Animation bump = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bump);
-                likeSymbol.startAnimation(bump);
+                Animation bumpUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_up);
+                Animation bumpDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_down);
+                likeSymbol.startAnimation(bumpUp);
+                likeSymbol.setScaleX(1.2f);
+                likeSymbol.setScaleY(1.2f);
+                likeSymbol.startAnimation(bumpDown);
+                likeSymbol.setScaleX(1.0f);
+                likeSymbol.setScaleY(1.0f);
             }
         });
 
@@ -505,6 +512,7 @@ public class AlbumActivity extends AppCompatActivity {
         TextView ratingText = findViewById(R.id.text_rating);
         ratingText.setText(String.format("%.2f", album.getScore()));
 
+        // Init bottom "Write/Edit review" button
         int i = 0;
         while(!reviewWritten && i<User.reviews.size()){
             if (User.reviews.get(i).getTitle().equals(id)){
@@ -538,6 +546,7 @@ public class AlbumActivity extends AppCompatActivity {
 
     }
 
+    // Retrun true if the top left corner of the image is dark, false otherwise
     public static boolean isTopLeftDark(Bitmap bitmap){
         boolean dark=false;
         int height = bitmap.getHeight()/8;
