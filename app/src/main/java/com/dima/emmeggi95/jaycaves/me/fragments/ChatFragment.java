@@ -31,6 +31,7 @@ public class ChatFragment extends Fragment {
     ChatPreviewsAdapter adapter;
     List<ChatPreview> chats;
     ChatPreviewsViewModel viewModel;
+    View noChats;
 
 
     @Override
@@ -49,11 +50,18 @@ public class ChatFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+        noChats = view.findViewById(R.id.no_chat);
+
         final Observer<List<ChatPreview>> observer = new Observer<List<ChatPreview>>() {
             @Override
             public void onChanged(@Nullable List<ChatPreview> chats) {
                 adapter = new ChatPreviewsAdapter(getActivity(), chats);
                 recyclerView.setAdapter(adapter);
+                if(chats.size()>0){
+                    noChats.setVisibility(View.GONE);
+                } else {
+                    noChats.setVisibility(View.VISIBLE);
+                }
             }
         };
 

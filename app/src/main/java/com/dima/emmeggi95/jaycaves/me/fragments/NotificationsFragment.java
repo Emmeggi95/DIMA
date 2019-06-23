@@ -29,6 +29,7 @@ public class NotificationsFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private NotificationsAdapter adapter;
     private NotificationsViewModel viewModel;
+    private View noNotification;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,11 +46,18 @@ public class NotificationsFragment extends Fragment {
         adapter = new NotificationsAdapter(getActivity(), new ArrayList<NotificationLike>());
         recyclerView.setAdapter(adapter);
 
+        noNotification = view.findViewById(R.id.no_notification);
+
         final Observer<List<NotificationLike>> observer = new Observer<List<NotificationLike>>() {
             @Override
             public void onChanged(@Nullable List<NotificationLike> notifications) {
                 adapter = new NotificationsAdapter(getActivity(), notifications);
                 recyclerView.setAdapter(adapter);
+                if(notifications.size()>0){
+                    noNotification.setVisibility(View.GONE);
+                } else {
+                    noNotification.setVisibility(View.VISIBLE);
+                }
             }
         };
 

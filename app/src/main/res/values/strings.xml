@@ -212,9 +212,10 @@
 
     <!-- Social Page -->
     <string name="title_notifications">Notifications</string>
-    <string name="title_chat">Chat</string>
+    <string name="title_chat">Chats</string>
     <!-- Notifications -->
     <string name="like_nofication_message">liked yor review of</string>
+    <string name="no_notifications_message">There is no notification yet.</string>
     <!-- Chat -->
     <string name="chats_file_key">chats_file</string>
     <string name="chats_key">chats</string>
@@ -225,6 +226,7 @@
     <string name="generic_message">Message...</string>
     <string name="generic_time">11/07/2018 09:25</string>
     <string name="load_more_messages">Load more messages...</string>
+    <string name="no_chats_message">There is no chat yet.</string>
 
     <!--Miscellaneous-->
     <string name="not_available">n/a</string>
