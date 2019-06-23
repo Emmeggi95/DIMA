@@ -15,19 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "497623901285-ppdpghuv6c2edj7hku1a825lderl19io.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dima.emmeggi95.jaycaves.me",
+            "certificate_hash": "31b33f9225bc98e5ddf17aa1e4fe5845aed7330b"
+          }
+        },
+        {
+          "client_id": "497623901285-lp9mfn4uv0s55hfd9rsi7l9rnev5peh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dima.emmeggi95.jaycaves.me",
+            "certificate_hash": "804ea378241779e231b8be615e07141b30f57af7"
+          }
+        },
+        {
           "client_id": "497623901285-mqi7antpq5sj23jfbf9bvf0ejp24m3hq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dima.emmeggi95.jaycaves.me",
             "certificate_hash": "2efd6f43aef0ac61e8d41fd624f04dcbd81ddcd1"
-          }
-        },
-        {
-          "client_id": "497623901285-0clcrd011hpejrfm32kf4ihm06lqheg9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.dima.emmeggi95.jaycaves.me",
-            "certificate_hash": "804ea378241779e231b8be615e07141b30f57af7"
           }
         },
         {
@@ -60,11 +68,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "497623901285-8di5ks5pa4dbimrfvlkjq4tj13s75rts.apps.googleusercontent.com",
+          "client_id": "497623901285-ntosp9aapd8jd1iu004a78aivedtsj91.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dima.emmegi95.jaycaves.sm2",
             "certificate_hash": "804ea378241779e231b8be615e07141b30f57af7"
+          }
+        },
+        {
+          "client_id": "497623901285-ao79pmi8p0ltq6e9mmfnjmbt0kv9p1i0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dima.emmegi95.jaycaves.sm2",
+            "certificate_hash": "2efd6f43aef0ac61e8d41fd624f04dcbd81ddcd1"
           }
         },
         {
