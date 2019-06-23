@@ -88,7 +88,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Review review = reviews.get(position);
-        ItemViewHolder h = (ItemViewHolder) holder; 
+        ItemViewHolder h = (ItemViewHolder) holder;
 
         h.likes.setTextColor(calculateTextGradient(review.getLikes()));
         h.title.setText(review.getHeadline());
@@ -115,7 +115,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (review.getId().equals(like)){
                 h.like.setImageResource(R.drawable.ic_favorite_black_24dp);
                 h.like_liked.setText(context.getResources().getString(R.string.liked));
-
             }
 
         h.header.setOnClickListener(new View.OnClickListener() {
@@ -134,13 +133,15 @@ public class ReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         h.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                heart.setImageResource(R.drawable.ic_favorite_black_24dp);
+
+                if(!message.getText().equals(context.getString(R.string.liked))) {
+                    heart.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    message.setText(context.getString(R.string.liked));
+                    User.addLike(review);
+                }
+
                 Animation bump = AnimationUtils.loadAnimation(context, R.anim.bounce_up);
                 heart.startAnimation(bump);
-                message.setText(context.getResources().getString(R.string.liked));
-                User.addLike(review);
-
-
             }
         });
     }
