@@ -41,7 +41,7 @@ public class NotificationsViewModel extends ViewModel {
                     newNote.setLiker("<b>" + newNote.getLiker() + "</b>");
                     for(NotificationLike n: notificationList){
                         if (n.getReviewId().equals(newNote.getReviewId())){
-                            newNote.setLiker(newNote.getLiker()+", "+n.getLiker());
+                            newNote.setLiker(newNote.getLiker()+","+n.getLiker());
                             notificationList.remove(n);
                         }
                     }

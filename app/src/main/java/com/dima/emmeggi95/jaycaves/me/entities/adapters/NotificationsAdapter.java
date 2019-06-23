@@ -87,34 +87,42 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 //NotificationsViewModel.albumList
                 notification.setRead(true);
                 NotificationsAdapter.this.notifyDataSetChanged();
-                notificationReference.orderByChild("liker").equalTo(notification.getLiker()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-                        NotificationLike newVal = new NotificationLike();
-                        String id ="";
-                        for(DataSnapshot d: data){
-                            newVal = d.getValue(NotificationLike.class);
-                            id = d.getKey();
+                String[] likers = notification.getLiker().split(",");
+                for (int i = 0; i < likers.length; i++) {
+                    if (likers[i].startsWith("<b>"))
+                        likers[i] = likers[i].substring(3, likers[i].length()-4);
+                    System.out.println("LIKERS: "+likers[0]);
+                    notificationReference.orderByChild("liker").equalTo(likers[i]).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Iterable<DataSnapshot> data = dataSnapshot.getChildren();
+                            NotificationLike newVal;
+                            String id;
+                            for (DataSnapshot d : data) {
+                                newVal = d.getValue(NotificationLike.class);
+                                id = d.getKey();
+                                newVal.setRead(true);
+                                if(id!=null)
+                                    notificationReference.child(id).setValue(newVal);
+                            }
                         }
-                        newVal.setRead(true);
-                        if(id!=null)
-                            notificationReference.child(id).setValue(newVal);
-                        Intent intent = new Intent(context, AlbumActivity.class);
-                        intent.putExtra("review", User.getReviewFromId(notification.getReviewId()));
-                        intent.putExtra("album", User.reviewedAlbums.get(notification.getReviewId()));
-                        context.startActivity(intent);
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                }
+                Intent intent = new Intent(context, AlbumActivity.class);
+                intent.putExtra("review", User.getReviewFromId(notification.getReviewId()));
+                intent.putExtra("album", User.reviewedAlbums.get(notification.getReviewId()));
+                context.startActivity(intent);
             }
         });
+
     }
+
+
+
 
     private void setReadState(CustomNotification notification){
         if(notification.isRead()){
